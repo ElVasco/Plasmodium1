@@ -1,0 +1,130 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:include src="/include/IncludeHeader.xhtml"></ui:include>
+
+<h:head></h:head>
+<body>
+	<ui:include src="/include/HiAndByeTrans.xhtml"></ui:include>
+	<ui:include src="/include/IncludeBanner.html"></ui:include>
+	<ui:include src="/include/IncludeTransMenu.xhtml"></ui:include>
+
+	<h2>Creación de pines en crypto</h2>
+
+	<h:form id="FormularioCreacion">
+
+		<p:panelGrid columns="2" border="1" rules="all" id="filtrosPanel"
+			style="">
+			<f:facet name="header">
+						Opciones de creación de pines
+					</f:facet>
+			<p:outputLabel value="Cantidad:" id="CantidadOT"
+				rendered="#{!CryptoBean.showConfirmCons}" />
+			<p:inputText id="Cantidad" value="#{CryptoBean.cant}"
+				converter="MyConverter" immediate="true"
+				valueChangeListener="#{CryptoBean.cantListenerMethod}"
+				required="#{!CryptoBean.showConfirmCons}"
+				rendered="#{!CryptoBean.showConfirmCons}"
+				validator="#{ValidadorBean.validate}">
+			</p:inputText>
+			<p:outputLabel value="Denominacion:" id="denomOT"
+				rendered="#{!CryptoBean.showConfirmCons}" />
+			<p:selectOneMenu value="#{CryptoBean.selectedDenom}"
+				id="DenominacionList" converter="MyConverter" immediate="true"
+				valueChangeListener="#{CryptoBean.selectedDenomListenerMethod}"
+				required="true" rendered="#{!CryptoBean.showConfirmCons}"
+				validator="#{ValidadorBean.validate}">
+				<f:selectItems value="#{GlobalData.selectPacking}" />
+			</p:selectOneMenu>
+			<p:outputLabel value="Descripción de Facial:"
+				id="DescripcionDeFacialOT" rendered="#{!CryptoBean.showConfirmCons}" />
+			<p:inputText id="DescripcionDeFacial"
+				value="#{CryptoBean.facialDesc}" converter="MyConverter"
+				immediate="true"
+				valueChangeListener="#{CryptoBean.facialDescListenerMethod}"
+				required="#{!CryptoBean.showConfirmCons}"
+				rendered="#{!CryptoBean.showConfirmCons}"
+				validator="#{ValidadorBean.validate}">
+			</p:inputText>
+			<p:outputLabel value="Fabricante:" id="fabricanteOT"
+				rendered="#{!CryptoBean.showConfirmCons}" />
+			<p:selectOneMenu value="#{CryptoBean.selectedFabricante}"
+				id="FabricanteList" converter="MyConverter" immediate="true"
+				valueChangeListener="#{CryptoBean.selectedFabricanteListenerMethod}"
+				required="true" rendered="#{!CryptoBean.showConfirmCons}"
+				validator="#{ValidadorBean.validate}">
+				<f:selectItems value="#{GlobalData.selectManufacturer}" />
+			</p:selectOneMenu>
+		</p:panelGrid>
+
+		<p:panelGrid columns="2" border="1" rules="all" tid="responsePanel"
+			style="" rendered="#{CryptoBean.showResponsePanel}">
+			<f:facet name="header">
+						Respuesta de creación de pines
+					</f:facet>
+			<p:outputLabel value="Código de Respuesta:" id="responseOT" />
+			<p:outputLabel id="responseValue" value="#{CryptoBean.responseCode}"
+				converter="MyConverter">
+			</p:outputLabel>
+			<p:outputLabel value="Código Validador:" id="logcodeOT" />
+			<p:outputLabel id="logcodeValue" value="#{CryptoBean.logCode}"
+				converter="MyConverter">
+			</p:outputLabel>
+			<p:outputLabel value="Total Tarjetas Creadas:" id="changedOT" />
+			<p:outputLabel id="changedTotal" value="#{CryptoBean.totalChanged}"
+				converter="MyConverter">
+			</p:outputLabel>
+			<p:outputLabel value="Nombre del Archivo:" id="nameFileOT" />
+			<p:outputLabel id="nameFile" value="#{CryptoBean.dir}"
+				converter="MyConverter">
+			</p:outputLabel>
+
+		</p:panelGrid>
+
+		<p>
+			<p:outputLabel value="#{CryptoBean.message}"
+				rendered="#{CryptoBean.message!=null}"
+				style="font-weight:bold;color:red;" />
+		</p>
+		<p>
+			<p:message showSummary="true" showDetail="false"
+				errorClass="message-e" id="CantidadMessage" for="Cantidad"
+				style="color:red;font-style: oblique;text-decoration: overline;font-family: 'New Century Shoolbook',serif;" />
+		</p>
+		<p>
+			<p:message showSummary="true" showDetail="false"
+				errorClass="message-e" id="denomMessage" for="DenominacionList"
+				style="color:red;font-style: oblique;text-decoration: overline;font-family: 'New Century Shoolbook',serif;" />
+		</p>
+		<p>
+			<p:message showSummary="true" showDetail="false"
+				errorClass="message-e" id="facialMessage" for="DescripcionDeFacial"
+				style="color:red;font-style: oblique;text-decoration: overline;font-family: 'New Century Shoolbook',serif;" />
+		</p>
+		<p>
+			<p:message showSummary="true" showDetail="false"
+				errorClass="message-e" id="fabricanteMessage" for="FabricanteList"
+				style="color:red;font-style: oblique;text-decoration: overline;font-family: 'New Century Shoolbook',serif;" />
+		</p>
+
+		<p:commandButton ajax="false"   value="#{msg.createPines}" id="myActionLink3"
+			action="#{CryptoBean.actionCreatePines}" immediate="true"
+			rendered="#{!CryptoBean.showResponsePanel}"
+			onclick="this.style.display='none'" />
+		<p:commandButton ajax="false"   value="#{msg.cancel}" immediate="true" validateClient="false" id="cancel"
+			action="#{CryptoBean.actionExit}" immediate="true"
+			rendered="#{!CryptoBean.showResponsePanel}" />
+		<p:commandButton ajax="false"   value="#{msg.end}" id="exit"
+			action="#{CryptoBean.actionEnd}" immediate="true"
+			rendered="#{CryptoBean.showResponsePanel}" />
+
+	</h:form>
+
+
+	<ui:include src="/include/IncludeFooter.html"></ui:include>
+
+</body>
+</html>

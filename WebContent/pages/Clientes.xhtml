@@ -1,0 +1,154 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:include src="/include/IncludeHeader.xhtml"></ui:include>
+
+<h:head></h:head>
+<body>
+	<ui:include src="/include/HiAndByeTrans.xhtml"></ui:include>
+	<ui:include src="/include/IncludeBanner.html"></ui:include>
+	<ui:include src="/include/IncludeTransMenu.xhtml"></ui:include>
+
+	<h2>Editor de clientes</h2>
+
+	<h:form id="ClientId">
+		<p:outputPanel id="clientSelect">
+			<p:panelGrid columns="2" border="1" id="clientPanel">
+				<f:facet name="header">
+					Selección de Cliente
+				</f:facet>
+				<p:outputLabel value="Ruta:" id="rutaOT" />
+				<p:selectOneMenu value="#{ClientBean.selectedRoute}" id="rutaList"
+					disabled="#{ClientBean.showDetail2 || ClientBean.showDetail}">
+					<p:ajax listener="#{ClientBean.routeListenerMethod}"
+						update="clientSelect" />
+					<f:selectItems value="#{GlobalData.selectRutas}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Clientes:" id="clienteOT"
+					rendered="#{ClientBean.showClient}" />
+				<p:selectOneMenu value="#{ClientBean.selectedClient}"
+					id="selectClientDetail" rendered="#{ClientBean.showClient}"
+					disabled="#{ClientBean.showDetail2 || ClientBean.showDetail}">
+					<p:ajax listener="#{ClientBean.clientListenerMethod}"
+						update="detailPanel,buttonPanel,clientSelect" />
+					<f:selectItems value="#{ClientBean.clientList}" />
+				</p:selectOneMenu>
+			</p:panelGrid>
+		</p:outputPanel>
+
+		<p:outputPanel id="detailPanel">
+			<p:panelGrid columns="2" border="1" id="detalleclient"
+				rendered="#{ClientBean.showDetail2 || ClientBean.showDetail}">
+				<f:facet name="header">
+					Detalle de Cliente
+				</f:facet>
+				<p:outputLabel value="Ruta:*" id="rutaOT1"
+					rendered="#{ClientBean.showClient}" />
+				<p:selectOneMenu value="#{ClientBean.selectedRoute}" id="rutaList1"
+					required="true" validator="#{ValidadorBean.validate}"
+					rendered="#{ClientBean.showClient}">
+					<f:selectItems value="#{GlobalData.selectRutas}" />
+				</p:selectOneMenu>
+				<p:outputLabel value="Cliente:*" id="Cliente" />
+				<p:inputText value="#{ClientBean.clientName}" id="nombrecliente"
+					maxlength="50" required="true"
+					validator="#{ValidadorBean.validate}" />
+				<p:outputLabel value="Rif:*" id="rifot" />
+
+				<p:inputMask value="#{ClientBean.clientRif}" id="Rif" maxlength="12"
+					required="true" validator="#{ValidadorBean.validate}"
+					mask="a-99999999-9" disabled="#{ClientBean.showNuc}"
+					style="#{ClientBean.style}">
+					<p:watermark for="Rif" value="(Ej: V-12345678-9)" />
+				</p:inputMask>
+
+				<p:outputLabel value="NUC:" id="NUC"
+					rendered="#{ClientBean.showDetail}" />
+				<p:inputText value="#{ClientBean.clientNuc}" id="NUC2"
+					rendered="#{ClientBean.showDetail}"
+					disabled="#{ClientBean.showNuc}" style="#{ClientBean.style}" />
+				<p:outputLabel value="Estados:*" id="Estado" />
+				<p:selectOneMenu value="#{ClientBean.selectedState}"
+					id="selectState" required="true"
+					validator="#{ValidadorBean.validate}">
+
+					<p:ajax listener="#{ClientBean.stateListenerMethod}"
+						update="selectMunicipality,selectCity" />
+					<f:selectItems value="#{ClientBean.selectState}" />
+				</p:selectOneMenu>
+				<p:outputLabel value="Municipio:*" id="Municipio" />
+				<p:selectOneMenu value="#{ClientBean.selectedMunicipality}"
+					id="selectMunicipality" validator="#{ValidadorBean.validate}"
+					required="true">
+					<p:ajax listener="#{ClientBean.municipalityListenerMethod}"
+						update="selectCity" />
+					<f:selectItems value="#{ClientBean.selectMunicipality}" />
+				</p:selectOneMenu>
+				<p:outputLabel value="Ciudades:*" id="Ciudad" />
+				<p:selectOneMenu value="#{ClientBean.selectedCity}" id="selectCity"
+					required="true" validator="#{ValidadorBean.validate}">
+					<p:ajax update="selectCity" />
+					<f:selectItems value="#{ClientBean.selectCity}" />
+				</p:selectOneMenu>
+				<p:outputLabel value="Direccion:*" id="Calle" />
+				<p:inputText value="#{ClientBean.streetName}" id="nombrecalle"
+					maxlength="80" required="true"
+					validator="#{ValidadorBean.validate}" />
+				<p:outputLabel value="Telefono 1:*" id="Telefono1" />
+				<p:inputMask value="#{ClientBean.phone1Number}" id="numerophone1"
+					maxlength="12" required="true" mask="9999-9999999"
+					validator="#{ValidadorBean.validate}">
+					<p:watermark for="numerophone1" value="(Ej: 0212-1234567)" />
+				</p:inputMask>
+
+				<p:outputLabel value="Telefono 2:" id="Telefono2" />
+				<p:inputMask value="#{ClientBean.phone2Number}" id="numerophone2"
+					maxlength="12" validator="#{ValidadorBean.validate}"
+					mask="9999-9999999">
+					<p:watermark for="numerophone2" value="(Ej: 0212-1234567)" />
+				</p:inputMask>
+				
+				<p:outputLabel value="Correo" id="correoLabel" />
+				<p:inputText id="mail" value="#{ClientBean.mailClient}"
+					validator="#{ValidadorBean.validate}" />
+					
+				<p:outputLabel value="Segmento:*" id="Segmento_Nuevo" />
+				<p:selectOneMenu value="#{ClientBean.selectedIndustry}"
+					id="selectIndustry" validator="#{ValidadorBean.validate}">
+					<f:selectItems value="#{GlobalData.selectIndustry}" />
+				</p:selectOneMenu>
+
+			</p:panelGrid>
+			<p:outputLabel value="#{msg.forcedInput}" id="Mensaje_Obligatorio" style="font-weight:bold;color:#FF0000" rendered="#{ClientBean.showClient}" />
+		</p:outputPanel>
+				
+		<p:messages id="error" showDetail="true" autoUpdate="true"
+			closable="true" />
+
+		<p:outputPanel id="buttonPanel">
+
+			<p:commandButton ajax="false"   value="#{msg.change}" id="buttonChange"
+				update="error" action="#{ClientBean.actionChangeClient}"
+				
+				rendered="#{ClientBean.showDetail and AuthorizationBean.MODIFY_CLIENT}" />
+
+			<p:commandButton ajax="false"   value="#{msg.grabar}" id="buttonAdd"
+				update="error" action="#{ClientBean.actionAddClient}" 
+				rendered="#{ClientBean.showDetail2 and AuthorizationBean.CREATE_CLIENT}" />
+
+
+			<p:commandButton ajax="false"   value="#{msg.cancel}" immediate="true"
+				validateClient="false" id="myActionLink5"
+				action="#{ClientBean.actionExit}" process="@none"  />
+		</p:outputPanel>
+
+
+	</h:form>
+	<ui:include src="/include/IncludeFooter.html"></ui:include>
+
+</body>
+</html>

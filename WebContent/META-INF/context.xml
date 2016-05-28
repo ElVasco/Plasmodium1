@@ -1,0 +1,30 @@
+<!-- Added by Leonardo Djekki to implement Oracle datasouce and connection pool -->
+
+<Context path="/PlasmodiumBI" docBase="PlasmodiumBI"
+         reloadable="true" crossContext="true">
+
+    <!-- Default set of monitored resources -->
+    <WatchedResource>WEB-INF/web.xml</WatchedResource>
+
+
+<Resource 	name="jdbc/mysqlnovared" 
+			auth="Container"
+              	type="javax.sql.DataSource"
+              	maxActive="400"
+              	maxIdle="45"
+              	maxWait="12000"
+              	username="root"
+              	logAbandoned="true"
+              	removeAbandoned="true"
+              	removeAbandonedTimeout="10"
+				password="0tpyrcsmbd"
+				driverClassName="com.mysql.jdbc.Driver"
+              	url="jdbc:mysql://devsco1.novared.net.ve:3306/crypto_web_prd?autoReconnect=true"/>
+
+
+<!--The connection pool will be bound into JNDI with the name "java:comp/env/jdbc/mysqlnovared"-->
+
+
+</Context>
+
+<!-- End added by Leonardo Djekki to implement connection pool -->

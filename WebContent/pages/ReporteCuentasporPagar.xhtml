@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:include src="/include/IncludeHeader.xhtml"></ui:include>
+
+<h:head></h:head>
+<body>
+	<ui:include src="/include/HiAndByeTrans.xhtml"></ui:include>
+	<ui:include src="/include/IncludeBanner.html"></ui:include>
+	<ui:include src="/include/IncludeTransMenu.xhtml"></ui:include>
+
+	<h2>Reporte de Cuentas por Pagar</h2>
+
+
+	<h:form id="reportForm">
+		<p:outputPanel id="filtrosPanel">
+			<p:panelGrid columns="2" border="1" rules="all" id="Panel"
+				rendered="#{AccountPerPayReportBean.showFilters}">
+				<f:facet name="header">
+							#{AccountPerPayReportBean.title}
+						</f:facet>
+
+				<p:outputLabel value="Fecha Desde:" id="startDate"
+					rendered="#{AccountPerPayReportBean.showDate}" />
+				<p:calendar id="selectDate1" value="#{AccountPerPayReportBean.date}"
+					pattern="dd/MM/yyyy" effect="slideDown"
+					rendered="#{AccountPerPayReportBean.showDate}">
+				</p:calendar>
+
+				<p:outputLabel value="Fecha Hasta:" id="endDate"
+					rendered="#{AccountPerPayReportBean.showDateTo}" />
+				<p:calendar id="selectDateTo"
+					value="#{AccountPerPayReportBean.dateTo}" pattern="dd/MM/yyyy"
+					effect="slideDown" rendered="#{AccountPerPayReportBean.showDateTo}">
+				</p:calendar>
+
+				<p:outputLabel value="Compañia de Servicio:" id="serviceComp"
+					rendered="#{AccountPerPayReportBean.showServiceComp}" />
+				<p:selectOneMenu
+					value="#{AccountPerPayReportBean.selectedServiceCompany}"
+					id="serviceCompList"
+					rendered="#{AccountPerPayReportBean.showServiceComp}">
+					<p:ajax
+						listener="#{AccountPerPayReportBean.serviceCompListenerMethod}"
+						update="sellerCompList,sellingUserList,posList" />
+					<f:selectItems value="#{AccountPerPayReportBean.selectServiceComp}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Estado de las Cuentas:" id="liquidacion"
+					rendered="#{AccountPerPayReportBean.showLiquidation}" />
+				<p:selectOneMenu
+					value="#{AccountPerPayReportBean.selectedLiquidation}"
+					id="liquidationList"
+					rendered="#{AccountPerPayReportBean.showLiquidation}">
+					<f:selectItems value="#{AccountPerPayReportBean.selectLiquidation}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Canal de Recarga:" id="channel"
+					rendered="#{AccountPerPayReportBean.showChannel}" />
+				<p:selectOneMenu value="#{AccountPerPayReportBean.selectedChannel}"
+					id="channelList" rendered="#{AccountPerPayReportBean.showChannel}">
+					<p:ajax listener="#{AccountPerPayReportBean.channelListenerMethod}"
+						update="filtrosPane2" />
+					<f:selectItems value="#{AccountPerPayReportBean.selectChannel}" />
+				</p:selectOneMenu>
+			</p:panelGrid>
+
+			<p:panelGrid columns="2" border="1" rules="all" id="filtrosPane2"
+				rendered="#{AccountPerPayReportBean.showFilters}">
+				<p:outputLabel value="Cadena Comercial:" id="sellerComp"
+					rendered="#{AccountPerPayReportBean.showSellerComp}" />
+				<p:selectOneMenu value="#{AccountPerPayReportBean.selectedSellerComp}"
+					id="sellerCompList"	rendered="#{AccountPerPayReportBean.showSellerComp}">
+					<p:ajax
+						listener="#{AccountPerPayReportBean.sellerCompListenerMethod}"
+						update="sellingUserList,posList" />
+					<f:selectItems value="#{AccountPerPayReportBean.selectSellerComp}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Usuario Vendedor:" id="sellingUser"
+					rendered="#{AccountPerPayReportBean.showUser}" />
+				<p:selectOneMenu value="#{AccountPerPayReportBean.selectedUser}"
+					id="sellingUserList" rendered="#{AccountPerPayReportBean.showUser}">
+					<p:ajax listener="#{AccountPerPayReportBean.userListenerMethod}"
+						update="posList" />
+					<f:selectItems value="#{AccountPerPayReportBean.selectUser}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Punto de Venta:" id="pos"
+					rendered="#{AccountPerPayReportBean.showPos}" />
+				<p:selectOneMenu value="#{AccountPerPayReportBean.selectedPos}"
+					id="posList" rendered="#{AccountPerPayReportBean.showPos}">
+					<p:ajax listener="#{AccountPerPayReportBean.emptyListenerMethod}" />
+					<f:selectItems value="#{AccountPerPayReportBean.selectPos}" />
+				</p:selectOneMenu>
+			</p:panelGrid>
+		</p:outputPanel>
+
+		<p:messages id="message" showDetail="true" autoUpdate="true"
+			closable="true" />
+
+		<p:outputPanel id="panelButton">
+
+			<p:commandButton ajax="false"   value="#{msg.reporte}" id="myActionLink3"
+				action="#{AccountPerPayReportBean.actionGetReport}" update="message"
+				rendered="#{AccountPerPayReportBean.showFilters}"  />
+
+			<p:commandButton ajax="false"    validateClient="false"  immediate="true" value="#{msg.cancelReport}" id="cancel"
+				action="#{AccountPerPayReportBean.actionExit}" process="@none" />
+
+		</p:outputPanel>
+	</h:form>
+
+
+
+	<ui:include src="/include/IncludeFooter.html"></ui:include>
+
+</body>
+</html>

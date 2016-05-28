@@ -1,0 +1,199 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:include src="/include/IncludeHeader.xhtml"></ui:include>
+
+<h:head></h:head>
+<body>
+	<ui:include src="/include/HiAndByeTrans.xhtml"></ui:include>
+	<ui:include src="/include/IncludeBanner.html"></ui:include>
+	<ui:include src="/include/IncludeTransMenu.xhtml"></ui:include>
+
+	<h2>Asignación de tarjetas a rutas</h2>
+
+	<h:form id="AsignarRuta1Form">
+		<p:panelGrid border="1" columns="2"
+			rendered="#{AsignarRutaBean.showWarehouse}">
+			<p:outputLabel value="Almacén:" id="WarehouseOT" />
+			<p:selectOneMenu value="#{AsignarRutaBean.selectedWarehouse}"
+				effect="fade" id="warehouseList" converter="MyConverter" 
+				disabled="#{AsignarRutaBean.showAll and AsignarRutaBean.showAssign}" >
+				<p:ajax listener="#{AsignarRutaBean.fromDistributerListener}"
+					update="panel,panelInput,panelB" />
+				<f:selectItems value="#{AsignarRutaBean.selectDistributer}"
+					id="warehouseListados" />
+			</p:selectOneMenu>
+		</p:panelGrid>
+		<p:outputPanel id="panel">
+			<p:dataTable value="#{AsignarRutaBean.disponibleList}" var="loc"
+				rendered="#{AsignarRutaBean.showAll and AsignarRutaBean.showStock}">
+				<f:facet name="header">
+							Inventario actual del distribuidor
+						</f:facet>
+				<p:column>
+					<f:facet name="header">
+						<p:outputLabel value="Denominación" />
+					</f:facet>
+					<p:outputLabel value="#{loc.value}" converter="AmountConverter" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">
+						<p:outputLabel value="Facial" />
+					</f:facet>
+					<p:outputLabel value="#{loc.facing}" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">
+						<p:outputLabel value="Cant. Tarjetas" />
+					</f:facet>
+					<p:outputLabel value="#{loc.cantidad}" converter="AmountConverter" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">
+						<p:outputLabel value="Total en Bs." />
+					</f:facet>
+					<p:outputLabel value="#{loc.monto}" converter="AmountConverter" />
+				</p:column>
+
+			</p:dataTable>
+		</p:outputPanel>
+
+		<p:outputPanel id="panelInput">
+			<p:panelGrid columns="2" border="1" rules="all" id="compraPanel"
+				style="" rendered="#{AsignarRutaBean.showAll}">
+				<f:facet name="header">
+							Detalle de la asignación a ruta
+						</f:facet>
+
+				<p:outputLabel value="Ruta:" id="rutaOT" />
+				<p:selectOneMenu value="#{AsignarRutaBean.selectedRuta}"
+					id="rutaList" validator="#{ValidadorBean.validate}" required="true"
+					disabled="#{AsignarRutaBean.showAll and AsignarRutaBean.showAssign}">
+					<p:ajax listener="#{AsignarRutaBean.routeListenerMethod}"
+						update="error,panelInput,panelB" />
+					<f:selectItems value="#{GlobalData.selectRutas}" id="rutaListados" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Denominación:" id="denominacionOT"
+					rendered="#{AsignarRutaBean.showAdd}" />
+				<p:selectOneMenu value="#{AsignarRutaBean.selectedPacking}"
+					id="denominacionList" rendered="#{AsignarRutaBean.showAdd}"
+					validator="#{ValidadorBean.validate}" required="true"
+					disabled="#{AsignarRutaBean.showAll and AsignarRutaBean.showAssign}">
+					<p:ajax listener="#{AsignarRutaBean.getDistributerFacings}"
+						update="panel,facialList,error,panelB" />
+					<f:selectItems value="#{GlobalData.selectPacking}"
+						id="denominacionListadas" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Facial:" id="clusterOT"
+					rendered="#{AsignarRutaBean.showAdd}" />
+				<p:selectOneMenu value="#{AsignarRutaBean.selectedFacing}"
+					id="facialList" rendered="#{AsignarRutaBean.showAdd}"
+					disabled="#{AsignarRutaBean.showAll and AsignarRutaBean.showAssign}">
+					<p:ajax listener="#{AsignarRutaBean.fromFacingListener}"
+						update="panel" />
+					<f:selectItems value="#{AsignarRutaBean.selectFacing}"
+						id="facialesListadas" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Cant. de Tarjetas:" id="numeroTarjetasOT"
+					rendered="#{AsignarRutaBean.showAdd}" />
+				<p:inputText value="#{AsignarRutaBean.numeroTarjetas}"
+					id="numeroTarjetas" rendered="#{AsignarRutaBean.showAdd}"
+					validator="#{ValidadorBean.validate}" required="true" maxlength="8"
+					size="10"
+					disabled="#{AsignarRutaBean.showAll and AsignarRutaBean.showAssign}" />
+
+
+			</p:panelGrid>
+
+		</p:outputPanel>
+
+		<p:outputPanel id="assignPanel">
+
+			<p:dataTable value="#{AsignarRutaBean.actualAsignarList}" var="act"
+				rendered="#{AsignarRutaBean.showAll and AsignarRutaBean.showAssign}">
+				<f:facet name="header">
+							Detalles de la asignación a realizar
+						</f:facet>
+				<p:column>
+					<f:facet name="header">
+						<p:outputLabel value="Zona" />
+					</f:facet>
+					<p:outputLabel value="#{act.routeN}" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">
+						<p:outputLabel value="Denominacion" />
+					</f:facet>
+					<p:outputLabel value="#{act.denomValue}" converter="AmountConverter" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">
+						<p:outputLabel value="Desde" />
+					</f:facet>
+					<p:outputLabel value="#{act.desde}" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">
+						<p:outputLabel value="Hasta" />
+					</f:facet>
+					<p:outputLabel value="#{act.hasta}" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">
+						<p:outputLabel value="Cantidad" />
+					</f:facet>
+					<p:outputLabel value="#{act.cantidad}" converter="AmountConverter" />
+				</p:column>
+
+
+				<p:column>
+					<f:facet name="header">
+						<p:outputLabel value="Bs" />
+					</f:facet>
+					<p:outputLabel value="#{act.monto}" converter="AmountConverter" />
+				</p:column>
+
+			</p:dataTable>
+		</p:outputPanel>
+
+		<p:messages id="error" showDetail="true" autoUpdate="true"
+			closable="true" />
+
+
+		<p:outputPanel id="panelB">
+			<p:commandButton ajax="false" value="#{msg.viewasign}"
+				action="#{AsignarRutaBean.action}"
+				rendered="#{AsignarRutaBean.showAll and AsignarRutaBean.showAdd and !AsignarRutaBean.showAssign and AsignarRutaBean.showStock}"
+				update="error,assignPanel,panelInput,panelB,warehouseList" />
+			<p:commandButton ajax="false" value="#{msg.asign}"
+				action="#{AsignarRutaBean.action2}"
+				rendered="#{AsignarRutaBean.showAll and AsignarRutaBean.showAssign}" />
+			<p:commandButton ajax="false" value="#{msg.reset}"
+				action="#{AsignarRutaBean.undo}"
+				rendered="#{AsignarRutaBean.showAll}"
+				update="panel,panelInput,assignPanel,panelB,warehouseList,error"
+				process="@none" />
+			<p:commandButton ajax="false" value="#{msg.cancel}" immediate="true"
+				validateClient="false" id="cancelBtn"
+				action="#{AsignarRutaBean.actionExit}" process="@none" />
+		</p:outputPanel>
+
+	</h:form>
+
+	<ui:include src="/include/IncludeFooter.html"></ui:include>
+
+</body>
+</html>

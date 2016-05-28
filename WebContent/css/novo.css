@@ -1,0 +1,116 @@
+html { 
+	height: 100%
+}
+
+#body,body,.body {
+	font-size: 12px;
+	font-family: Lucida Grande, Lucida Sans, Arial, sans-serif;
+	background-color: #ffffff;
+	min-height:100%;margin:0;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+	background: #70bg32;
+	background-repeat:no-repeat;
+	background: -moz-linear-gradient(#FFF, #000); 
+	background: -webkit-linear-gradient(#FFF, #000); 
+	background: -o-linear-gradient(#FFF, #000); 
+	background: -ms-linear-gradient(#FFF, #000); 
+}
+
+.ui-panelgrid, .table, #table, table {
+	margin-bottom: 10px;
+	padding-bottom: 10px;
+margin-top: 10px;
+}
+
+.ui-datatable.dataTables table{width: auto;}
+
+
+
+.distributerSelector{
+	background: rgba(255,255,255, 0.35); 
+}
+
+.blockAdministration{
+	width: 700px;
+}
+
+.blockUser{
+	width: 400px;
+}
+
+td{
+	vertical-align: top;
+}
+
+h2 {
+	font-size: 16px;
+	font-weight: bold;
+	font-family: Lucida Grande, Lucida Sans, Arial, sans-serif;
+}
+
+.hiAndBye {
+	float: right;
+	position: relative;
+	font-family: Lucida Grande, Lucida Sans, Arial, sans-serif;
+}
+
+.trans {
+	background-color: #ffffff;
+	opacity: 0.35;
+	filter: alpha(opacity = 35);
+	-moz-opacity: 0.5;
+}
+
+th {
+	font-size: 18px;
+    color: #629be0;
+    text-shadow: 2px 2px 8px #fff;
+	font-weight: bold;
+	text-align: center;
+	position: relative;
+	margin-left: 150px;
+
+}
+
+h9
+{
+  font-size: 18px;
+  color: #629be0;
+  font-weight: bold;
+  text-align: center;
+  position: relative;
+  margin-left: 100px;
+  top: 15px;
+  text-shadow: 2px 2px 8px #ffffff;
+}
+
+div[id="growl_container"] {
+    position:fixed;
+    top: 40%;
+    left: 37%;
+    width: 360px;
+    height: 110px;
+    z-index:9999; 
+}
+
+.img {
+	padding-bottom: 5px;
+}
+
+#footer { /* pie de pagina con copyright RIF y demas */
+	position: relative;
+	z-index: 10;
+	clear: both;
+	text-align: center;
+	bottom: 0px;
+	margin: 0px;
+	padding: 0px;
+	color: #ffffff;
+	height: 30px;
+	width: 100%;
+	font-family: Lucida Grande, Lucida Sans, Arial, sans-serif;
+	color: #000000;
+}

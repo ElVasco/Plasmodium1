@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:include src="/include/IncludeHeader.xhtml"></ui:include>
+
+<h:head></h:head>
+<body>
+	<!-- Esta parte es delicada la lista se llena en un bean "UserBean" pero se selecciona con otro "DepositBean" -->
+	<ui:include src="/include/HiAndByeTrans.xhtml"></ui:include>
+	<ui:include src="/include/IncludeBanner.html"></ui:include>
+	<ui:include src="/include/IncludeTransMenu.xhtml"></ui:include>
+
+	<h2>Distribución de Saldo</h2>
+	<h:form id="Transfer">
+		<p:panelGrid columns="2" border="1" rules="all" id="transferPanelS">
+			<f:facet name="header">
+						Saldo Disponible
+					</f:facet>
+			<p:outputLabel value="Saldo Disponible:" id="saldoB" />
+			<p:outputLabel value="#{UserBean.balance}" id="SaldoBs" />
+		</p:panelGrid>
+
+
+		<p:panelGrid columns="2" border="1" rules="all" id="transferPanel">
+			<f:facet name="header">
+						Datos generales de la transferencia
+					</f:facet>
+
+			<p:outputLabel value="Usuario" id="user" />
+			<p:selectOneMenu value="#{TransferBean.selectedUser}" id="selectUser"
+				required="true" validator="#{ValidadorBean.validate}">
+				<f:selectItems value="#{TransferBean.selectUsers}" />
+			</p:selectOneMenu>
+
+			<p:outputLabel value="Monto:" id="montoOT" />
+			<p:inputText value="#{TransferBean.amount}" id="Monto"
+				required="true" maxlength="10" validator="#{ValidadorBean.validate}" />
+		</p:panelGrid>
+
+		<p:messages id="message" showDetail="true" autoUpdate="true"
+			closable="true" />
+
+		<p:commandButton ajax="false"   value="#{msg.transfer}"
+			action="#{TransferBean.action}" update="message" />
+
+		<p:commandButton ajax="false"   value="#{msg.cancel}" immediate="true" validateClient="false" id="myActionLink5"
+			action="#{TransferBean.actionExit}" process="@none" />
+	</h:form>
+
+	<ui:include src="/include/IncludeFooter.html"></ui:include>
+
+</body>
+</html>

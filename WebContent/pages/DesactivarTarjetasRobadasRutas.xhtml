@@ -1,0 +1,154 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:include src="/include/IncludeHeader.xhtml"></ui:include>
+
+<h:head></h:head>
+<body>
+	<ui:include src="/include/HiAndByeTrans.xhtml"></ui:include>
+	<ui:include src="/include/IncludeBanner.html"></ui:include>
+	<ui:include src="/include/IncludeTransMenu.xhtml"></ui:include>
+
+	<h2>Desactivar tarjetas robadas en ruta</h2>
+
+	<h:form id="dtrr">
+		<p:panelGrid columns="2" border="1" rules="all" id="compraPanel"
+			style="">
+			<f:facet name="header">
+						Ruta robada
+					</f:facet>
+			<p:outputLabel value="Ruta:" id="rutaOT" />
+			<p:selectOneMenu value="#{RutasBean.selectedRoute}" id="rutaList">
+				<p:ajax listener="#{RutasBean.routeStatusListenerMethod}"
+					update="panelInput,buttons" />
+				<f:selectItems value="#{GlobalData.selectRutas}" />
+			</p:selectOneMenu>
+		</p:panelGrid>
+
+		<p:outputPanel id="panelInput">
+			<p:panelGrid columns="8" border="1" rules="all" id="tarjetasPanel"
+				rendered="#{RutasBean.showPanel and !(RutasBean.totalChange>0 || RutasBean.unchange!=null)}">
+				<f:facet name="header">
+							Tarjetas robadas
+					</f:facet>
+				<p:outputLabel value="Denominación:" id="denominacionOT" />
+				<p:selectOneMenu id="Denominacion"
+					value="#{RutasBean.selectedDenom}"
+					validator="#{ValidadorBean.validate}">
+					<f:selectItems value="#{GlobalData.selectPacking}" />
+				</p:selectOneMenu>
+				<p:outputLabel value="Desde:" id="desdeOT" />
+				<p:inputText value="#{RutasBean.fromCardT}" id="Desde"
+					maxlength="#{tam.maxlength}" size="#{tam.size}"
+					validator="#{ValidadorBean.validate}" required="true" />
+				<p:outputLabel value="Hasta:" id="hastaT" />
+				<p:inputText value="#{RutasBean.toCardT}" id="Hasta" maxlength="#{tam.maxlength}" size="#{tam.size}"
+				 validator="#{ValidadorBean.validate}" required="true" />
+				<p:outputLabel value="Total:" id="totalOT" />
+				<p:inputText value="#{RutasBean.countCardT}" id="Total"
+					maxlength="#{tam.maxlength}" size="#{tam.sizeTotal}" validator="#{ValidadorBean.validate}"
+					required="true" />
+			</p:panelGrid>
+		</p:outputPanel>
+
+		<p:outputPanel id="tablePanel">
+			<p:dataTable value="#{RutasBean.assignationList}" var="act"
+				rendered="#{RutasBean.totalCards>0 and !(RutasBean.totalChange>0 || RutasBean.unchange!=null)}">
+				<p:column>
+					<f:facet name="header">
+						<p:outputLabel value="Denominación" />
+					</f:facet>
+					<p:outputLabel value="#{act.value}" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">
+						<p:outputLabel value="Desde" />
+					</f:facet>
+					<p:outputLabel value="#{act.desde}" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">
+						<p:outputLabel value="Hasta" />
+					</f:facet>
+					<p:outputLabel value="#{act.hasta}" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">
+						<p:outputLabel value="Num. Tarjetas" />
+					</f:facet>
+					<p:outputLabel value="#{act.cantidad}" />
+				</p:column>
+
+			</p:dataTable>
+		</p:outputPanel>
+
+		<p:outputPanel id="totalPanel">
+			<p:panelGrid columns="2" border="1" rules="all" id="ttlPanel"
+				rendered="#{RutasBean.totalCards>0 and !(RutasBean.totalChange>0 || RutasBean.unchange!=null)}">
+				<f:facet name="header">
+							Total de tarjetas a desactivar
+					</f:facet>
+				<p:outputLabel value="Total Tarjetas:" id="totalCardOT" />
+				<p:outputLabel value="#{RutasBean.totalCards}" id="totalCard" />
+			</p:panelGrid>
+		</p:outputPanel>
+
+
+		<p:outputPanel id="responsePanel">
+			<p:panelGrid columns="2" border="1" rules="all"
+				id="responsePanelConfirm"
+				rendered="#{!RutasBean.showPanel and (RutasBean.totalChange>0 || RutasBean.unchange!=null)}">
+				<f:facet name="header">
+						Resultado del proceso
+					</f:facet>
+
+				<p:outputLabel value="Total de tarjetas desactivadas:"
+					id="logcodeConfirmOT" />
+				<p:outputLabel id="totalDesact" value="#{RutasBean.totalChange}"
+					converter="MyConverter">
+				</p:outputLabel>
+				<p:outputLabel value="Total de tarjetas no desactivadas:"
+					id="unchange" />
+				<p:outputLabel id="totalunchange" value="#{RutasBean.totalUnchange}"
+					converter="MyConverter">
+				</p:outputLabel>
+			</p:panelGrid>
+		</p:outputPanel>
+
+		<p:messages id="message" showDetail="true" closable="true"
+			autoUpdate="true" />
+
+		<p:outputPanel id="buttons">
+			<p:commandButton ajax="false" value="#{msg.viewasign}"
+				id="viewasignBtn" action="#{RutasBean.actionAssignCardsStolen}"
+				update="message,tablePanel,totalPanel,buttons"
+				rendered="#{RutasBean.showPanel and !(RutasBean.totalChange>0 || RutasBean.unchange!=null)}">
+			</p:commandButton>
+			<p:commandButton ajax="false" value="#{msg.removeassign}"
+				id="removeassignBtn" action="#{RutasBean.deleteLastAssignation}"
+				update="tablePanel,totalPanel,buttons"
+				rendered="#{RutasBean.totalCards>0 and !(RutasBean.totalChange>0 || RutasBean.unchange!=null)}">
+			</p:commandButton>
+			<p:commandButton ajax="false" value="Desactivar" id="deactivateBtn"
+				action="#{RutasBean.offAction}"
+				update="responsePanel,buttons,compraPanel,panelInput,tablePanel"
+				rendered="#{RutasBean.totalCards>0 and !(RutasBean.totalChange>0 || RutasBean.unchange!=null)}">
+			</p:commandButton>
+			<p:commandButton ajax="false" value="#{msg.cancel}" immediate="true"
+				validateClient="false" id="cancelBtn"
+				action="#{RutasBean.actionExit}" process="@none">
+			</p:commandButton>
+		</p:outputPanel>
+
+	</h:form>
+
+	<ui:include src="/include/IncludeFooter.html"></ui:include>
+
+</body>
+</html>

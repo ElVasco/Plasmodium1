@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:include src="/include/IncludeHeader.xhtml"></ui:include>
+
+<h:head></h:head>
+<body >
+	<p:panelGrid border="0" columns="1" rowClasses="t-whitebg"
+		style="background-color:#FFF;">
+		<f:facet name="header_table">
+			<p:outputLabel value="" />
+		</f:facet>
+		<p:outputLabel value="Ruta:" />
+		<p:outputLabel value="#{ReportBean.routeName}" converter="MyConverter" />
+		<p:outputLabel value="Fecha:" />
+		<p:outputLabel value="#{ReportBean.dateS}" converter="MyConverter" />
+		<p:dataTable styleClass="dataTables"  value="#{ReportBean.printList.fields}" var="rows"
+			style="background-color:#FFF; border-widtp:0px;"
+			columnClasses="t-number,t-number,t-number,t-number,t-number,t-number,t-number,t-number,t-number,t-number"
+			rowClasses="t-whitebg" headerClass="t-header">
+			<p:column rendered="#{ReportBean.label1b}">
+				<f:facet name="header">
+					<p:outputLabel value="#{ReportBean.label1}" />
+				</f:facet>
+				<p:outputLabel value="#{rows.field1}" />
+			</p:column>
+			<p:column rendered="#{ReportBean.label2b}">
+				<f:facet name="header">
+					<p:outputLabel value="#{ReportBean.label2}" />
+				</f:facet>
+				<p:outputLabel value="#{rows.field2}" />
+			</p:column>
+			<p:column rendered="#{ReportBean.label3b}">
+				<f:facet name="header">
+					<p:outputLabel value="#{ReportBean.label3}" />
+				</f:facet>
+				<p:outputLabel value="#{rows.field3}" />
+			</p:column>
+			<p:column rendered="#{ReportBean.label4b}">
+				<f:facet name="header">
+					<p:outputLabel value="#{ReportBean.label4}" />
+				</f:facet>
+				<p:outputLabel value="#{rows.field4}" />
+			</p:column>
+			<p:column rendered="#{ReportBean.label5b}">
+				<f:facet name="header">
+					<p:outputLabel value="#{ReportBean.label5}" />
+				</f:facet>
+				<p:outputLabel value="#{rows.field5}" />
+			</p:column>
+			<p:column rendered="#{ReportBean.label6b}">
+				<f:facet name="header">
+					<p:outputLabel value="#{ReportBean.label6}" />
+				</f:facet>
+				<p:outputLabel value="#{rows.field6}" />
+			</p:column>
+			<p:column rendered="#{ReportBean.label7b}">
+				<f:facet name="header">
+					<p:outputLabel value="#{ReportBean.label7}" />
+				</f:facet>
+				<p:outputLabel value="#{rows.field7}" />
+			</p:column>
+			<p:column rendered="#{ReportBean.label8b}">
+				<f:facet name="header">
+					<p:outputLabel value="#{ReportBean.label8}" />
+				</f:facet>
+				<p:outputLabel value="#{rows.field8}" />
+			</p:column>
+			<p:column rendered="#{ReportBean.label9b}">
+				<f:facet name="header">
+					<p:outputLabel value="#{ReportBean.label9}" />
+				</f:facet>
+				<p:outputLabel value="#{rows.field9}" />
+			</p:column>
+			<p:column rendered="#{ReportBean.label10b}">
+				<f:facet name="header">
+					<p:outputLabel value="#{ReportBean.label10}"
+						rendered="#{ReportBean.label10b}" />
+				</f:facet>
+				<p:outputLabel value="#{rows.field10}"
+					rendered="#{ReportBean.label10b}" />
+			</p:column>
+		</p:dataTable>
+	</p:panelGrid>
+</body>
+</html>

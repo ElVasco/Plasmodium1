@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:include src="/include/IncludeHeader.xhtml"></ui:include>
+
+<h:head></h:head>
+<body>
+	<ui:include src="/include/HiAndByeTrans.xhtml"></ui:include>
+	<ui:include src="/include/IncludeBanner.html"></ui:include>
+	<ui:include src="/include/IncludeTransMenu.xhtml"></ui:include>
+
+	<h2>Reporte de usuarios</h2>
+
+
+	<h:form id="reportForm">
+
+		<p:panelGrid border="0" columns="2">
+			<p:outputLabel> Reporte de usuarios</p:outputLabel>
+			<p:selectOneMenu id="reportType"
+				value="#{ReportBeanVI.selectedReport}" converter="MyConverter"
+				onchange="this.form.submit()"
+				valueChangeListener="#{ReportBeanVI.reportListenerMethod}"
+				immediate="true">
+				<f:selectItems value="#{ReportBeanVI.reportUsersList}" />
+			</p:selectOneMenu>
+		</p:panelGrid>
+
+		<p:panelGrid columns="2" border="1" rules="all" id="filtrosPanel"
+			rendered="#{ReportBeanVI.showFilters}">
+			<f:facet name="header">
+						Opciones de usuarios
+					</f:facet>
+
+			<p:outputLabel value="Fecha Desde:" id="fechaOC"
+				rendered="#{ReportBeanVI.showDateFrom}" />
+			<p:calendar id="selectDates" value="#{ReportBeanVI.dateFrom}"
+				pattern="dd/MM/yyyy" effect="slideDown"
+				validator="#{ValidadorBean.validate}"
+				rendered="#{ReportBeanVI.showDateFrom}">
+				<p:ajax event="dateSelect"
+					listener="#{ReportBeanVI.dateFromListener}" />
+			</p:calendar>
+			<p:outputLabel value="Fecha Hasta:" id="fechaOT"
+				rendered="#{ReportBeanVI.showDateTo}" />
+			<p:calendar id="selectDate" value="#{ReportBeanVI.dateTo}"
+				pattern="dd/MM/yyyy" effect="slideDown"
+				validator="#{ValidadorBean.validate}"
+				rendered="#{ReportBeanVI.showDateTo}">
+				<p:ajax event="dateSelect" listener="#{ReportBeanVI.dateToListener}" />
+			</p:calendar>
+		</p:panelGrid>
+		<p>
+			<p:message showSummary="true" showDetail="false"
+				errorClass="message-e" id="reportMessage" for="reportType"
+				style="color:red;font-style: oblique;text-decoration: overline;font-family: 'New Century Shoolbook',serif;" />
+		</p>
+		<p>
+			<p:message showSummary="true" showDetail="false"
+				errorClass="message-e" id="timePeriodMessage" for="timePeriodList"
+				style="color:red;font-style: oblique;text-decoration: overline;font-family: 'New Century Shoolbook',serif;" />
+		</p>
+		<p>
+			<p:message showSummary="true" showDetail="false"
+				errorClass="message-e" id="selectDateMessage" for="selectDate"
+				style="color:red;font-style: oblique;text-decoration: overline;font-family: 'New Century Shoolbook',serif;" />
+		</p>
+		<p>
+			<p:message showSummary="true" showDetail="false"
+				errorClass="message-e" id="selectDateToMessage" for="selectDateTo"
+				style="color:red;font-style: oblique;text-decoration: overline;font-family: 'New Century Shoolbook',serif;" />
+		</p>
+
+		<p:outputLabel value="#{ReportBeanVI.message}" id="messageNoPromOT"
+			rendered="#{ReportBeanVI.message!=null}"
+			style="font-weight:bold;color:red;" />
+		<br></br>
+		<p:commandButton ajax="false"   value="#{msg.reporte}" id="myActionLink3"
+			action="#{ReportBeanVI.actionGetReport}"
+			rendered="#{ReportBeanVI.showFilters}"  />
+		<p:commandButton ajax="false"    validateClient="false"  immediate="true" value="#{msg.cancelReport}" id="cancel"
+			action="#{ReportBeanVI.actionExit}" process="@none" />
+
+
+	</h:form>
+
+
+
+	<ui:include src="/include/IncludeFooter.html"></ui:include>
+
+</body>
+</html>

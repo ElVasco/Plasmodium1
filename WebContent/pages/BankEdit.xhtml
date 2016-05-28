@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:include src="/include/IncludeHeader.xhtml"></ui:include>
+
+<h:head></h:head>
+<body>
+	<ui:include src="/include/HiAndBye.xhtml"></ui:include>
+	<ui:include src="/include/IncludeBanner.html"></ui:include>
+	<ui:include src="/include/IncludeAdministracionMenu.xhtml"></ui:include>
+
+	<h2>Edición de Bancos</h2>
+	<h:form>
+		<p:panelGrid columns="2">
+			<p:outputLabel value="Banco:" />
+			<p:outputLabel value="Banco de Venezuela" title="Bank" />
+			<p:outputLabel value="Numero de Cuenta:" />
+			<p:inputText id="accountNumber" value="0989198990929309480902"
+				title="AccountNumber" required="true" />
+			<p:outputLabel value="Compania:" />
+			<p:outputLabel value="La PrimeraT C.A" title="Company1" />
+		</p:panelGrid>
+		<br />
+		<p:commandLink action="#{bank.edit}" value="Guardar">
+			<f:param name="jsfcrud.currentBank"
+				value="#{jsfcrud_class['com.novared.entity.util.JsfUtil'].jsfcrud_method['getAsConvertedString'][bank.bank][bank.converter].jsfcrud_invoke}" />
+		</p:commandLink>
+		<br />
+		<br />
+		<p:commandLink action="#{bank.detailSetup}" value="Mostrar"
+			immediate="true">
+			<f:param name="jsfcrud.currentBank"
+				value="#{jsfcrud_class['com.novared.entity.util.JsfUtil'].jsfcrud_method['getAsConvertedString'][bank.bank][bank.converter].jsfcrud_invoke}" />
+		</p:commandLink>
+		<br />
+		<p:commandLink action="#{bank.listSetup}"
+			value="Mostrar todas las Cuentas de Banco" immediate="true" />
+
+	</h:form>
+
+	<ui:include src="/include/IncludeFooter.html"></ui:include>
+
+</body>
+</html>

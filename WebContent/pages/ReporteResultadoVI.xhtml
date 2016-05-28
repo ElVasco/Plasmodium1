@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:include src="/include/IncludeHeader.xhtml"></ui:include>
+
+<h:head></h:head>
+<body>
+
+	<!-- Esta parte es delicada la lista se llena en un bean "UserBean" pero se selecciona con otro "AsignarDistribuidor1Bean" -->
+	<ui:include src="/include/HiAndByeTrans.xhtml"></ui:include>
+	<ui:include src="/include/IncludeBanner.html"></ui:include>
+	<ui:include src="/include/IncludeTransMenu.xhtml"></ui:include>
+
+	<h2>Resultado de Reporte</h2>
+
+	<h:form id="ReporteResultadoVIForm">
+		<p:commandButton ajax="false"   value="#{msg.exitReport}" id="cancel" 
+			action="#{ReportBeanVI.actionExit}" process="@none" />
+
+		<p:panelGrid border="1" columns="1">
+			<f:facet name="header">
+				<p:outputLabel value="#{ReportBeanVI.tittle}" />
+			</f:facet>
+			<p:dataTable styleClass="dataTables"
+				value="#{ReportBeanVI.resultList.fields}" var="rows">
+				<p:column rendered="#{ReportBeanVI.label1b}">
+					<f:facet name="header">
+						<p:outputLabel value="#{ReportBeanVI.label1}" />
+					</f:facet>
+					<p:outputLabel value="#{rows.field1}" />
+				</p:column>
+				<p:column rendered="#{ReportBeanVI.label2b}">
+					<f:facet name="header">
+						<p:outputLabel value="#{ReportBeanVI.label2}" />
+					</f:facet>
+					<p:outputLabel value="#{rows.field2}" />
+				</p:column>
+				<p:column rendered="#{ReportBeanVI.label3b}">
+					<f:facet name="header">
+						<p:outputLabel value="#{ReportBeanVI.label3}" />
+					</f:facet>
+					<p:outputLabel value="#{rows.field3}" />
+				</p:column>
+				<p:column rendered="#{ReportBeanVI.label4b}">
+					<f:facet name="header">
+						<p:outputLabel value="#{ReportBeanVI.label4}" />
+					</f:facet>
+					<p:outputLabel value="#{rows.field4}" />
+				</p:column>
+				<p:column rendered="#{ReportBeanVI.label5b}">
+					<f:facet name="header">
+						<p:outputLabel value="#{ReportBeanVI.label5}" />
+					</f:facet>
+					<p:outputLabel value="#{rows.field5}" />
+				</p:column>
+				<p:column rendered="#{ReportBeanVI.label6b}">
+					<f:facet name="header">
+						<p:outputLabel value="#{ReportBeanVI.label6}" />
+					</f:facet>
+					<p:outputLabel value="#{rows.field6}" />
+				</p:column>
+				<p:column rendered="#{ReportBeanVI.label7b}">
+					<f:facet name="header">
+						<p:outputLabel value="#{ReportBeanVI.label7}" />
+					</f:facet>
+					<p:outputLabel value="#{rows.field7}" />
+				</p:column>
+				<p:column rendered="#{ReportBeanVI.label8b}">
+					<f:facet name="header">
+						<p:outputLabel value="#{ReportBeanVI.label8}" />
+					</f:facet>
+					<p:outputLabel value="#{rows.field8}" />
+				</p:column>
+				<p:column rendered="#{ReportBeanVI.label9b}">
+					<f:facet name="header">
+						<p:outputLabel value="#{ReportBeanVI.label9}" />
+					</f:facet>
+					<p:outputLabel value="#{rows.field9}" />
+				</p:column>
+				<p:column rendered="#{ReportBeanVI.label10b}">
+					<f:facet name="header">
+						<p:outputLabel value="#{ReportBeanVI.label10}" />
+					</f:facet>
+					<p:outputLabel value="#{rows.field10}" />
+				</p:column>
+			</p:dataTable>
+		</p:panelGrid>
+
+		<p:commandButton ajax="false"   value="#{msg.exitReport}" id="cancelBottom"
+			 action="#{ReportBeanVI.actionExit}" process="@none" />
+	</h:form>
+
+	<ui:include src="/include/IncludeFooter.html"></ui:include>
+
+</body>
+</html>

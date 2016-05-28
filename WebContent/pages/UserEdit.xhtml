@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:include src="/include/IncludeHeader.xhtml"></ui:include>
+
+<h:head></h:head>
+<body>
+	<ui:include src="/include/HiAndBye.xhtml"></ui:include>
+	<ui:include src="/include/IncludeBanner.html"></ui:include>
+	<ui:include src="/include/IncludeInicioMenu.xhtml"></ui:include>
+
+
+
+	<p:outputPanel id="userEditPanel" styleClass="blockUser">
+		<h:form id="ClientId" styleClass="distributerSelector">
+			<h9>Panel de creación de usuarios</h9>
+			<h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="0">
+				<p:panelGrid columns="2" border="1" rules="all"
+					title="Datos del Usuario" id="userDetail">
+					<p:outputLabel value="Nombres:*" id="nameLabel" />
+					<p:inputText id="name" value="#{UserVideoBean.name}"
+						required="true" validator="#{ValidadorBean.validate}" size="30" />
+					<p:outputLabel value="Apellidos:*" id="lastNameLabel" />
+					<p:inputText id="lastname" value="#{UserVideoBean.lastname}"
+						required="true" validator="#{ValidadorBean.validate}" size="30" />
+					<p:outputLabel value="Correo:*" id="correoLabel" />
+					<p:inputText id="mail" value="#{UserVideoBean.mail}"
+						validator="#{ValidadorBean.validate}" required="true" size="30" />
+				</p:panelGrid>
+
+
+				<p:messages id="error" showDetail="true" autoUpdate="true"
+					closable="true" />
+				<p:outputPanel id="buttonPanel">
+					<p:commandButton ajax="false" value="#{msg.actionAddUser}"
+						id="buttonAdd" action="#{UserVideoBean.actionAddUser}" />
+					<p:commandButton ajax="false" value="#{msg.cancel}"
+						immediate="true" validateClient="false" id="cancel"
+						process="@none" action="#{UserVideoBean.actionExit}" />
+				</p:outputPanel>
+			</h:panelGrid>
+		</h:form>
+	</p:outputPanel>
+
+
+
+	<p:growl id="growl" showDetail="true" sticky="false" life="4000" />
+	<ui:include src="/include/IncludeFooter.html"></ui:include>
+
+</body>
+</html>

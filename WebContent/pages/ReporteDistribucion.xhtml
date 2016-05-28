@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:include src="/include/IncludeHeader.xhtml"></ui:include>
+
+<h:head></h:head>
+<body>
+	<ui:include src="/include/HiAndByeTrans.xhtml"></ui:include>
+	<ui:include src="/include/IncludeBanner.html"></ui:include>
+	<ui:include src="/include/IncludeTransMenu.xhtml"></ui:include>
+
+	<h2>Reportes de distribución</h2>
+
+	<h:form id="reportForm">
+		<p:panelGrid border="0" columns="2">
+			<p:outputLabel> Reportes de distribución</p:outputLabel>
+			<p:selectOneMenu id="reportType"
+				value="#{DistributionReportBean.selectedReport}"
+				converter="MyConverter">
+				<p:ajax listener="#{DistributionReportBean.reportListener}"
+					update="filtrosPanel,panelButton" />
+				<f:selectItems value="#{DistributionReportBean.reportList}" />
+			</p:selectOneMenu>
+		</p:panelGrid>
+
+		<p:outputPanel id="filtrosPanel">
+			<p:panelGrid columns="2" border="1" rules="all"
+				rendered="#{DistributionReportBean.showFilters}">
+				<f:facet name="header">
+					Opciones de Selección
+				</f:facet>
+				<p:outputLabel value="Zona:" id="distOT"
+					rendered="#{DistributionReportBean.showDistributer}" />
+				<p:selectOneMenu
+					value="#{DistributionReportBean.selectedDistributer}"
+					id="distribuidorList" converter="MyConverter" immediate="true"
+					rendered="#{DistributionReportBean.showDistributer}"
+					onchange="this.form.submit()"
+					valueChangeListener="#{DistributionReportBean.distributerListenerMethod}">
+					<f:selectItems value="#{DistributionReportBean.selectDistributer}" />
+				</p:selectOneMenu>
+				<p:outputLabel value="Ruta:" id="rutaOT"
+					rendered="#{DistributionReportBean.showRoute}" />
+				<p:selectOneMenu value="#{DistributionReportBean.selectedRoute}"
+					id="rutaList" converter="MyConverter" immediate="true"
+					rendered="#{DistributionReportBean.showRoute}"
+					onchange="this.form.submit()"
+					valueChangeListener="#{DistributionReportBean.routeListenerMethod}">
+					<f:selectItems value="#{DistributionReportBean.selectRoute}" />
+				</p:selectOneMenu>
+				<p:outputLabel value="Denominación:" id="denominacionOT"
+					rendered="#{DistributionReportBean.showDenom}" />
+				<p:selectOneMenu id="denominacionList"
+					value="#{DistributionReportBean.selectedDenom}"
+					converter="MyConverter" immediate="true"
+					validator="#{ValidadorBean.validate}"
+					rendered="#{DistributionReportBean.showDenom}"
+					valueChangeListener="#{DistributionReportBean.selectedDenomListener}">
+					<f:selectItems value="#{GlobalData.selectPacking}" />
+				</p:selectOneMenu>
+				<p:outputLabel value="Fecha Desde:" id="fechaOT"
+					rendered="#{DistributionReportBean.showDate}" />
+				<p:calendar id="selectDate" value="#{DistributionReportBean.date}"
+					pattern="dd/MM/yyyy" effect="slideDown"
+					validator="#{ValidadorBean.validate}"
+					rendered="#{DistributionReportBean.showDate}">
+					<p:ajax event="dateSelect"
+						listener="#{DistributionReportBean.dateListener}" />
+				</p:calendar>
+				<p:outputLabel value="Fecha Hasta:" id="fechaHastaOT"
+					rendered="#{DistributionReportBean.showDateTo}" />
+				<p:calendar id="selectDateTo"
+					value="#{DistributionReportBean.dateTo}" pattern="dd/MM/yyyy"
+					effect="slideDown" rendered="#{DistributionReportBean.showDateTo}">
+					<p:ajax event="dateSelect"
+						valueChangeListener="#{DistributionReportBean.dateToListener}" />
+				</p:calendar>
+			</p:panelGrid>
+		</p:outputPanel>
+
+		<p:messages id="message" showDetail="true" autoUpdate="true"
+			closable="true" />
+
+		<p:outputPanel id="panelButton">
+			<p:commandButton ajax="false"   value="#{msg.reporte}" id="myActionLink3"
+				action="#{DistributionReportBean.actionGetReport}"
+				rendered="#{DistributionReportBean.showFilters}" 
+				update="message" />
+			<p:commandButton ajax="false"    validateClient="false"  immediate="true" value="#{msg.cancelReport}" id="cancel"
+				action="#{DistributionReportBean.actionExit}" process="@none" />
+		</p:outputPanel>
+
+	</h:form>
+
+
+
+	<ui:include src="/include/IncludeFooter.html"></ui:include>
+
+</body>
+</html>

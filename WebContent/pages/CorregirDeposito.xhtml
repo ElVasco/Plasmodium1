@@ -1,0 +1,213 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:include src="/include/IncludeHeader.xhtml"></ui:include>
+
+<h:head></h:head>
+<body>
+	<ui:include src="/include/HiAndByeTrans.xhtml"></ui:include>
+	<ui:include src="/include/IncludeBanner.html"></ui:include>
+	<ui:include src="/include/IncludeTransMenu.xhtml"></ui:include>
+
+	<h2>Corrección de Depósito</h2>
+
+	<h:form id="facturaId">
+		<p:outputPanel id="panel">
+			<p:panelGrid columns="2" border="1" rules="all"
+				rendered="#{!DepositBean.showCorret and !DepositBean.showBillList}"
+				id="clientPanel">
+				<f:facet name="header">
+							Datos generales del depósito
+						</f:facet>
+
+				<p:outputLabel value="Ruta:" id="rutaOT" />
+				<p:selectOneMenu value="#{DepositBean.selectedRoute}" id="rutaList"
+					validator="#{ValidadorBean.validate}">
+					<p:ajax listener="#{DepositBean.routeListenerMethod2}"
+						update="message,depositList" />
+					<f:selectItems value="#{GlobalData.selectRutas}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Depósito:" id="depositOT" />
+				<p:selectOneMenu value="#{DepositBean.selectedDeposit}"
+					id="depositList" validator="#{ValidadorBean.validate}">
+					<f:selectItems value="#{DepositBean.selectDeposit}" />
+				</p:selectOneMenu>
+			</p:panelGrid>
+		</p:outputPanel>
+
+		<p:outputPanel id="panelShowCorrect">
+
+			<p:panelGrid columns="2" border="1" rules="all"
+				rendered="#{DepositBean.showCorret}" id="depositoPanelCorret">
+				<f:facet name="header">
+							Datos generales del depósito
+						</f:facet>
+				<p:outputLabel value="Monto del Deposito:" id="montoOTCorret" />
+				<p:outputLabel value="#{DepositBean.outAmountTotalDecimal}"
+					id="MontoCorret" />
+				<p:outputLabel value="Cantidad de Depositos Realizados:"
+					id="rafagaOTCorret" />
+				<p:outputLabel value="#{DepositBean.cantidadDeposits}"
+					id="CantDepositosCorret" />
+			</p:panelGrid>
+
+			<p:dataTable value="#{DepositBean.depositList}" var="act"
+				id="tablaCorret" rendered="#{DepositBean.showCorret}">
+
+				<p:column headerText="Numero de Control">
+					<h:outputText value="#{act.control_number}" />
+				</p:column>
+
+				<p:column headerText="Fecha">
+					<h:outputText value="#{act.bill_Date}" />
+				</p:column>
+
+				<p:column headerText="Monto">
+					<h:outputLabel value="#{act.value}" converter="AmountConverter"/>
+				</p:column>
+
+			</p:dataTable>
+		</p:outputPanel>
+
+		<p:outputPanel id="panel1">
+			<p:panelGrid columns="2" border="1" rules="all"
+				rendered="#{DepositBean.showBillList}" id="depositoPanel">
+				<f:facet name="header">
+							Datos generales del depósito
+						</f:facet>
+
+				<p:outputLabel value="Ruta:" id="rutaOTCorrect" />
+				<p:selectOneMenu id="rutaListCorret" value="#{DepositBean.selectedRoute}"
+					disabled="#{DepositBean.displayRoute}">
+					<p:ajax listener="#{DepositBean.routeListenerMethod}"
+						update="message,panel2" />
+					<f:selectItems value="#{GlobalData.selectRutas}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Banco:" id="bancoOT" />
+				<p:selectOneMenu id="bankList" value="#{DepositBean.selectedBank}"
+					validator="#{ValidadorBean.validate}" required="true"
+					disabled="#{DepositBean.displayBank}">
+					<f:selectItems value="#{GlobalData.selectBanks}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Fecha:" id="fechaOT" />
+				<p:calendar id="Fecha" value="#{DepositBean.date}"
+					disabled="#{DepositBean.displayDate}" pattern="dd/MM/yyyy" effect="slideDown">
+				</p:calendar>
+
+				<p:outputLabel value="Monto:" id="montoOT" />
+				<p:inputText value="#{DepositBean.amountTotal}" id="Monto" size="40"
+					required="true" maxlength="10"
+					disabled="#{DepositBean.displayAmount}"
+					validator="#{ValidadorBean.validate}" />
+
+				<p:outputLabel value="Ráfaga Bancaria:" id="rafagaOT" />
+				<p:inputText value="#{DepositBean.controlNum}" id="Rafaga"
+					required="true" maxlength="16" size="40"
+					disabled="#{DepositBean.displayRafaga}"
+					validator="#{ValidadorBean.validate}" />
+			</p:panelGrid>
+		</p:outputPanel>
+
+		<p:outputPanel id="panel2">
+			<p:panelGrid columns="1" border="1" rules="all" id="tarjetasPanel"
+				rendered="#{DepositBean.showBillList}">
+
+				<f:facet name="header">
+							Asignación de guía de despacho al depósito
+						</f:facet>
+
+				<p:selectManyCheckbox value="#{DepositBean.selectedItems}"
+					layout="pageDirection" disabled="#{DepositBean.displayBill}">
+					<f:selectItems value="#{DepositBean.billList}" />
+				</p:selectManyCheckbox>
+
+			</p:panelGrid>
+		</p:outputPanel>
+
+		<p:outputPanel id="panel3">
+			<p:panelGrid columns="2" border="1" rules="all"
+				title="Datos Generales del Depósito de Ajuste"
+				id="depositoAuxiliarPanel"
+				rendered="#{DepositBean.depositAux and DepositBean.showBillList}">
+				<f:facet name="header">
+							Datos generales del depósito de ajuste
+						</f:facet>
+
+				<p:outputLabel value="Banco:" id="bancoAuxOT" />
+				<p:selectOneMenu id="bankAuxList"
+					value="#{DepositBean.selectedBankAux}"
+					disabled="#{DepositBean.displayBankAux}" validator="#{ValidadorBean.validate}">
+					<f:selectItems value="#{GlobalData.selectBanks}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Fecha:" id="fechaAuxOT" />
+				<p:calendar id="FechaAjuste" value="#{DepositBean.dateAux}"
+					disabled="#{DepositBean.displayDateAux}" pattern="dd/MM/yyyy" effect="slideDown">
+				</p:calendar>
+
+				<p:outputLabel value="Monto:" id="montoAuxOT" />
+				<p:inputText id="MontoDepositoAjuste"
+					value="#{DepositBean.amountTotalAux}" maxlength="10" size="40"
+					disabled="#{DepositBean.displayAmountAux}" required="true" 
+					validator="#{ValidadorBean.validate}" />
+
+				<p:outputLabel value="Ráfaga Bancaria:" id="rafagaAuxOT" />
+				<p:inputText id="RafagaDepositoAjuste"
+					value="#{DepositBean.controlNumAux}"
+					disabled="#{DepositBean.displayRafagaAux}" maxlength="16" size="40"
+					required="true" validator="#{ValidadorBean.validate}" />
+
+			</p:panelGrid>
+
+		</p:outputPanel>
+
+		<p:messages id="message" showDetail="true" closable="true"
+			autoUpdate="true" />
+
+		<p:outputPanel id="panelButton">
+			<p:commandButton ajax="false"   value="#{msg.viewdocument}" id="myActionLink"
+				action="#{DepositBean.actionViewDocument}"
+				update="message,panelShowCorrect,panel,panelButton"
+				rendered="#{!DepositBean.showCorret and !DepositBean.showBillList}" />
+
+			<!--  <p:commandButton ajax="false"   value="#{msg.delete}" id="myActionDelete"
+				action="#{DepositBean.actionDelete}"
+				update="message,panelShowCorrect,panel,panelButton"
+				rendered="#{DepositBean.deleteDeposit}" />-->
+
+			<p:commandButton ajax="false"   value="#{msg.updateDeposit}" id="modifyButton"
+				action="#{DepositBean.addAssignation}"
+				update="panelShowCorrect,panel,panel1,panel2,panel3,panelButton"
+				rendered="#{DepositBean.showCorret}" />
+
+			<p:commandButton ajax="false" value="#{msg.validar}" id="botonV1"
+				actionListener="#{DepositBean.checkDepositAmount}"
+				update="message,panel3,panelButton"
+				rendered="#{DepositBean.showBillList and !DepositBean.valid and !DepositBean.valid2}" />
+
+			<p:commandButton ajax="false" value="#{msg.errorData}" id="wrongData"
+				actionListener="#{DepositBean.wrongData}"
+				update="message,panel2,panel3,panelButton"
+				rendered="#{DepositBean.valid || DepositBean.valid2}" />
+
+			<p:commandButton ajax="false"   value="#{msg.grabarDeposito}" id="botonG"
+				action="#{DepositBean.actionCreateDeposit}"
+				update="message,panelButton"
+				rendered="#{DepositBean.valid || DepositBean.valid2}" />
+		</p:outputPanel>
+
+		<p:commandButton ajax="false"   value="#{msg.cancel}" immediate="true" validateClient="false" id="myActionLink5"
+			action="#{DepositBean.actionExit}" process="@none" />
+
+	</h:form>
+
+	<ui:include src="/include/IncludeFooter.html"></ui:include>
+
+</body>
+</html>

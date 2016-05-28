@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:include src="/include/IncludeHeader.xhtml"></ui:include>
+
+<h:head></h:head>
+<body>
+	<ui:include src="/include/HiAndByeTrans.xhtml"></ui:include>
+	<ui:include src="/include/IncludeBanner.html"></ui:include>
+	<ui:include src="/include/IncludeTransMenu.xhtml"></ui:include>
+	<h2>Aprobación de Depósitos</h2>
+
+	<h:form id="Deposito">
+
+		<p:outputPanel id="panel">
+			<p:panelGrid border="0" columns="2">
+				<p:outputLabel>Tipo de Busqueda</p:outputLabel>
+				<p:selectOneMenu id="depositType"
+					value="#{DepositBean.selectedTypeSearch}" converter="MyConverter">
+					<p:ajax listener="#{DepositBean.depositListenerMethod}"
+						update="panel" />
+					<f:selectItems value="#{DepositBean.depositListSearch}" />
+				</p:selectOneMenu>
+			</p:panelGrid>
+
+			<p:panelGrid columns="2" border="1" rules="all"
+				rendered="#{DepositBean.showBank || DepositBean.showBank2}"
+				id="depositPanel">
+				<f:facet name="header">
+							Datos Generales del Depósito
+						</f:facet>
+
+				<p:outputLabel value="Banco:" id="bancoOT2"
+					rendered="#{DepositBean.showBank2}" />
+				<p:selectOneMenu id="bankList2" value="#{DepositBean.selectedBank}"
+					converter="MyConverter" rendered="#{DepositBean.showBank2}"
+					validator="#{ValidadorBean.validate}">
+					<f:selectItems value="#{DepositBean.selectSearchDeposit}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Banco:" id="bancoOT"
+					rendered="#{DepositBean.showBank}" />
+				<p:selectOneMenu id="bankList" value="#{DepositBean.selectedBank}"
+					converter="MyConverter" validator="#{ValidadorBean.validate}"
+					rendered="#{DepositBean.showBank}">
+					<f:selectItems value="#{GlobalData.selectBanks}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Fecha Desde:" id="fechaOT"
+					rendered="#{DepositBean.showDateFrom}" />
+				<p:calendar id="selectDate1" value="#{DepositBean.dateFrom}"
+					pattern="dd/MM/yyyy" effect="slideDown"
+					validator="#{ValidadorBean.validate}"
+					rendered="#{DepositBean.showDateFrom}">
+				</p:calendar>
+				<p:outputLabel value="Fecha Hasta:" id="fechaHastaOT"
+					rendered="#{DepositBean.showDateTo}" />
+				<p:calendar id="selectDateTo" value="#{DepositBean.dateTo}"
+					pattern="dd/MM/yyyy" effect="slideDown"
+					rendered="#{DepositBean.showDateTo}">
+				</p:calendar>
+			</p:panelGrid>
+
+
+			<p:panelGrid columns="2" border="1" rules="all"
+				rendered="#{DepositBean.showBlock}" id="panelApDeposit">
+				<f:facet name="header">
+							Panel de Aprobación de Depósitos
+						</f:facet>
+
+				<p:selectManyCheckbox value="#{DepositBean.selectedItems}"
+					layout="pageDirection">
+					<f:selectItems value="#{DepositBean.depositListDTV}" />
+				</p:selectManyCheckbox>
+			</p:panelGrid>
+
+			<p:messages id="message" showDetail="true" closable="true"
+				autoUpdate="true" />
+
+			<p:commandButton ajax="false"   value="#{msg.search}" id="myActionLink33"
+				actionListener="#{DepositBean.selectedApproveDepositListener}"
+				rendered="#{!DepositBean.showBlock}" update="panel,panelApDeposit" />
+
+			<p:commandButton ajax="false"   value="#{msg.aproval}"
+				action="#{DepositBean.actionList}"
+				rendered="#{DepositBean.showBlock}" update="message" />
+
+			<p:commandButton ajax="false"   value="#{msg.noaproval}"
+				action="#{DepositBean.actionRejectDeposit}"
+				rendered="#{DepositBean.showBlock}" update="message" />
+
+			<p:commandButton ajax="false"   value="#{msg.cancel}" immediate="true" validateClient="false" id="myActionLink5"
+				action="#{DepositBean.actionExit}" process="@none" />
+
+			<br></br>
+			<p:commandButton ajax="false"   value="#{msg.backSearch}" id="myActionBack"
+				action="#{DepositBean.backSearchListener}"
+				rendered="#{DepositBean.showBlock}" update="panel" />
+		</p:outputPanel>
+	</h:form>
+	<ui:include src="/include/IncludeFooter.html"></ui:include>
+</body>
+</html>

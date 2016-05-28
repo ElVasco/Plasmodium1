@@ -1,0 +1,240 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+<body>
+
+	<p:menubar autoDisplay="true">
+		<p:menuitem value="INICIO" icon="ui-icon-home" url="MenuInicio.jsf" />
+		<!--<p:menuitem value="ADMINISTRACIÓN" icon="ui-icon-home" rendered="#{AuthorizationBean.ADMIN_MENU}" url="Administration.jsf" />-->
+		<p:submenu label="ADMINISTRACIÓN" icon="ui-icon-wrench"
+			rendered="#{AuthorizationBean.ADMIN_MENU}">
+
+			<p:menuitem value="Asignacion de contenido" url="Administration.jsf"
+				rendered="#{AuthorizationBean.ADMIN_MENU}" />
+			<p:menuitem value="Crear Usuario" url="UserEdit.jsf"
+				rendered="#{AuthorizationBean.CREATE_USER}" />
+		</p:submenu>
+		<!--<p:menuitem value="Aprobar usuario" url="AprobarUsuario.jsf"
+				rendered="#{AuthorizationBean.IS_APPROVE_USER}" />
+			<p:menuitem value="Puntos de Venta" url="Epos.jsf"
+				rendered="#{AuthorizationBean.IS_VIEW_POS_WEB || AuthorizationBean.IS_CREATE_POS_WEB || AuthorizationBean.IS_UPDATE_POS_WEB || AuthorizationBean.IS_DELETE_POS_WEB}" />
+			<p:menuitem value="Registrar sub-usuario"
+				url="RegistroSubUsuario.jsf"
+				rendered="#{AuthorizationBean.IS_SUBUSER_REGISTER}" />
+			<p:menuitem value="Usuarios" url="User.jsf"
+				rendered="#{AuthorizationBean.CREATE_USER || AuthorizationBean.MODIFY_USER || AuthorizationBean.DELETE_USER || AuthorizationBean.VIEW_USER}" />
+
+			<p:submenu label="Administración de pines"
+				rendered="#{AuthorizationBean.CHANGE_STATUS_NVRD || AuthorizationBean.PIN_GENERATION_REQUEST || AuthorizationBean.CHANGE_STATUS_MANUF || AuthorizationBean.CHANGE_STATUS_DISTRIB}">
+				<p:menuitem value="Solicitar pines" url="SolicitudPines.jsf"
+					rendered="#{AuthorizationBean.PIN_GENERATION_REQUEST}" />
+				<p:menuitem value="Crear pines solicitados"
+					url="CreacionDePinesPorRequerimiento.jsf"
+					rendered="#{AuthorizationBean.CHANGE_STATUS_NVRD}" />
+				<p:menuitem value="Cambio de estatus" url="CambioDeEstatus.jsf"
+					rendered="#{AuthorizationBean.CHANGE_STATUS_NVRD || AuthorizationBean.CHANGE_STATUS_MANUF || AuthorizationBean.CHANGE_STATUS_DISTRIB}" />
+			</p:submenu>
+
+			<p:submenu label="Administración de reclamos"
+				rendered="#{AuthorizationBean.CHANGE_STATUS_DIRECTV}">
+				<p:menuitem value="Reclamo de tarjetas" url="RecargaManual.jsf"
+					rendered="#{AuthorizationBean.CHANGE_STATUS_DIRECTV}" />
+			</p:submenu>
+		</p:submenu>
+		<p:submenu label="COMPRA" icon="ui-icon-cart"
+			rendered="#{AuthorizationBean.IS_BUYS_MENU}">
+			<p:menuitem value="Pago con depósito" url="AgregarDepositoVI.jsf"
+				rendered="#{AuthorizationBean.IS_REGISTER_PAYMENT}" />
+			<p:menuitem value="Recarga de tickets" url="RecargaSaldoSANITAS.jsf"
+				rendered="#{AuthorizationBean.RECHARGE_TICKETS}" />
+			<p:menuitem value="Pago con TDC" url="RecargaSaldoSANITASTDC.jsf"
+				rendered="#{AuthorizationBean.CREDIT_CARD_PAYMENT}" />
+		</p:submenu>
+		<p:submenu label="DISTRIBUCIÓN" icon="ui-icon-shuffle"
+			rendered="#{AuthorizationBean.DISTRIB_MENU}">
+			<p:submenu label="Distribución a zona"
+				rendered="#{AuthorizationBean.DISTRIB_ZONE || AuthorizationBean.REVERSE_ZONE}">
+				<p:menuitem value="Asignar inv. zona" url="AsignarDistribuidor.jsf"
+					rendered="#{AuthorizationBean.DISTRIB_ZONE}" />
+				<p:menuitem value="Reverso inv. zona" url="ReversoDistribuidor.jsf"
+					rendered="#{AuthorizationBean.REVERSE_ZONE}" />
+			</p:submenu>
+			<p:submenu label="Distribución a ruta"
+				rendered="#{AuthorizationBean.DISTRIB_ROUTE || AuthorizationBean.REVERSE_ROUTE}">
+				<p:menuitem value="Asignar inv. ruta" url="AsignarRuta.jsf"
+					rendered="#{AuthorizationBean.DISTRIB_ROUTE}" />
+				<p:menuitem value="Reverso inv. ruta" url="ReversoRuta.jsf"
+					rendered="#{AuthorizationBean.REVERSE_ROUTE}" />
+			</p:submenu>
+			<p:submenu label="Distribución de saldo"
+				rendered="#{AuthorizationBean.IS_E_TRANSFER || AuthorizationBean.IS_D_TRANSFER}">
+				<p:menuitem value="Asignación de saldo"
+					url="DistribucionSaldoVI.jsf"
+					rendered="#{AuthorizationBean.IS_E_TRANSFER}" />
+				<p:menuitem value="Reverso de saldo" url="ReversoSaldoVI.jsf"
+					rendered="#{AuthorizationBean.IS_D_TRANSFER}" />
+			</p:submenu>
+		</p:submenu>
+
+		<p:submenu label="VENTA" icon="ui-icon-cart"
+			rendered="#{AuthorizationBean.SALES_MENU}">
+			<p:submenu label="Gestión de rutas"
+				rendered="#{AuthorizationBean.ACTIVE_ROUTE}">
+				<p:menuitem value="Activación/Desactivación" url="RutasActDes.jsf"
+					rendered="#{AuthorizationBean.ACTIVE_ROUTE}" />
+				<p:menuitem value="Desactivar consecutivos en ruta"
+					url="DesactivarTarjetasRobadasRutas.jsf"
+					rendered="#{AuthorizationBean.ACTIVE_ROUTE}" />
+			</p:submenu>
+			<p:submenu label="Guías de despacho"
+				rendered="#{AuthorizationBean.CREATE_BILL || AuthorizationBean.MODIFY_BILL}">
+				<p:menuitem value="Agregar guía despacho" url="AgregarFactura.jsf"
+					rendered="#{AuthorizationBean.CREATE_BILL}" />
+				<p:menuitem value="Corregir guía despacho" url="CorregirFactura.jsf"
+					rendered="#{AuthorizationBean.MODIFY_BILL}" />
+			</p:submenu>
+			<p:submenu label="Depósitos"
+				rendered="#{AuthorizationBean.CREATE_DEPOSIT || AuthorizationBean.MODIFY_DEPOSIT || AuthorizationBean.APPROVE_DEPOSIT || AuthorizationBean.IS_APPROVE_DEPOSIT}">
+				<p:menuitem value="Agregar depósitos" url="AgregarDeposito.jsf"
+					rendered="#{AuthorizationBean.CREATE_DEPOSIT}" />
+				<p:menuitem value="Corregir depósitos" url="CorregirDeposito.jsf"
+					rendered="#{AuthorizationBean.MODIFY_DEPOSIT}" />
+				<p:menuitem value="Aprobar depósitos"
+					url="CorregirDepositoDistribuidor.jsf"
+					rendered="#{AuthorizationBean.APPROVE_DEPOSIT}" />
+				<p:menuitem value="Aprobar depósitos lista"
+					url="CorregirDepositoDistribuidorLista.jsf"
+					rendered="#{AuthorizationBean.APPROVE_DEPOSIT}" />
+				<p:menuitem value="Aprobar depósitos" url="ApDepositoLista.jsf"
+					rendered="#{AuthorizationBean.IS_APPROVE_DEPOSIT}" />
+			</p:submenu>
+			<p:submenu label="Vendedor GRE5"
+				rendered="#{AuthorizationBean.IS_SELL_PIN}">
+				<p:menuitem value="Vender PIN virtual" url="VenderPinVirtualVI.jsf"
+					rendered="#{AuthorizationBean.IS_SELL_PIN}" />
+			</p:submenu>
+
+		</p:submenu>
+
+		<p:submenu label="LIQUIDACIÓN" icon="ui-icon-script"
+			rendered="#{AuthorizationBean.ELECTRONIC_LIQUIDATION_MENU}">
+			<p:menuitem value="Aprobación de depósitos"
+				url="AprobacionLiquidacionCadena.jsf"
+				rendered="#{AuthorizationBean.APPROVE_DEPOSIT_GRE}" />
+			<p:menuitem value="Liquidación recargas electronicas"
+				url="LiquidacionCadena.jsf"
+				rendered="#{AuthorizationBean.CHAIN_LIQUIDATION}" />
+			<p:menuitem value="Liquidación GRE5" url="LiquidacionGRE5.jsf"
+				rendered="#{AuthorizationBean.GRE5_LIQUIDATION}" />
+		</p:submenu>
+
+		<p:submenu label="REPORTES" icon="ui-icon-print"
+			rendered="#{AuthorizationBean.REPORTS_MENU}">
+
+			<p:menuitem value="Depósitos de Recargas Electrónicas"
+				url="ReporteDepositosRecargasElectronicas.jsf"
+				rendered="#{AuthorizationBean.LIST_DEPOSIT_USER || AuthorizationBean.LIST_DEPOSIT_USER_COMPANY || AuthorizationBean.LIST_DEPOSIT_COMPANY}" />
+			<p:menuitem value="Cuentas por Cobrar"
+				url="ReporteCuentasporCobrar.jsf"
+				rendered="#{AuthorizationBean.LIST_ALL_ACCOUNTTOPAY}" />
+			<p:menuitem value="Cuentas por Pagar"
+				url="ReporteCuentasporPagar.jsf"
+				rendered="#{AuthorizationBean.LIST_ALL_ACCOUNTTOPAY || AuthorizationBean.LIST_ACCOUNTTOPAY}" />
+			<p:menuitem value="Ventas" url="ReporteVentasVI.jsf"
+				rendered="#{AuthorizationBean.IS_SALES_REPORT}" />
+			<p:menuitem value="Puntos de venta" url="ReportePosVentasVI.jsf"
+				rendered="#{AuthorizationBean.IS_POS_SALES_REPORT}" />
+			<p:menuitem value="Recargas" url="ReporteRecargas.jsf"
+				rendered="#{AuthorizationBean.RECHARGE_REPORTS}" />
+			<p:menuitem value="Servicios" url="ReporteServicios.jsf"
+				rendered="#{AuthorizationBean.SERVICES_REPORTS}" />
+			<p:menuitem value="Tráfico" url="ReporteTrafico.jsf"
+				rendered="#{AuthorizationBean.TRAFFIC_REPORTS}" />
+			<p:menuitem value="Saldo" url="ReporteSaldo.jsf"
+				rendered="#{AuthorizationBean.GET_BALANCE}" />
+			<p:menuitem value="Inventario" url="ReporteInventario.jsf"
+				rendered="#{AuthorizationBean.STOCK_REPORTS}" />
+			<p:menuitem value="Distribución" url="ReporteDistribucion.jsf"
+				rendered="#{AuthorizationBean.DISTRIBUTION_REPORTS}" />
+			<p:menuitem value="Estatus" url="ReporteEstatus.jsf"
+				rendered="#{AuthorizationBean.STATUS_REPORTS}" />
+			<p:menuitem value="Ventas financieras" url="ReporteVentas.jsf"
+				rendered="#{AuthorizationBean.SALES_REPORTS}" />
+			<p:menuitem value="Ventas operativas" url="ReporteVentasOp.jsf"
+				rendered="#{AuthorizationBean.OP_SALES_REPORTS}" />
+			<p:menuitem value="Guías de despacho" url="ReporteFacturas.jsf"
+				rendered="#{AuthorizationBean.BILL_REPORTS}" />
+			<p:menuitem value="Depósitos" url="ReporteDepositos.jsf"
+				rendered="#{AuthorizationBean.DEPOSIT_REPORTS}" />
+			<p:menuitem value="Promedios" url="ReportePromedio.jsf"
+				rendered="#{AuthorizationBean.AVERAGE_REPORTS}" />
+			<p:menuitem value="Clientes" url="ReporteCliente.jsf"
+				rendered="#{AuthorizationBean.CLIENT_REPORTS}" />
+			<p:menuitem value="Control" url="ReporteControl.jsf"
+				rendered="#{AuthorizationBean.CONTROL_REPORTS}" />
+			<p:menuitem value="Logística" url="ReporteLogistica.jsf"
+				rendered="#{AuthorizationBean.LOGISTIC_REPORTS}" />
+			<p:menuitem value="Cierre" url="ReporteCierre.jsf"
+				rendered="#{AuthorizationBean.CLOSING_REPORTS}" />
+			<p:menuitem value="Usuarios" url="ReporteUsuariosVI.jsf"
+				rendered="#{AuthorizationBean.IS_USERS_REPORTS}" />
+			<p:menuitem value="Analíticos" url="ReporteAnalitico.jsf"
+				rendered="#{AuthorizationBean.ANALYTICAL_REPORTS}" />
+
+		</p:submenu>
+
+		<p:submenu label="CIERRES" icon="ui-icon-pencil"
+			rendered="#{AuthorizationBean.CLOSEOUT_MENU}">
+			<p:submenu label="Pre-cierre"
+				rendered="#{AuthorizationBean.PRECLOSING_REPORT_ZONE || AuthorizationBean.PRECLOSING_REPORT || AuthorizationBean.PRECLOSING_REPORT_ZONE_GRE || AuthorizationBean.PRECLOSING_REPORT_GRE}">
+				<p:menuitem value="Resumen cierre de zona" url="PreCierreZona.jsf"
+					rendered="#{AuthorizationBean.PRECLOSING_REPORT_ZONE}" />
+				<p:menuitem value="Reporte cierre de cadenas comerciales"
+					url="ReportePreCierreCadena.jsf"
+					rendered="#{AuthorizationBean.PRECLOSING_REPORT_ZONE_GRE}" />
+				<p:menuitem value="Reporte cierre de vendedores externos"
+					url="PreCierreZonaVI.jsf"
+					rendered="#{AuthorizationBean.PRECLOSING_REPORT_ZONE_GRE}" />
+				<p:menuitem value="Resumen de cierre" url="PreCierre.jsf"
+					rendered="#{AuthorizationBean.PRECLOSING_REPORT}" />
+				<p:menuitem value="Resumen de cierre de cadena comercial"
+					url="PreCierreCadena.jsf"
+					rendered="#{AuthorizationBean.PRECLOSING_REPORT_GRE}" />
+				<p:menuitem value="Resumen de cierre vendedores externos"
+					url="PreCierreVI.jsf"
+					rendered="#{AuthorizationBean.PRECLOSING_REPORT_GRE}" />
+			</p:submenu>
+
+			<p:submenu label="Cierre"
+				rendered="#{AuthorizationBean.CLOSEOUT  || AuthorizationBean.CLOSING_REPORTS_GRE || AuthorizationBean.REVERSE_REPORT}">
+				<p:menuitem value="Ejecutar cierre" url="Cierre.jsf"
+					rendered="#{AuthorizationBean.CLOSEOUT}" />
+				<p:menuitem value="Ejecutar cierre cadenas comerciales"
+					url="CierreCadena.jsf"
+					rendered="#{AuthorizationBean.CLOSING_REPORTS_GRE}" />
+				<p:menuitem value="Ejecutar cierre vendedores externos"
+					url="CierreVI.jsf"
+					rendered="#{AuthorizationBean.CLOSING_REPORTS_GRE}" />
+				<p:menuitem value="Reverso de cierre" url="ReversoCierre.jsf"
+					rendered="#{AuthorizationBean.REVERSE_REPORT}" />
+			</p:submenu>
+		</p:submenu>
+
+		<p:submenu label="CONCILIACIONES" icon="ui-icon-calculator"
+			rendered="#{AuthorizationBean.CREATE_CONCILIATION_FILE}">
+			<p:submenu label="Pre-cierre ZONA">
+				<p:menuitem value="Reporte cierre de zona" url="PreCierreZona.jsf"
+					rendered="#{AuthorizationBean.PRECLOSING_REPORT_ZONE}" />
+				<p:menuitem value="Resumen de cierre" url="PreCierre.jsf"
+					rendered="#{AuthorizationBean.PRECLOSING_REPORT}" />
+				<p:menuitem value="Ejecutar cierre" url="Cierre.jsf"
+					rendered="#{AuthorizationBean.CLOSEOUT}" />
+				<p:menuitem value="Reverso de cierre" url="ReversoCierre.jsf"
+					rendered="#{AuthorizationBean.REVERSE_REPORT}" />
+			</p:submenu>
+		</p:submenu>-->
+	</p:menubar>
+</body>
+</html>
