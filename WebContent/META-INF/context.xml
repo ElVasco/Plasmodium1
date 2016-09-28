@@ -17,9 +17,9 @@
               	logAbandoned="true"
               	removeAbandoned="true"
               	removeAbandonedTimeout="10"
-				password="0tpyrcsmbd"
+				password="Tx0m1n.00"
 				driverClassName="com.mysql.jdbc.Driver"
-              	url="jdbc:mysql://devsco1.novared.net.ve:3306/crypto_web_prd?autoReconnect=true"/>
+              	url="jdbc:mysql://127.0.0.1:3306/crypto_web_prd?autoReconnect=true"/>
 
 
 <!--The connection pool will be bound into JNDI with the name "java:comp/env/jdbc/mysqlnovared"-->

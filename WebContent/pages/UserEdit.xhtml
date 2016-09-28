@@ -14,36 +14,30 @@
 
 
 
-	<p:outputPanel id="userEditPanel" styleClass="blockUser">
+	 <p:panel id="panel" header="Panel de creación de usuarios" styleClass="blockUser">
 		<h:form id="ClientId" styleClass="distributerSelector">
-			<h9>Panel de creación de usuarios</h9>
-			<h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="0">
-				<p:panelGrid columns="2" border="1" rules="all"
-					title="Datos del Usuario" id="userDetail">
-					<p:outputLabel value="Nombres:*" id="nameLabel" />
-					<p:inputText id="name" value="#{UserVideoBean.name}"
-						required="true" validator="#{ValidadorBean.validate}" size="30" />
-					<p:outputLabel value="Apellidos:*" id="lastNameLabel" />
-					<p:inputText id="lastname" value="#{UserVideoBean.lastname}"
-						required="true" validator="#{ValidadorBean.validate}" size="30" />
-					<p:outputLabel value="Correo:*" id="correoLabel" />
-					<p:inputText id="mail" value="#{UserVideoBean.mail}"
-						validator="#{ValidadorBean.validate}" required="true" size="30" />
-				</p:panelGrid>
+			<h:panelGrid id="grid" columns="3" cellpadding="5">
+				<p:outputLabel for="name" value="Nombres:" />
+				<p:inputText id="name" value="#{UserVideoBean.name}" required="true" />
+				<p:message for="name" display="tooltip"/>
 
+				<p:outputLabel for="lastname" value="Apellidos:" />
+				<p:inputText id="lastname" value="#{UserVideoBean.lastname}" required="true" />
+				<p:message for="lastname" display="tooltip" />
 
-				<p:messages id="error" showDetail="true" autoUpdate="true"
-					closable="true" />
-				<p:outputPanel id="buttonPanel">
-					<p:commandButton ajax="false" value="#{msg.actionAddUser}"
-						id="buttonAdd" action="#{UserVideoBean.actionAddUser}" />
-					<p:commandButton ajax="false" value="#{msg.cancel}"
-						immediate="true" validateClient="false" id="cancel"
-						process="@none" action="#{UserVideoBean.actionExit}" />
-				</p:outputPanel>
+				<p:outputLabel for="mail" value="Correo:" />
+				<p:inputText id="mail" type="mail" value="#{UserVideoBean.mail}" required="true" validatorMessage="Debe tener el formato (xxx@yyy.rrr).">
+					<f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+				</p:inputText>
+				<p:message for="mail" display="text"/>
+
 			</h:panelGrid>
+
+			<p:commandButton id="buttonAdd" ajax="false" validateClient="true" value="#{msg.actionAddUser}" update="ClientId"  actionListener="#{UserVideoBean.actionAddUser}" />
+			<p:commandButton id="cancel" ajax="false"  process="@none" value="#{msg.cancel}"  actionListener="#{UserVideoBean.actionExit}" />
 		</h:form>
-	</p:outputPanel>
+
+	</p:panel>
 
 
 

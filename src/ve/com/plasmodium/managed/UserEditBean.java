@@ -180,6 +180,19 @@ public class UserEditBean {
 		selectedUser = "9999";
 	}
 
+	public void clearDataUser(){
+		showDetail=false;
+		showDetailNew=false; 
+		idUser = null;
+		loginUser = null;
+		nameUser = null;
+		passUser = "";
+		mailUser = null;
+		levelListUser = "9999";
+		jobtitleUser = null;
+		industryUser = null;
+		userEnabled = false;
+	}
 
 	public List<SelectItem> getPendingStates() {
 		resetState();
@@ -250,13 +263,16 @@ public class UserEditBean {
 	 * @param e Distribuidor seleccionado
 	 */
 	public void distribListenerMethod2 (){
+		setShowPickUser(false);
+		setShowDetail(false);
+		setSelectedUser("");
+		userListenerMethod();
 		resetUserList();
-		setShowPickUser(true);
-		AuthorizationBean sessionAuthorizationBean = (AuthorizationBean) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("AuthorizationBean");
-		if(sessionAuthorizationBean!=null){
-			if(!sessionAuthorizationBean.isUSER_CALLCENTER())
-				buscarUsuario(Short.parseShort(selectedDistributeru));
+		if(selectedDistributeru != null && !selectedDistributeru.equals("")){
+			buscarUsuario(Short.parseShort(selectedDistributeru));
+			setShowPickUser(true);
 		}
+		
 	}
 
 	/*	@SuppressWarnings("unchecked")
@@ -289,9 +305,11 @@ public class UserEditBean {
 	public void userListenerMethod( ){
 		logger.debug("Entre al metodo de busca de detalle de usuario  ");
 		try{
-			UserManager userManager = new UserManager(SQLConstant.MYSQL);		
-			short userIDS  = selectedUser==null || selectedUser.equals("")?Short.parseShort(selectedUserCallCenter):Short.parseShort(selectedUser);
-			if(userIDS!=9999){
+			clearDataUser();
+			showDetail=false;
+			showDetailNew=false;
+			if(selectedUser != null && !selectedUser.equals("")){
+				short userIDS  = Short.parseShort(selectedUser);
 				if(userIDS==999){
 					showDetail=true;
 					showDetailNew=true; 
@@ -305,6 +323,7 @@ public class UserEditBean {
 					industryUser = null;
 					userEnabled = true;
 				}else{
+					UserManager userManager = new UserManager(SQLConstant.MYSQL);
 					showDetail=true;
 					showDetailNew=false;
 					userDetail2 = userManager.usuarioDetail(userIDS);
@@ -318,9 +337,6 @@ public class UserEditBean {
 					industryUser = userDetail2.getIndustry();
 					userEnabled = userDetail2.getActive();
 				}
-			}else{
-				showDetail=false;
-				showDetailNew=false;
 			}
 			/*If an existent user is selected his details can't be edited unless the button with label "Modificar" is pressed*/
 			editDetail=false; 
@@ -528,14 +544,12 @@ public class UserEditBean {
 	 * Resetela (limpia) la lista de usuario para volverla a llenar segun el distribuidor seleccionado
 	 */
 	public void resetUserList(){			
-		SelectItem si;
-		si = new SelectItem("9999","Seleccione un Usuario");
+		
 		if(selectUser==null){
 			selectUser  =  new ArrayList<SelectItem>();
 		}else{
 			selectUser.clear();
 		}
-		selectUser.add(si);	 
 	}
 
 	/**
@@ -580,13 +594,13 @@ public class UserEditBean {
 	 */
 	public void resetSelectDistributer(){
 		SelectItem si;
-		si = new SelectItem("9999","Seleccione un Distribuidor");
+		//si = new SelectItem("9999","Seleccione un Distribuidor");
 		if(selectDistributer==null){
 			selectDistributer  =  new ArrayList<SelectItem>();
 		}else{
 			selectDistributer.clear();
 		}
-		selectDistributer.add(si);
+		//selectDistributer.add(si);
 	}
 
 

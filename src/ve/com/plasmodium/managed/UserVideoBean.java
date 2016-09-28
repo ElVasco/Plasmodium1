@@ -48,6 +48,7 @@ public class UserVideoBean {
 	public UserVideoBean() {
 		logger.debug("entro a constructor UserVideoBean");
 		resetUser();
+		setMail(mail);
 		//resetLevelList();
 		setLevel("114");
 
@@ -107,7 +108,8 @@ public class UserVideoBean {
 		UserManager userManager = new UserManager(SQLConstant.MYSQL);
 		UserBean sessionUserBean = (UserBean) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("UserBean");
 		short company = sessionUserBean.getCompany();
-		Pattern email = Pattern.compile("^[_A-Za-z0-9-+]+(\\.[_A-Za-z0-9-+]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
+		Pattern email = Pattern.compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
+//									     ^[_A-Za-z0-9-\ +]+(\ .[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\ .[A-Za-z0-9]+)*(\ .[A-Za-z]{2,})$
 		Matcher fit = email.matcher(mail);
 		if (!fit.matches())
 			return navigation;

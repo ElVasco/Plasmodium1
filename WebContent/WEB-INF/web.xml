@@ -111,6 +111,10 @@
 		<param-value>false</param-value>
 	</context-param>
 	<context-param>
+		<param-name>primefaces.FONT_AWESOME</param-name>
+		<param-value>true</param-value>
+	</context-param>
+	<context-param>
 		<description>
 	If true, a javascript function will be rendered that is able to restore the
 	former vertical scroll on every request. Convenient feature if you have pages
@@ -154,9 +158,11 @@
 	<!-- Added by Leonardo Djekki to implement Datasource and connection pool -->
 	<resource-ref>
 		<description>MySQL Datasource</description>
-		<res-ref-name>jdbc:mysql://devsco1.novared.net.ve:3306/crypto_web_prd?autoReconnect=true</res-ref-name>
-		<res-type>javax.sql.DataSource</res-type>
-		<res-auth>Container</res-auth>
+		<res-ref-name>jdbc:mysql://127.0.01:3306/crypto_web_prd?autoReconnect=true</res-ref-name>
+		<res-type>
+			javax.sql.DataSource
+		</res-type>
+			<res-auth>Container</res-auth>
 	</resource-ref>
 	<!-- End added by Leonardo Djekki to implement connection pool -->
 	<context-param>
@@ -170,7 +176,7 @@
 
 	<context-param>
 		<param-name>primefaces.THEME</param-name>
-		<param-value>ui-lightness</param-value>
+		<param-value>redmond</param-value>
 		<!--<param-value>redmond</param-value> -->
 	</context-param>
 

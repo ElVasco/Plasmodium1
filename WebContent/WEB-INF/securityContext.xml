@@ -52,10 +52,11 @@
 	<beans:bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<beans:property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<beans:property name="url"
-			value="jdbc:mysql://devsco1.novared.net.ve:3306/crypto_web_prd?autoReconnect=true" />
+		<!--  <beans:property name="url" value="jdbc:mysql://devsco1.novared.net.ve:3306/crypto_web_prd?autoReconnect=true" /> -->
+		<beans:property name="url" value="jdbc:mysql://127.0.0.1:3306/crypto_web_prd?autoReconnect=true" />
 		<beans:property name="username" value="root" />
-		<beans:property name="password" value="0tpyrcsmbd" />
+		<!-- <beans:property name="password" value="0tpyrcsmbd" />  -->
+		<beans:property name="password" value="Tx0m1n.00" />
 	</beans:bean>
 	
 <beans:bean id="customAuthenticationSuccessHandler" class="ve.com.plasmodium.control.CustomAuthenticationSuccessHandler"/>  

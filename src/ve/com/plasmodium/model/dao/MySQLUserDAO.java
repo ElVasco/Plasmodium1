@@ -256,9 +256,6 @@ public class MySQLUserDAO implements UserDAO {
 		where+=distrib==1?" AND level=12":"";
 		query=select+where;
 		try{
-			descriptionUser ="Seleccione un usuario";			
-			userIdString = "9999";
-			userList.add(new SelectItem(userIdString, descriptionUser));
 			preparedStatement = conn.prepareStatement(query);
 			logger.debug("Statement a ejecutarse " + preparedStatement.toString());
 			resulSet = preparedStatement.executeQuery();
