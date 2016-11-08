@@ -33,8 +33,8 @@
 
 			</h:panelGrid>
 
-			<p:commandButton id="buttonAdd" ajax="false" validateClient="true" value="#{msg.actionAddUser}" update="ClientId"  actionListener="#{UserVideoBean.actionAddUser}" />
-			<p:commandButton id="cancel" ajax="false"  process="@none" value="#{msg.cancel}"  actionListener="#{UserVideoBean.actionExit}" />
+			<p:commandButton id="buttonAdd" ajax="false" validateClient="true" value="#{msg.actionAddUser}" update="ClientId"  action="#{UserVideoBean.actionAddUser}" />
+			<p:commandButton id="cancel" ajax="false"  process="@none" value="#{msg.cancel}" immediate="true" action="#{UserVideoBean.actionExit}" />
 		</h:form>
 
 	</p:panel>

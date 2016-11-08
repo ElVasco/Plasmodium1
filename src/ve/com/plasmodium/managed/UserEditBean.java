@@ -183,13 +183,13 @@ public class UserEditBean {
 	public void clearDataUser(){
 		showDetail=false;
 		showDetailNew=false; 
-		idUser = null;
-		loginUser = null;
-		nameUser = null;
-		passUser = "";
-		mailUser = null;
+		setIdUser("");
+		setLoginUser("");
+		setNameUser("");
+		setPassUser("");
+		setMailUser("");
 		levelListUser = "9999";
-		jobtitleUser = null;
+		setJobtitleUser("");
 		industryUser = null;
 		userEnabled = false;
 	}

@@ -13,115 +13,7 @@
 	<ui:include src="/include/IncludeBanner.html"></ui:include>
 	<ui:include src="/include/IncludeTransMenu.xhtml"></ui:include>
 
-	<h2>Editor de usuarios</h2>
 
-	<h:form id="ClientId1">
-		<p:outputPanel id="userSelectPanel">
-			<p:panelGrid columns="2" border="1" rules="all" id="clientPanel">
-				<f:facet name="header">
-							Datos generales del usuario
-						</f:facet>
-				<p:outputLabel value="Distribuidor:" id="distributerOT"
-					rendered="#{!AuthorizationBean.USER_CALLCENTER}" />
-				<p:selectOneMenu value="#{UserEditBean.selectedDistributeru}"
-					id="distribList" rendered="#{!AuthorizationBean.USER_CALLCENTER}">
-					<p:ajax listener="#{UserEditBean.distribListenerMethod2}"
-						update="userSelectPanel" />
-					<f:selectItems value="#{UserEditBean.selectDistributer}" />
-				</p:selectOneMenu>
-
-				<p:outputLabel value="Usuarios:" id="rutaOT"
-					rendered="#{!AuthorizationBean.USER_CALLCENTER and UserEditBean.showPickUser}" />
-				<p:selectOneMenu value="#{UserEditBean.selectedUser}"
-					rendered="#{!AuthorizationBean.USER_CALLCENTER and UserEditBean.showPickUser}">
-					<p:ajax listener="#{UserEditBean.userListenerMethod}"
-						update="userEditPanel,buttonPanel" />
-					<f:selectItems value="#{UserEditBean.selectUser}" />
-					<f:selectItem itemValue="999" itemLabel="Agregar nuevo Usuario..."
-						itemDisabled="#{!AuthorizationBean.CREATE_USER}" />
-				</p:selectOneMenu>
-
-
-				<p:outputLabel value="Usuarios:" id="ruta2OT"
-					rendered="#{AuthorizationBean.USER_CALLCENTER}" />
-				<p:selectOneMenu value="#{UserEditBean.selectedUserCallCenter}"
-					id="userCallCenterList"
-					rendered="#{AuthorizationBean.USER_CALLCENTER}">
-					<p:ajax listener="#{UserEditBean.userListenerMethod}"
-						update="userEditPanel,buttonPanel" />
-					<f:selectItems value="#{UserEditBean.selectUserCallCenter}" />
-					<f:selectItem itemValue="999" itemLabel="Agregar nuevo Usuario..."
-						itemDisabled="#{!AuthorizationBean.CREATE_USER}" />
-				</p:selectOneMenu>
-			</p:panelGrid>
-		</p:outputPanel>
-		<p:outputPanel id="userEditPanel">
-			<p:panelGrid columns="2" border="1" rules="all"
-				title="Datos del Usuario" id="userDetail"
-				rendered="#{UserEditBean.showDetail}">
-				<p:outputLabel value="Nombre:*" id="nameLabel" />
-				<p:inputText id="name" value="#{UserEditBean.nameUser}"
-					required="true" validator="#{ValidadorBean.validate}"
-					readonly="#{!(UserEditBean.showDetailNew or UserEditBean.editDetail)}" />
-				<p:outputLabel value=" Rif:*" id="idLabel" />
-				<p:inputMask id="Rif" value="#{UserEditBean.idUser}" maxlength="12"
-					required="true" validator="#{ValidadorBean.validate}"
-					mask="a-99999999-9"
-					readonly="#{!(UserEditBean.showDetailNew or UserEditBean.editDetail)}">
-					<p:watermark for="Rif" value="(Ej: V-12345678-9)" />
-				</p:inputMask>
-				<p:outputLabel value="Usuario:*" id="userLabel" />
-				<p:inputText id="login" value="#{UserEditBean.loginUser}"
-					maxlength="12" required="true"
-					validator="#{ValidadorBean.validate}"
-					readonly="#{!(UserEditBean.showDetailNew or UserEditBean.editDetail)}" />
-				<p:outputLabel value="Clave:*" id="claveLabel" />
-				<p:password id="pass" value="#{UserEditBean.passUser}"
-					maxlength="12" required="true"
-					validator="#{ValidadorBean.validate}"
-					readonly="#{!(UserEditBean.showDetailNew or UserEditBean.editDetail)}" />
-				<p:outputLabel value="Correo:*" id="correoLabel" />
-				<p:inputText id="mail" value="#{UserEditBean.mailUser}"
-					validator="#{ValidadorBean.validate}" required="true"
-					readonly="#{!(UserEditBean.showDetailNew or UserEditBean.editDetail)}" />
-				<p:outputLabel value="Cargo:*" id="cargoLabel" />
-				<p:inputText id="jobtitle" value="#{UserEditBean.jobtitleUser}"
-					validator="#{ValidadorBean.validate}" required="true"
-					readonly="#{!(UserEditBean.showDetailNew or UserEditBean.editDetail)}" />
-				<p:outputLabel value="Nivel de Acceso:*" id="level" />
-				<p:selectOneMenu id="levelList" converter="MyConverter"
-					value="#{UserEditBean.levelListUser}"
-					validator="#{ValidadorBean.validate}"
-					disabled="#{!(UserEditBean.showDetailNew or UserEditBean.editDetail)}">
-					<f:selectItems value="#{UserEditBean.levelList}" />
-				</p:selectOneMenu>
-			</p:panelGrid>
-			<p:outputLabel value="#{msg.forcedInput}" id="Mensaje_Obligatorio"
-				style="font-weight:bold;color:#FF0000"
-				rendered="#{UserEditBean.showDetail and (AuthorizationBean.MODIFY_USER || AuthorizationBean.VIEW_USER || AuthorizationBean.DELETE_USER)}" />
-		</p:outputPanel>
-
-		<p:messages id="error" showDetail="true" autoUpdate="true"
-			closable="true" />
-		<p:outputPanel id="buttonPanel">
-			<p:commandButton ajax="false" value="#{msg.change}" id="buttonChange"
-				action="#{UserEditBean.actionChangeUser}"
-				rendered="#{!UserEditBean.showDetailNew and UserEditBean.showDetail and AuthorizationBean.MODIFY_USER}"
-				update="error,userEditPanel" />
-			<p:commandButton ajax="false"
-				value="#{UserEditBean.userEnabled ? msg.deactivate:msg.reactivate}"
-				id="buttonDelete" action="#{UserEditBean.actionDeleteUser}"
-				rendered="#{!UserEditBean.showDetailNew and UserEditBean.showDetail and !UserEditBean.editDetail and AuthorizationBean.DELETE_USER}"
-				process="@none" />
-			<p:commandButton ajax="false" value="#{msg.actionAddUser}"
-				id="buttonAdd" action="#{UserEditBean.actionAddUser}"
-				rendered="#{UserEditBean.showDetailNew and UserEditBean.showDetail and AuthorizationBean.CREATE_USER}"
-				update="error" />
-			<p:commandButton ajax="false" value="#{msg.cancel}" immediate="true"
-				validateClient="false" id="cancel" process="@none"
-				action="#{UserEditBean.actionExit}" />
-		</p:outputPanel>
-	</h:form>
 	<p:panel id="panel" header="Panel de edición de usuarios"
 		styleClass="blockUser">
 		<f:facet name="header">
@@ -269,8 +161,8 @@
 			<h:panelGrid id="buttonPanel" columns="3" cellpadding="5">
 
 				<p:commandButton ajax="false" value="#{msg.change}"
-					id="buttonChange" actionListener="#{UserEditBean.actionChangeUser}"
-					validateClient="true"
+					id="buttonChange" action="#{UserEditBean.actionChangeUser}"
+					validateClient="true" 
 					rendered="#{!UserEditBean.showDetailNew and UserEditBean.showDetail}"
 					update="error,userEditPanel" />
 				<p:commandButton ajax="false"
@@ -286,7 +178,7 @@
 					update="error" />
 				<p:commandButton ajax="false" value="#{msg.cancel}" immediate="true"
 					id="cancel" process="@none"
-					actionListener="#{UserEditBean.actionExit}" />
+					action="#{UserEditBean.actionExit}" />
 			</h:panelGrid>
 		</h:form>
 	</p:panel>
