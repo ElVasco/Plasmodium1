@@ -143,7 +143,7 @@ public final class SQLConstant {
 
 	///////////////////////////////////////////////////////////////////////////
 	public final static String SELECT_USER = 
-			"SELECT A.user, A.client, A.doc,  A.name, A.lastname,  A.email, A.jobtitle, A.level, A.login, A.pwd_web, A.active, A.version, A.company, A.employer, B.name, B.is_distributer, A.route FROM user AS A STRAIGHT_JOIN company AS B  ON A.employer=B.company WHERE  A.login =?;";
+			"SELECT A.id_user,A.num_ident,  A.first_name, A.fist_last_name, A.email, A.position, A.id_level, A.login, A.password, A.active, A.institution, B.name FROM user AS A STRAIGHT_JOIN institution AS B ON A.institution=B.id_institution WHERE  A.login =?;;";
 
 	public final static String SELECT_USER2 = 
 			"SELECT A.user, A.client, A.doc,  A.name, A.lastname,  A.email, A.jobtitle, A.level, A.login, A.pwd_web, A.active, A.version, A.company, A.employer, B.name, B.is_distributer, A.route FROM user AS A STRAIGHT_JOIN company AS B  ON A.employer=B.company WHERE  A.user =?;";
@@ -163,7 +163,7 @@ public final class SQLConstant {
 			"SELECT user, name FROM user WHERE employer=?";
 
 	public final static String UsuarioDetail = 
-			"SELECT u.user,u.company,u.employer,u.doc,u.name,u.lastname,u.email,u.jobtitle,u.level,u.login,i.description,u.active FROM user AS u LEFT OUTER JOIN client as c ON c.company = u.company AND u.client = c.client LEFT OUTER JOIN industry as i ON c.industry = i.industry WHERE u.user=?";
+			"SELECT u.id_user ,u.institution ,u.num_ident ,u.first_name,u.fist_last_name,u.email,u.position,u.id_level,u.login,u.active FROM user AS u WHERE u.id_user=?";
 
 	public final static String DeleteUser = 
 			"UPDATE user SET active=? WHERE user=?";

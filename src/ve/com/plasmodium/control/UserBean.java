@@ -64,14 +64,7 @@ public class UserBean {
 
 	//private List<SelectItem> levelList;
 	private List<SelectItem> selectUser;
-	private List<SelectItem> selectUserCallCenter;
-	private List<SelectItem> selectDistributer;
-	private List<SelectItem> selectMasterDistributer; //Selected master distributer to obtain the distributer list selected by a user of level 99,98
-	private String selectedDistributer;
-	private String selectedMasterDistributer; //Master distributer to obtain the distributer list selected by a user of level 99,98
-	private String selectedDistributeru;
 	private String selectedUser;
-	private String selectedUserCallCenter;
 	// antes era string
 	private UserVo userDetail;
 	private UserVo userDetail2;
@@ -99,8 +92,6 @@ public class UserBean {
 		messages.add("Ingreso al Sistema");
 		userName="";
 		selectedUser = new String();
-		selectedUserCallCenter = new String();
-		selectedMasterDistributer = new String();
 		nameUser = new String();
 		idUser = new String();
 		loginUser = new String();
@@ -119,309 +110,11 @@ public class UserBean {
 		userMailNew = new String();
 		userJobtitleNew = new String(); 
 		levelListUserNew = new String();
-		//passUser = new String();
-		//short distributer = sessionUserBean.getDistributer();
-		resetUserList();
-		resetUserCallCenterList();
-
-		if(company==null){
-			setLogin(SecurityContextHolder.getContext().getAuthentication().getName());
-			if(!login.equals("anonymousUser"))
-				setLogin(login);
-			resetSelectDistributer();
-			selectMasterDistributer = new ArrayList<SelectItem>();
-			SelectItem si = new SelectItem(Short.toString(getDistributer()),getCompanyName());
-		}
-
-	}
-
-	public float buscarDeduction(short company){
-		UserManager userManager = new UserManager(SQLConstant.MYSQL);		
-		return userManager.bucarDeduction(company);
-
+		setLogin(SecurityContextHolder.getContext().getAuthentication().getName());
+		setLogin(login);
 	}
 
 
-	/**
-	 * Busca la lista de usuario segun un Distribuidor
-	 * @param distrib Distribuidor seleccionado.
-	 * @return
-	 */
-	public List<SelectItem> buscarUsuario(short distrib){
-		UserManager userManager = new UserManager(SQLConstant.MYSQL);
-		try {
-			resetUserList();
-			selectUser.addAll((List<SelectItem>) userManager.listaUsuarios(selectDistributer, distrib));
-		} catch (Exception e) {
-			logger.error("Exception UserBean - buscarUsuario ", e);
-		}	    
-		return selectUser;
-	}
-
-	/**
-	 * Recibe el dato seleccionado de la lista de distribuidores para simular sus funciones y contendo para el usuario maestro
-	 * @param e Distribuidor seleccionado
-	 */
-	public void distribListenerMethod (){
-		UserBean sessionUserBean = (UserBean) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("UserBean");
-		short dis =  Short.parseShort(selectedDistributer);
-		logger.debug("   "+dis+"   "+sessionUserBean.getLevel());
-		if(sessionUserBean.getLevel()==99 || sessionUserBean.getLevel()==98){
-			sessionUserBean.setDistributer(dis);
-		}else{
-			short distrib = Short.parseShort(selectedDistributeru);
-			buscarUsuario(distrib);
-		}
-		logger.debug(selectedDistributeru);
-		GlobalDataBean globalDataBean = new GlobalDataBean();
-		FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("GlobalData", globalDataBean);
-	}
-
-	/**
-	 * Recibe el distribuidor raiz y consulta los distribuidores asociados a ese distribuidor usado para las listas
-	 * de los usuarios de nivel 98, 99
-	 * @param el Distribuidor seleccionado
-	 */
-	public void masterDistribListenerMethod (){
-		resetSelectDistributer();
-		setDistributer(Short.parseShort(this.selectedMasterDistributer));
-		SelectItem si = new SelectItem(this.selectedMasterDistributer,"distribuidor del usuario");
-		/*Remove the last element and reinsert it because the option "seleccione distribuidor" is placed last*/
-		(this.selectDistributer).remove((this.selectDistributer).size()-1);
-		(this.selectDistributer).add(0,new SelectItem("9999","Seleccione un Distribuidor"));
-	}
-	
-	/**
-	 * Recibe el dato seleccionado de la lista de distribuidores para llenar lista de usuario segun ese distribuidor
-	 * @param e Distribuidor seleccionado
-	 */
-	public void distribListenerMethod2 (){
-		resetUserList();
-		short dis =  Short.parseShort(selectedDistributeru);
-		AuthorizationBean sessionAuthorizationBean = (AuthorizationBean) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("AuthorizationBean");
-		if(sessionAuthorizationBean!=null){
-			if(!sessionAuthorizationBean.isUSER_CALLCENTER())
-				buscarUsuario(dis);
-		}
-		GlobalDataBean globalDataBean = new GlobalDataBean();
-		FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("GlobalData", globalDataBean);
-	}
-
-	public void userListenerMethod1(){
-		userListenerMethod();
-	}
-	public void userListenerMethod2(){
-		userListenerMethod();
-	}
-	/**
-	 * Recibe el dato seleccionado de la lista de usuario para traer los datos del mismo o mostrar pantalla de ingreso a nuevo usuario
-	 * @param e Usuario seleccionado
-	 */
-	public void userListenerMethod( ){
-		try{
-			UserManager userManager = new UserManager(SQLConstant.MYSQL);		
-			short userIDS  = selectedUser==null || selectedUser.equals("")?Short.parseShort(selectedUserCallCenter):Short.parseShort(selectedUser);
-			if(userIDS!=9999){
-				if(userIDS==999){
-					showDetail=true;
-					showDetailNew=false; 
-					idUser = null;
-					loginUser = null;
-					nameUser = null;
-					mailUser = null;
-					levelListUser = "9999";
-					jobtitleUser = null;
-				}else{
-					showDetail=true;
-					showDetailNew=false;
-					userDetail2 = userManager.usuarioDetail(userIDS);
-					idUser = userDetail2.getDoc();
-					loginUser = userDetail2.getLogin();
-					nameUser = userDetail2.getName();
-					mailUser = userDetail2.getEmail();
-					levelListUser = userDetail2.getLevel()+"";
-					jobtitleUser = userDetail2.getJobtitle();
-				}
-				FacesContext.getCurrentInstance().renderResponse();
-				FacesContext.getCurrentInstance().responseComplete();
-				FacesContext.getCurrentInstance().getExternalContext().redirect("User.jsf");
-			}else{
-				showDetail=false;
-				showDetailNew=false;
-			}
-		}catch (Exception e){
-			logger.error("Exception UserBean - userListenerMethod ", e);
-		}
-
-	}
-
-	/**
-	 * Recibe el dato seleccionado de la lista de usuario para traer los datos del mismo
-	 * @param e Usuario seleccionado
-	 */
-	public void approveUserListenerMethod(){
-		UserManager userManager = new UserManager(SQLConstant.MYSQL);
-		selectedUserCallCenter = selectedUser;
-		short userIDS  = selectedUser==null?Short.parseShort(selectedUserCallCenter):Short.parseShort(selectedUser);
-		if(userIDS>0){
-			showDetail=true;
-			showDetailNew=false;
-			userDetail2 = userManager.usuarioDetail(userIDS);
-			idUser = userDetail2.getDoc();
-			loginUser = userDetail2.getLogin();
-			nameUser = userDetail2.getName();
-			lastNameUser = userDetail2.getLastname();
-			mailUser = userDetail2.getEmail();
-			levelListUser = userDetail2.getLevel()+"";
-			jobtitleUser = userDetail2.getJobtitle();
-			FacesContext.getCurrentInstance().renderResponse();
-		}else{
-			showDetail=false;
-			showDetailNew=false;
-		}
-	}
-
-	/**
-	 * Recibe el dato seleccionado de la lista de usuario para traer los datos del mismo
-	 * @param e Usuario seleccionado
-	 */
-	public void creditListenerMethod(){
-		setShowCreditOptions(false);
-		String valor  = levelListUser;
-		if(valor.compareTo("42")!=0){
-			if(valor.compareTo("43")==0){
-				creditLabel = "Monto Limite Pre-aprobado";
-			} else if(valor.compareTo("44")==0){
-				creditLabel = "Limite de Credito";
-			}
-			setShowCreditOptions(true);
-			FacesContext.getCurrentInstance().renderResponse();
-		} 
-	}
-
-	/**
-	 * Cambia los datos usuario por los captados en pantalla 
-	 * @return String Navigation que nos indica a que pantalla dirigirnos
-	 * @throws CustomException
-	 */
-	public String actionChangeUser() throws CustomException{
-		String navigation = "fail";
-		UserManager userManager = new UserManager(SQLConstant.MYSQL);
-		String user,doc,login,name,mail,cargo,level,pass,max_unsettled_balance, max_selling_amount, max_days_card_unsettled;
-		if((idUser!=null || idUser.compareTo("")!=0)&& loginUser!=null && nameUser!=null && mailUser!=null && jobtitleUser!=null && levelListUser.compareTo(9999+"")!=0){
-			Pattern email = Pattern.compile("^[_A-Za-z0-9-+]+(\\.[_A-Za-z0-9-+]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
-			//Pattern email = Pattern.compile("/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+[.]{1}[a-zA-Z]{2,4}$/");
-			Matcher fit = email.matcher(mailUser);
-			List<String> aux = null;
-			Short company=0;
-			user = selectedUser==null?selectedUserCallCenter:selectedUser;
-			doc = idUser;
-			login = loginUser;
-			name = nameUser;
-			mail = mailUser;
-			cargo = jobtitleUser;
-			level = levelListUser;
-			pass =  "";
-			max_unsettled_balance ="";
-			max_selling_amount="0";
-			max_days_card_unsettled="0";
-			if(maxUnsettledBalance!=null) {
-				max_unsettled_balance = maxUnsettledBalance;
-				/*max_selling_amount = maxSellingAmount;
-				max_days_card_unsettled = maxDaysCardUnsettled;	*/			
-			} 
-			if (!fit.matches())
-				return navigation;
-			if(userManager.changeUser(company,user, doc, login, name, mail, cargo, level,aux, pass, max_unsettled_balance, max_selling_amount, max_days_card_unsettled)){
-				navigation = "successful_change";
-				getMessages().add(0,"Operación satisfactoria - El usuario : "+nameUser+" "+lastNameUser+" ha sido actualizado en el sistema.");	    	
-				setMessageExit("");
-				resetFaceUser();
-				idUser = "";
-				loginUser = "";
-				nameUser = "";
-				mailUser = "";
-				jobtitleUser = "";
-				levelListUser = "";
-				passUser = "";
-				maxUnsettledBalance = "";
-				maxSellingAmount = "";
-				maxDaysCardUnsettled = "";
-				selectedDistributeru = "9999";
-				selectedUser = "9999";
-				setShowDetail(false); 
-				setShowCreditOptions(false); 
-				setShowDetailNew(false);
-				setShowTarven(false);
-				setShowNvRd(false);
-				setShowNvRdAdmin(false);
-				setShowNoHibrido(false);
-
-			}
-		}
-		return navigation;
-	}
-
-	/**
-	 * Desactiva el usario que se encuentra mostrado en pantalla actualmente
-	 * @return String Navigation que nos indica a que pantalla dirigirnos
-	 * @throws CustomException
-	 */
-	public String actionDeleteUser() throws CustomException{
-		String navigation = "fail";
-		UserManager userManager = new UserManager(SQLConstant.MYSQL);
-		if(userManager.deleteUser(selectedUser,false)){
-			navigation="successful_delete";
-			getMessages().add(0,"Operación satisfactoria - El usuario : "+nameUser+" ha sido actualizado en el sistema.");	    	
-			setMessageExit("");
-			resetFaceUser();
-		}
-		return navigation;
-	}
-
-	/**
-	 * Agrega un usuario nuevo al sistema 
-	 * @return String Navigation que nos indica a que pantalla dirigirnos
-	 * @throws CustomException
-	 */
-	public String actionAddUser() throws CustomException{
-		String navigation = "fail";
-		UserManager userManager = new UserManager(SQLConstant.MYSQL);
-		if(userIdNew!=null && userLoginNew!=null && userNameNew!=null && userMailNew!=null && userJobtitleNew!=null && levelListUserNew.compareTo(9999+"")!=0 && passUserNew!=null){
-			logger.debug("entro "+company);
-			logger.debug(selectedDistributeru);
-			logger.debug(userIdNew);
-			logger.debug(userLoginNew);
-			Pattern email = Pattern.compile("^[_A-Za-z0-9-+]+(\\.[_A-Za-z0-9-+]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
-			//Pattern email = Pattern.compile("/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+[.]{1}[a-zA-Z]{2,4}$/");
-			Matcher fit = email.matcher(userMailNew);
-			if (!fit.matches())
-				return navigation;
-			//userNameNewn+" "+userMailNew+" "+userJobtitleNew+" "+levelListUserNew+" "+passUserNew
-			if(userManager.addUser(company, selectedDistributeru==null?"1":selectedDistributeru ,userIdNew, userLoginNew, userNameNew, userMailNew, userJobtitleNew, levelListUserNew, passUserNew)==1){
-				navigation = "successful_add";
-				getMessages().add(0,"Operación satisfactoria - el usuario : "+userNameNew+" ha sido agregado en el sistema.");	    	
-				setMessageExit("");
-				resetFaceUser();
-				userIdNew = "";
-				userLoginNew = "";
-				userNameNew = "";
-				userMailNew = "";
-				userJobtitleNew = "";
-				levelListUserNew = "";
-				passUserNew = "";
-				selectedDistributeru = "9999";
-				selectedUser = "9999";
-				setShowDetail(false); 
-				setShowDetailNew(false);
-				setShowTarven(false);
-				setShowNvRd(false);
-				setShowNvRdAdmin(false);
-				setShowNoHibrido(false);
-			}
-		}
-		return navigation;
-	}
 
 	/**
 	 * Resetea (limpia) la pantalla de mostrar/ingresar usuario para nueva seleccion
@@ -432,9 +125,7 @@ public class UserBean {
 			passUserNew = "";
 			confirmPassNew = "";
 		}else{
-			selectedDistributer = "";
 			selectedUser = "";
-			selectedUserCallCenter = "";
 			nameUser = "";
 			idUser = "";
 			loginUser = "";
@@ -491,38 +182,16 @@ public class UserBean {
 					showNvRd=true;
 				if(userVo.getLevel()==99)
 					showNvRdAdmin=true;
-					showNoHibrido=true;
+				showNoHibrido=true;
 				logger.debug("su compania es " + userVo.getCompany());
 				logger.debug("su level es " + userVo.getLevel());
 				setCompany(userVo.getCompany());
 				setUserName(userVo.getName());
-				setClient(userVo.getClient());
-				setMasterClient(userVo.getMasterClient());
-				setDistributer(userVo.getEmployer());
-				setEmployer(userVo.getEmployer());
 				setUser(userVo.getUser());
 				setLevel(userVo.getLevel());
 				setPassUser(userVo.getPassword());
-				setRoute(userVo.getRoute());
 				setEmail(userVo.getEmail());
 				setCompanyName(userVo.getNameCompany());
-				//setBalance(Float.parseFloat(userManager.getBalance(userVo.getCompany(),userVo.getUser())));
-				if (getDistributer()<235) { //TODO ESTO ES TEMPORAL POR LA COMISION DE SMARTCALL
-					setDeduction(buscarDeduction(getCompany()));
-				}
-				else {
-					setDeduction(Float.parseFloat("0.932")); //TODO ESTO ES TEMPORAL POR LA COMISION DE SMARTCALL
-				}
-			//	SecurityContext sg = (SecurityContext) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("SPRING_SECURITY_CONTEXT");
-			//	if((sg.toString().indexOf("IS_APPROVE_DEPOSIT"))>0 || (sg.toString().indexOf("APPROVE_DEPOSIT_GRE"))>0 || (sg.toString().indexOf("IS_SHOW_BALANCE"))>0 
-			//	|| (sg.toString().indexOf("IS_CREATE_POS_WEB"))>0 || (sg.toString().indexOf("IS_UPDATE_POS_WEB"))>0 || (sg.toString().indexOf("IS_DELETE_POS_WEB"))>0 ){
-					logger.debug("busco el balance ");
-					/*List<String> user_data = cryptoManager.getSecurityToken("001000", login, passUser);
-					if(user_data.size()>=3 && user_data.get(2) != null)
-						setSecurityToken(user_data.get(2));
-					if(user_data.size()>=4 && user_data.get(3) != null)
-						setBalance(Float.parseFloat(user_data.get(3))/100);*/
-				//}
 			} 			
 		} catch (Exception e) {
 			logger.error("Exception UserBean - cargarEmpleado ", e);
@@ -542,102 +211,6 @@ public class UserBean {
 		}
 		selectUser.add(si);	 
 	}
-
-	/**
-	 * Resetela (limpia) la lista de usuario para volverla a llenar segun el distribuidor seleccionado
-	 */
-	public void resetUserCallCenterList(){
-		logger.debug("Entro al reset User del Bean UserCallCenter");
-		UserManager userManager = new UserManager(SQLConstant.MYSQL);
-		SelectItem si ;
-		si = new SelectItem("9999","Seleccione un Usuario");
-
-		if(selectUserCallCenter==null){
-			selectUserCallCenter  =  new ArrayList<SelectItem>();
-		}else{
-			selectUserCallCenter.clear();
-		}
-		selectUserCallCenter.add(si);	 
-		selectUserCallCenter = (List<SelectItem>) userManager.listaUsuarios(selectDistributer, Short.parseShort("1"));
-	}
-
-
-
-	/*	public void setLevelList(List<SelectItem> levelList) {
-		this.levelList = levelList;
-	}
-	public List<SelectItem> getLevelList() {
-		return levelList;
-	}*/
-
-	/*	public void resetLevelList(){
-	    SelectItem si;
-	    si = new SelectItem("9999","Seleccione un Nivel de Acceso");
-	    if(levelList==null){
-	    	levelList  =  new ArrayList<SelectItem>();
-	    }else{
-	    	levelList.clear();
-	    }
-	    levelList.add(si);
-	    AuthorizationBean sessionAuthorizationBean = (AuthorizationBean) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("AuthorizationBean");
-	    if(sessionAuthorizationBean.isCREATE_USER()){
-	    	si = new SelectItem("1","Administrador Tarven");
-	    	levelList.add(si);
-	    }
-	    if(sessionAuthorizationBean.isCREATE_USER()){
-	    	si = new SelectItem("36","Analista de Inventarios Tarven");
-	    	levelList.add(si);
-	    }
-	    if(sessionAuthorizationBean.isCREATE_USER()){
-	    	si = new SelectItem("37","Analista Depositos  Tarven");
-	    	levelList.add(si);
-	    }
-	    if(sessionAuthorizationBean.isCREATE_USER()){
-	    	si = new SelectItem("31","Supervisor de Distribuidor");
-	    	levelList.add(si);
-	    }
-	    if(sessionAuthorizationBean.isCREATE_USER() && sessionAuthorizationBean.isCHANGE_STATUS_NVRD()){
-	    	si = new SelectItem("8","Fabricante");
-	    	levelList.add(si);
-	    }
-	    if(sessionAuthorizationBean.isCREATE_USER() && sessionAuthorizationBean.isCHANGE_STATUS_NVRD()){
-	    	si = new SelectItem("8","Fabricante");
-	    	levelList.add(si);
-	    }
-	    if(sessionAuthorizationBean.isCREATE_USER() && sessionAuthorizationBean.isCHANGE_STATUS_NVRD()){
-	    	si = new SelectItem("4","Analista Credito y Cobranzas DTV ");
-	    	levelList.add(si);
-	    }
-	    if(sessionAuthorizationBean.isCREATE_USER() && sessionAuthorizationBean.isCHANGE_STATUS_NVRD()){
-	    	si = new SelectItem("3","Asistente Credito y Cobranzas DTV");
-	    	levelList.add(si);
-	    }
-	    if(sessionAuthorizationBean.isCREATE_USER() && sessionAuthorizationBean.isCHANGE_STATUS_NVRD()){
-	    	si = new SelectItem("99","Administrador Sistema");
-	    	levelList.add(si);
-	    }
-	    if(sessionAuthorizationBean.isCREATE_USER() && sessionAuthorizationBean.isCHANGE_STATUS_NVRD()){
-	    	si = new SelectItem("30","Finanzas");
-	    	levelList.add(si);
-	    }
-	}*/
-
-	/**
-	 * Reset the list of distributers
-	 */
-	public void resetSelectDistributer(){
-		SelectItem si;
-		si = new SelectItem("9999","Seleccione un Distribuidor");
-		if(selectDistributer==null){
-			selectDistributer  =  new ArrayList<SelectItem>();
-		}else{
-			selectDistributer.clear();
-		}
-		selectDistributer.add(si);
-	}
-
-
-
 
 
 	/**
@@ -1116,71 +689,6 @@ public class UserBean {
 		this.selectUser = selectUser;
 	}
 
-
-	/**
-	 * @return the selectUserCallCenter
-	 */
-	public List<SelectItem> getSelectUserCallCenter() {
-		return selectUserCallCenter;
-	}
-
-
-	/**
-	 * @param selectUserCallCenter the selectUserCallCenter to set
-	 */
-	public void setSelectUserCallCenter(List<SelectItem> selectUserCallCenter) {
-		this.selectUserCallCenter = selectUserCallCenter;
-	}
-
-
-	/**
-	 * @return the selectDistributer
-	 */
-	public List<SelectItem> getSelectDistributer() {
-		return selectDistributer;
-	}
-
-
-	/**
-	 * @param selectDistributer the selectDistributer to set
-	 */
-	public void setSelectDistributer(List<SelectItem> selectDistributer) {
-		this.selectDistributer = selectDistributer;
-	}
-
-
-	/**
-	 * @return the selectedDistributer
-	 */
-	public String getSelectedDistributer() {
-		return selectedDistributer;
-	}
-
-
-	/**
-	 * @param selectedDistributer the selectedDistributer to set
-	 */
-	public void setSelectedDistributer(String selectedDistributer) {
-		this.selectedDistributer = selectedDistributer;
-	}
-
-
-	/**
-	 * @return the selectedDistributeru
-	 */
-	public String getSelectedDistributeru() {
-		return selectedDistributeru;
-	}
-
-
-	/**
-	 * @param selectedDistributeru the selectedDistributeru to set
-	 */
-	public void setSelectedDistributeru(String selectedDistributeru) {
-		this.selectedDistributeru = selectedDistributeru;
-	}
-
-
 	/**
 	 * @return the selectedUser
 	 */
@@ -1195,23 +703,6 @@ public class UserBean {
 	public void setSelectedUser(String selectedUser) {
 		this.selectedUser = selectedUser;
 	}
-
-
-	/**
-	 * @return the selectedUserCallCenter
-	 */
-	public String getSelectedUserCallCenter() {
-		return selectedUserCallCenter;
-	}
-
-
-	/**
-	 * @param selectedUserCallCenter the selectedUserCallCenter to set
-	 */
-	public void setSelectedUserCallCenter(String selectedUserCallCenter) {
-		this.selectedUserCallCenter = selectedUserCallCenter;
-	}
-
 
 	/**
 	 * @return the userDetail
@@ -1531,29 +1022,13 @@ public class UserBean {
 	public void setEmployer(short employer) {
 		this.employer = employer;
 	}
-	
+
 	public String getCompanyName() {
 		return companyName;
 	}
 
 	public void setCompanyName(String companyName) {
 		this.companyName = companyName;
-	}
-
-	public List<SelectItem> getSelectMasterDistributer() {
-		return selectMasterDistributer;
-	}
-
-	public void setSelectMasterDistributer(List<SelectItem> selectMasterDistributer) {
-		this.selectMasterDistributer = selectMasterDistributer;
-	}
-
-	public String getSelectedMasterDistributer() {
-		return selectedMasterDistributer;
-	}
-
-	public void setSelectedMasterDistributer(String selectedMasterDistributer) {
-		this.selectedMasterDistributer = selectedMasterDistributer;
 	}
 
 }

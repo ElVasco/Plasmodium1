@@ -18,23 +18,23 @@
 		<h:form id="ClientId" styleClass="distributerSelector">
 			<h:panelGrid id="grid" columns="3" cellpadding="5">
 				<p:outputLabel for="name" value="Nombres:" />
-				<p:inputText id="name" value="#{UserVideoBean.name}" required="true" />
+				<p:inputText id="name" value="#{UserEditBean.name}" required="true" />
 				<p:message for="name" display="tooltip"/>
 
 				<p:outputLabel for="lastname" value="Apellidos:" />
-				<p:inputText id="lastname" value="#{UserVideoBean.lastname}" required="true" />
+				<p:inputText id="lastname" value="#{UserEditBean.lastname}" required="true" />
 				<p:message for="lastname" display="tooltip" />
 
 				<p:outputLabel for="mail" value="Correo:" />
-				<p:inputText id="mail" type="mail" value="#{UserVideoBean.mail}" required="true" validatorMessage="Debe tener el formato (xxx@yyy.rrr).">
+				<p:inputText id="mail" type="mail" value="#{UserEditBean.mail}" required="true" validatorMessage="Debe tener el formato (xxx@yyy.rrr).">
 					<f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
 				</p:inputText>
 				<p:message for="mail" display="text"/>
 
 			</h:panelGrid>
 
-			<p:commandButton id="buttonAdd" ajax="false" validateClient="true" value="#{msg.actionAddUser}" update="ClientId"  action="#{UserVideoBean.actionAddUser}" />
-			<p:commandButton id="cancel" ajax="false"  process="@none" value="#{msg.cancel}" immediate="true" action="#{UserVideoBean.actionExit}" />
+			<p:commandButton id="buttonAdd" ajax="false" validateClient="true" value="#{msg.actionAddUser}" update="ClientId"  action="#{UserEditBean.actionAddUser}" />
+			<p:commandButton id="cancel" ajax="false"  process="@none" value="#{msg.cancel}" immediate="true" action="#{UserEditBean.actionExit}" />
 		</h:form>
 
 	</p:panel>

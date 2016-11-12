@@ -2,7 +2,6 @@
 <html lang="en"
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:f="http://java.sun.com/jsf/core"
-    xmlns:jsp="http://java.sun.com/JSP/Page"
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:ui="http://java.sun.com/jsf/facelets" 
     xmlns:p="http://primefaces.org/ui"
@@ -11,17 +10,6 @@
 <body>
 <p:outputPanel styleClass="hiAndBye">
 <p:outputLabel value="Bienvenido(a) #{UserBean.userName}"/>
-<p:outputLabel value=", Su saldo disponible es " style="font-weight:bold;" rendered="#{AuthorizationBean.IS_SHOW_BALANCE}"/>
-<p:outputLabel value="#{UserBean.balance}" style="font-weight:bold; font-size:1.5em; border: 1px dotted red; padding:2px; -webkit-border-radius: 20px;
--webkit-border-bottom-left-radius: 20px;
--moz-border-radius: 20px;
--moz-border-radius-bottomleft: 20px;
-border-radius: 20px;
-border-bottom-left-radius: 20px;
-width:100px;
-height:100px;
-margin:0 auto;" rendered="#{AuthorizationBean.IS_SHOW_BALANCE}"/>
-&nbsp;
 <p:outputLabel value="  |  " rendered="#{AuthorizationBean.CHANGE_PASSWORD}"/>&nbsp;
 <p:commandLink action="CambioClave.jsf?faces-redirect=true" rendered="#{AuthorizationBean.CHANGE_PASSWORD}" value="Cambio de Clave"></p:commandLink> &nbsp;
 <p:outputLabel value="  |  " rendered="#{AuthorizationBean.LOG_IN}"/> &nbsp;

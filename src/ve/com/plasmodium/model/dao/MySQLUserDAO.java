@@ -32,46 +32,25 @@ public class MySQLUserDAO implements UserDAO {
 			if (resulSet.next()) {
 				//System.out.println("Trajo un registro de user");
 				userVo = new UserVo();
-				logger.debug("apenas corro el query, user es: "+resulSet.getShort("A.user"));
-				userVo.setUser(resulSet.getInt("A.user"));
-				userVo.setClient(resulSet.getInt("A.client"));
-				userVo.setDoc(resulSet.getString("A.doc"));
-				userVo.setName(resulSet.getString("A.name"));
-				userVo.setLastname(resulSet.getString("A.lastname"));
+				logger.debug("apenas corro el query, user es: "+resulSet.getShort("A.id_user"));
+				userVo.setUser(resulSet.getInt("A.id_user"));
+				userVo.setDoc(resulSet.getString("A.num_ident"));
+				userVo.setName(resulSet.getString("A.first_name"));
+				userVo.setLastname(resulSet.getString("A.fist_last_name"));
 				userVo.setEmail(resulSet.getString("A.email"));
-				userVo.setJobtitle(resulSet.getString("A.jobtitle"));
-				userVo.setLevel(resulSet.getShort("A.level"));
+				userVo.setJobtitle(resulSet.getString("A.position"));
+				userVo.setLevel(resulSet.getShort("A.id_level"));
 				userVo.setLogin(resulSet.getString("A.login"));
-				userVo.setPwd(resulSet.getBytes("A.pwd_web"));
-				userVo.setPassword(resulSet.getString("A.pwd_web"));
-				//userVo.setPassword(resulSet.getString("A.password"));
+				userVo.setPwd(resulSet.getBytes("A.password"));
+				userVo.setPassword(resulSet.getString("A.password"));
 				userVo.setActive(resulSet.getBoolean("A.active"));
-				userVo.setVersion(resulSet.getLong("A.version"));
-				userVo.setEmployer(resulSet.getShort("A.employer"));
-				userVo.setCompany(resulSet.getShort("A.company"));
+				userVo.setCompany(resulSet.getShort("A.institution"));
 				userVo.setNameCompany(resulSet.getString("B.name"));
-				userVo.setIs_distributer(resulSet.getBoolean("B.is_Distributer"));
-				userVo.setRoute(resulSet.getShort("A.route"));
 			} else {
 				System.out.println("no trajo registros");
 				userVo = null;
 			}
-			if(userVo!=null){
-			preparedStatement = null;
-			preparedStatement = conn.prepareStatement(SQLConstant.GET_MASTER_CLIENT);
-			preparedStatement.setInt(1, userVo.getCompany());
-			preparedStatement.setInt(2, userVo.getClient());
-			logger.debug("Statement a ejecutarse " + preparedStatement.toString());
-			resulSet = null;
-			resulSet = preparedStatement.executeQuery();
-			if (resulSet.next()) {				
-				userVo.setMasterClient(resulSet.getInt(1));	
-				logger.debug("El MasterClient es: " + userVo.getMasterClient());
-			} else {
-				System.out.println("no trajo registros en getMasterClient");
-				userVo = null;
-			}
-			}			
+		
 		} catch (Exception e) {
 			logger.error("Exception MySQLUserDAO - datosUsuario ", e);
 		}
@@ -100,7 +79,6 @@ public class MySQLUserDAO implements UserDAO {
 				userVo = new UserVo();
 				logger.debug("apenas corro el query, user es: "+resulSet.getShort("A.user"));
 				userVo.setUser(resulSet.getInt("A.user"));
-				userVo.setClient(resulSet.getInt("A.client"));
 				userVo.setDoc(resulSet.getString("A.doc"));
 				userVo.setName(resulSet.getString("A.name"));
 				userVo.setLastname(resulSet.getString("A.lastname"));
@@ -113,31 +91,12 @@ public class MySQLUserDAO implements UserDAO {
 				//userVo.setPassword(resulSet.getString("A.password"));
 				userVo.setActive(resulSet.getBoolean("A.active"));
 				userVo.setVersion(resulSet.getLong("A.version"));
-				userVo.setEmployer(resulSet.getShort("A.employer"));
 				userVo.setCompany(resulSet.getShort("A.company"));
 				userVo.setNameCompany(resulSet.getString("B.name"));
-				userVo.setIs_distributer(resulSet.getBoolean("B.is_Distributer"));
-				userVo.setRoute(resulSet.getShort("A.route"));
 			} else {
 				System.out.println("no trajo registros");
 				userVo = null;
-			}
-			if(userVo!=null){
-			preparedStatement = null;
-			preparedStatement = conn.prepareStatement(SQLConstant.GET_MASTER_CLIENT);
-			preparedStatement.setInt(1, userVo.getCompany());
-			preparedStatement.setInt(2, userVo.getClient());
-			logger.debug("Statement a ejecutarse " + preparedStatement.toString());
-			resulSet = null;
-			resulSet = preparedStatement.executeQuery();
-			if (resulSet.next()) {				
-				userVo.setMasterClient(resulSet.getInt(1));	
-				logger.debug("El MasterClient es: " + userVo.getMasterClient());
-			} else {
-				System.out.println("no trajo registros en getMasterClient");
-				userVo = null;
-			}
-			}			
+			}		
 		} catch (Exception e) {
 			logger.error("Exception MySQLUserDAO - datosUsuario ", e);
 		}
@@ -216,7 +175,7 @@ public class MySQLUserDAO implements UserDAO {
 			logger.debug("Statement a ejecutarse " + preparedStatement.toString());
 			resultSet = preparedStatement.executeQuery();
 			if (resultSet.next()) {
-				result = new UserVo (resultSet.getInt("u.user"), resultSet.getString("u.doc"), resultSet.getString("u.name") , resultSet.getString("u.lastname"), resultSet.getString("u.email"), resultSet.getString("u.jobtitle"), resultSet.getShort("u.level"),resultSet.getString("u.login"),resultSet.getString("i.description"));
+				result = new UserVo (resultSet.getInt("u.id_user"), resultSet.getString("u.num_ident"), resultSet.getString("u.first_name") , resultSet.getString("u.fist_last_name"), resultSet.getString("u.email"), resultSet.getString("u.position"), resultSet.getShort("u.id_level"),resultSet.getString("u.login"));
 				result.setActive(resultSet.getBoolean("u.active"));	
 			}
 
@@ -232,8 +191,8 @@ public class MySQLUserDAO implements UserDAO {
 		ResultSet resulSet = null;
 		List <SelectItem> userList = new ArrayList<SelectItem>();
 		String select, query, where;
-		select = "SELECT user, name FROM user ";
-		where=" WHERE employer IN( ";
+		select = "SELECT id_user, first_name FROM user ";
+		where=" WHERE institution IN( ";
 		String descriptionUser;
 		String userIdString ;
 
@@ -253,7 +212,6 @@ public class MySQLUserDAO implements UserDAO {
 		}
 
 		where=where+")";
-		where+=distrib==1?" AND level=12":"";
 		query=select+where;
 		try{
 			preparedStatement = conn.prepareStatement(query);

@@ -37,7 +37,7 @@ public class MySQLDAOFactory extends DAOFactory {
 			Context initContext = new InitialContext();
 			// Buscara en el contexto java:comp/env/jdbc/mysqlnew especificamente en el archivo context.xml de la aplicacion
 			Context envContext  = (Context)initContext.lookup("java:comp/env");
-			DataSource ds = (DataSource)envContext.lookup("jdbc/mysqlnovared");
+			DataSource ds = (DataSource)envContext.lookup("jdbc/mysqlPlasmodium");
 			conn = ds.getConnection();
 		}
 		catch (NamingException e) {
@@ -65,20 +65,5 @@ public class MySQLDAOFactory extends DAOFactory {
 	public AuthorizationDAO getAuthorizationDAO() {
 		return new MySQLAuthorizationDAO();
 	}
-
-	//IS
-
-
-
-	//Liquidacion
-
-
-
-
-	public VideoDAO getVideoDAO() {
-		return new MySQLVideoDAO();
-	}
-
-
 
 }

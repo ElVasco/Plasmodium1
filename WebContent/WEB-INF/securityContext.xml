@@ -52,8 +52,7 @@
 	<beans:bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<beans:property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<!--  <beans:property name="url" value="jdbc:mysql://devsco1.novared.net.ve:3306/crypto_web_prd?autoReconnect=true" /> -->
-		<beans:property name="url" value="jdbc:mysql://127.0.0.1:3306/crypto_web_prd?autoReconnect=true" />
+		<beans:property name="url" value="jdbc:mysql://127.0.0.1:3306/plasmodium?autoReconnect=true" />
 		<beans:property name="username" value="root" />
 		<!-- <beans:property name="password" value="0tpyrcsmbd" />  -->
 		<beans:property name="password" value="Tx0m1n.00" />
@@ -67,11 +66,10 @@
 		<authentication-provider>
 			<password-encoder hash="md5" />
 			<jdbc-user-service data-source-ref="dataSource"
-				users-by-username-query="select login, pwd_web, active AS 'enabled' from user where login=?"
-				authorities-by-username-query="SELECT u.name, r.rol_name FROM user u STRAIGHT_JOIN sec_level
-				l ON u.level=l.level STRAIGHT_JOIN sec_level_profile lp ON l.level=lp.level
-				STRAIGHT_JOIN sec_profile p ON lp.profile=p.profile 
-				STRAIGHT_JOIN sec_profile_rol pr ON	p.profile=pr.profile STRAIGHT_JOIN sec_rol
+				users-by-username-query="select login, password, active AS 'enabled' from user where login=?"
+				authorities-by-username-query="SELECT u.first_name, r.rol_name FROM user u STRAIGHT_JOIN sec_level
+				l ON u.id_level=l.level STRAIGHT_JOIN sec_level_profile lp ON l.level=lp.level
+				STRAIGHT_JOIN sec_profile_rol pr ON	lp.profile=pr.profile STRAIGHT_JOIN sec_rol
 				r ON pr.rol=r.rol WHERE u.login=? group by
 				r.rol_name order by r.rol" />
 		</authentication-provider>

@@ -3,6 +3,7 @@ package ve.com.plasmodium.managed;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -120,18 +121,22 @@ public class UserEditBean {
 		passUser = new String();
 		AuthorizationBean sessionAuthorizationBean = (AuthorizationBean) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("AuthorizationBean");
 		UserBean sessionUserBean = (UserBean) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("UserBean");
-
+		Map<String, String> parameterMap = (Map<String, String>) FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+		String param = parameterMap.get("modify");
+		logger.debug(param + "----------");
 		//short distributer = sessionUserBean.getDistributer();
 		resetSelectDistributer();
-		SelectItem si = new SelectItem(Short.toString(sessionUserBean.getDistributer()),sessionUserBean.getCompanyName());
+		logger.debug(sessionUserBean.getCompany());
+		logger.debug(sessionUserBean.getCompanyName());
+		SelectItem si = new SelectItem(Short.toString(sessionUserBean.getCompany()),sessionUserBean.getCompanyName());
 		selectDistributer.add(si);
 
 		resetUserList();
-		resetUserCallCenterList();
+		//resetUserCallCenterList();
 		
 		company = sessionUserBean.getCompany();
 		resetServiceCompany();
-		resetselectSercviceCompany();
+		//resetselectSercviceCompany();
 		resetLevelList();
 		if(sessionAuthorizationBean.isIS_APPROVE_USER()) //es aprobador de usuarios
 			resetAllLists(); 
@@ -334,7 +339,6 @@ public class UserEditBean {
 					mailUser = userDetail2.getEmail();
 					levelListUser = userDetail2.getLevel()+"";
 					jobtitleUser = userDetail2.getJobtitle();
-					industryUser = userDetail2.getIndustry();
 					userEnabled = userDetail2.getActive();
 				}
 			}
@@ -369,7 +373,6 @@ public class UserEditBean {
 			levelListUser = userDetail2.getLevel()+"";
 			levelListUser = "9999";
 			jobtitleUser = userDetail2.getJobtitle();
-			industryUser = userDetail2.getIndustry();
 		}
 	}
 

@@ -27,13 +27,10 @@ public class UserVo implements Serializable {
     private long version;
         
     private short company;
-    private short employer;
-    private int client;
-    private int masterClient;
+
+
+
     private String nameCompany;
-    private boolean is_distributer;
-    private Short route;
-	private String industry;
     
     
     public UserVo() {
@@ -69,18 +66,7 @@ public class UserVo implements Serializable {
     	this.level = level;
     	this.login = login;
     }
-    
-    public UserVo(Integer user, String doc, String name, String lastname, String email, String jobtitle, short level, String login, String industry) {
-    	this.user = user;
-    	this.doc = doc;
-    	this.name = name;
-    	this.lastname = lastname;
-    	this.email = email;
-    	this.jobtitle = jobtitle;
-    	this.level = level;
-    	this.login = login;
-    	this.setIndustry(industry);
-    }
+
 
     public Integer getUser() {
 	return user;
@@ -234,13 +220,7 @@ public class UserVo implements Serializable {
         this.company = company;
     }
 
-    public boolean isIs_distributer() {
-        return is_distributer;
-    }
 
-    public void setIs_distributer(boolean is_distributer) {
-        this.is_distributer = is_distributer;
-    }
 
     public String getNameCompany() {
         return nameCompany;
@@ -250,44 +230,5 @@ public class UserVo implements Serializable {
         this.nameCompany = nameCompany;
     }
 
-    public short getEmployer() {
-        return employer;
-    }
-
-    public void setEmployer(short employer) {
-        this.employer = employer;
-    }
-
-	public void setClient(int client) {
-		this.client = client;
-	}
-
-	public int getClient() {
-		return client;
-	}
-
-	public void setMasterClient(int masterClient) {
-		this.masterClient = masterClient;
-	}
-
-	public int getMasterClient() {
-		return masterClient;
-	}
-
-	public Short getRoute() {
-		return route;
-	}
-
-	public void setRoute(Short route) {
-		this.route = route;
-	}
-
-	public String getIndustry() {
-		return industry;
-	}
-
-	public void setIndustry(String industry) {
-		this.industry = industry;
-	}
 
 }

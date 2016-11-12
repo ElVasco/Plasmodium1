@@ -4,8 +4,6 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:t="http://myfaces.apache.org/tomahawk"
-	xmlns:hx="http://myfaces.apache.org/html5/html"
-	xmlns:fx="http://myfaces.apache.org/html5/core"
 	xmlns:p="http://primefaces.org/ui">
 <ui:include src="/include/IncludeHeader.xhtml"></ui:include>
 
@@ -16,39 +14,7 @@
 	<ui:include src="/include/IncludeInicioMenu.xhtml"></ui:include>
 
 	<h2></h2>
-	<p:outputPanel id="selector">
-		<h:form id="ClientId" styleClass="distributerSelector">
-
-			<h:panelGrid columns="2" style="position: absolute; top:70px;"
-				cellpadding="0" rendered="#{VideoBean.showMenu}">
-				<p:outputPanel id="panel1" style="position: absolute; top:70px;">
-					<h:panelGrid columns="1" cellpadding="0" >
-
-						<h:outputText value="Contenido: " />
-						<p:selectOneListbox value="#{VideoBean.selectedVideo}"
-							style="width:200px;>" width="200">
-							<f:selectItems value="#{VideoBean.videos}" />
-							<p:ajax listener="#{VideoBean.selectedVideoMethod}"
-								update="iframe" />
-						</p:selectOneListbox>
-
-
-					</h:panelGrid>
-				</p:outputPanel>
-				<p:outputPanel id="iframe"
-					style="position: absolute; left:210px;top:70px;" >
-					<h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5"
-						id="iframe1" rendered="#{VideoBean.showVideo}">
-						<f:view contentType="text/html">
-							<h:outputText value="#{VideoBean.htmlInput}" escape="false"/>
-						</f:view>
-					</h:panelGrid>
-				</p:outputPanel>
-			</h:panelGrid>
-
-		</h:form>
-	</p:outputPanel>
-	<!--<h:form>
+	<h:form>
 		<p:dataTable styleClass="dataTables" value="#{UserBean.messages}"
 			var="rows" rendered="#{AuthorizationBean.SESSION_LOG}">
 			<p:column headerText="Historial de Operaciones">
@@ -62,7 +28,7 @@
 			value="Estimado Usuario, Usted se encuentra en espera de aprobación."
 			rendered="#{AuthorizationBean.IS_NON_APPROVED_USER}"
 			style="font-weight:bold;color:red;" />
-	</p> -->
+	</p>
 
 
 	<p:growl id="growl" showDetail="true" sticky="false" life="7000" />

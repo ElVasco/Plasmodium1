@@ -8,7 +8,7 @@
 
 <h:head></h:head>
 <body>
-	<!-- Esta parte es delicada la lista se llena en un bean "UserBean" pero se selecciona con otro "DepositBean" -->
+	<!-- Esta parte es delicada la lista se llena en un bean "UserBean" -->
 	<ui:include src="/include/HiAndByeTrans.xhtml"></ui:include>
 	<ui:include src="/include/IncludeBanner.html"></ui:include>
 	<ui:include src="/include/IncludeTransMenu.xhtml"></ui:include>
@@ -128,34 +128,6 @@
 				</p:selectOneMenu>
 				<p:message for="levelList" display="tooltip" />
 
-				<!-- 
-
-				<p:outputLabel for="name1" value="Nombres:" />
-				<p:inputText id="name1" value="#{UserVideoBean.name}"
-					required="true" />
-				<p:message for="name1" display="tooltip" />
-
-				<p:outputLabel for="lastname1" value="Apellidos:" />
-				<p:inputText id="lastname1" value="#{UserVideoBean.lastname}"
-					required="true" />
-				<p:message for="lastname1" display="tooltip" />
-
-				<p:outputLabel for="mail1" value="Correo:" />
-				<p:inputText id="mail1" type="mail" value="#{UserVideoBean.mail}"
-					required="true"
-					validatorMessage="Debe tener el formato (xxx@yyy.rrr).">
-					<f:validateRegex
-						pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
-				</p:inputText>
-				<p:message for="mail1" display="text" />
-
-			
-
-			<p:commandButton id="buttonAdd" ajax="false" validateClient="true"
-				value="#{msg.actionAddUser}" update="ClientId,panel1"
-				actionListener="#{UserVideoBean.actionAddUser}" />
-			<p:commandButton id="cancel" ajax="false" process="@none"
-				value="#{msg.cancel}" actionListener="#{UserVideoBean.actionExit}" />-->
 
 			</h:panelGrid>
 			<h:panelGrid id="buttonPanel" columns="3" cellpadding="5">

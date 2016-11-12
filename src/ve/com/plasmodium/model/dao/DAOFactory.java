@@ -25,8 +25,6 @@ public abstract class DAOFactory {
 	public abstract CardDAO getCardDAO();
 	public abstract UserDAO getUserDAO();
 
-	public abstract VideoDAO getVideoDAO();
-
 	public abstract AuthorizationDAO getAuthorizationDAO();
 	//IS
 
