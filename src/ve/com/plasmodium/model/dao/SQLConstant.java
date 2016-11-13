@@ -143,10 +143,10 @@ public final class SQLConstant {
 
 	///////////////////////////////////////////////////////////////////////////
 	public final static String SELECT_USER = 
-			"SELECT A.id_user,A.num_ident,  A.first_name, A.fist_last_name, A.email, A.position, A.id_level, A.login, A.password, A.active, A.institution, B.name FROM user AS A STRAIGHT_JOIN institution AS B ON A.institution=B.id_institution WHERE  A.login =?;;";
+			"SELECT A.id_user,A.num_ident,  A.first_name, A.fist_last_name, A.email, A.position, A.id_level, A.login, A.password, A.active FROM user AS A WHERE  A.login =?;";
 
-	public final static String SELECT_USER2 = 
-			"SELECT A.user, A.client, A.doc,  A.name, A.lastname,  A.email, A.jobtitle, A.level, A.login, A.pwd_web, A.active, A.version, A.company, A.employer, B.name, B.is_distributer, A.route FROM user AS A STRAIGHT_JOIN company AS B  ON A.employer=B.company WHERE  A.user =?;";
+	public final static String LIST_INSTITUTION_USER = 
+			"SELECT i.id_institution, i.name FROM user_institution AS ui STRAIGHT_JOIN institution AS i ON ui.institution=i.id_institution WHERE ui.user = ?;";
 
 	public final static String GET_MASTER_CLIENT = 
 			"SELECT getMasterClient(?,?)";
@@ -163,20 +163,20 @@ public final class SQLConstant {
 			"SELECT user, name FROM user WHERE employer=?";
 
 	public final static String UsuarioDetail = 
-			"SELECT u.id_user ,u.institution ,u.num_ident ,u.first_name,u.fist_last_name,u.email,u.position,u.id_level,u.login,u.active FROM user AS u WHERE u.id_user=?";
+			"SELECT u.id_user ,ui.institution ,u.num_ident ,u.first_name,u.fist_last_name,u.email,u.position,u.id_level,u.login,u.active FROM user AS u STRAIGHT_JOIN user_institution AS ui ON ui.user = u.id_user WHERE u.id_user=?";
 
 	public final static String DeleteUser = 
 			"UPDATE user SET active=? WHERE user=?";
 
-	public static final String getLevels = "SELECT l.level, l.description FROM sec_level_profile AS lp STRAIGHT_JOIN sec_profile_rol AS pr ON lp.profile=pr.profile STRAIGHT_JOIN sec_rol AS r ON r.rol=pr.rol STRAIGHT_JOIN sec_level AS l ON r.rol_name=concat('ASSIGN_LEVEL',l.level) WHERE lp.level=?;";
+	public static final String getLevels = "SELECT l.level, l.description FROM sec_level_profile AS lp STRAIGHT_JOIN sec_profile_rol AS pr ON lp.profile=pr.profile STRAIGHT_JOIN sec_rol AS r ON r.rol=pr.rol STRAIGHT_JOIN sec_level AS l ON r.rol_name=concat('ADD_LEVEL_',l.level) WHERE lp.level=?;";
 	
 	public static final String getServiceCompany = "SELECT service_company, c.name FROM arrangement AS a STRAIGHT_JOIN company AS c ON a.service_company=c.company WHERE a.seller_company=?;";
 			
-	public static final String insertUserArrangement = "insert into user_arrangement values (?,?,?);";
 	public final static String AddUser = 
-			"INSERT INTO user (user,company,employer,doc,name,lastname,email,jobtitle,level,login,valid_to,active,version,pwd_web) VALUE(IF(((SELECT COUNT(*) FROM user AS u1 )>0),(SELECT MAX(user)+1 FROM user AS u2 ),1),?,?,?,?,'C.A',?,?,?,?,CONVERT_TZ('2038-01-17 23:59:59','UTC',(SELECT @@global.system_time_zone)),true,1,md5(?))";
-	//Buscar las denominaciones existentes para la compa�ia a partir del company del usuario
-	//SELECT p.denom, p.value FROM packing p WHERE p.company=<user.company>
+			"INSERT INTO user (first_name,fist_last_name,num_ident,phone_1,email,id_level,position,active,login,password) VALUE (?,?,?,?,?,?,?,?,?,md5(?));";
+
+	public final static String AddUserInstitution = 
+			"INSERT INTO user_institution (user,institution) VALUE (?,?);";
 
 	public final static String SELECT_PACKING_listByCompany = 
 			"SELECT p.denom, p.value FROM packing p WHERE p.company=?";

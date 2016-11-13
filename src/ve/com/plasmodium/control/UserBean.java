@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -111,7 +109,7 @@ public class UserBean {
 		userJobtitleNew = new String(); 
 		levelListUserNew = new String();
 		setLogin(SecurityContextHolder.getContext().getAuthentication().getName());
-		setLogin(login);
+		//setLogin(login);
 	}
 
 
@@ -173,25 +171,19 @@ public class UserBean {
 		UserManager userManager = new UserManager(SQLConstant.MYSQL);
 		logger.debug("CARGAR EMPLEADO!\n!");
 		try {
-			UserVo userVo = (UserVo) userManager.datosUsuario(login);
+			UserVo userVo = new UserVo();
+			userManager.datosUsuario(userVo, login);
 			logger.debug("el usuario es " + userVo.getUser());
 			if(userVo!=null) {
-				if(userVo.getLevel()==1)
-					showTarven=true;
-				if(userVo.getLevel()==30)
-					showNvRd=true;
-				if(userVo.getLevel()==99)
-					showNvRdAdmin=true;
-				showNoHibrido=true;
-				logger.debug("su compania es " + userVo.getCompany());
+				logger.debug("su compania es " + userVo.getCompanys().get(0).getName());
 				logger.debug("su level es " + userVo.getLevel());
-				setCompany(userVo.getCompany());
+				setCompany((short) userVo.getCompanys().get(0).getInstitution());
 				setUserName(userVo.getName());
 				setUser(userVo.getUser());
 				setLevel(userVo.getLevel());
 				setPassUser(userVo.getPassword());
 				setEmail(userVo.getEmail());
-				setCompanyName(userVo.getNameCompany());
+				setCompanyName(userVo.getCompanys().get(0).getName());
 			} 			
 		} catch (Exception e) {
 			logger.error("Exception UserBean - cargarEmpleado ", e);

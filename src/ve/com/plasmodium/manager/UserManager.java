@@ -1,8 +1,5 @@
 package ve.com.plasmodium.manager;
 
-import java.io.IOException;
-import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.model.SelectItem;
@@ -27,14 +24,12 @@ public class UserManager {
 
 
 
-	public UserVo datosUsuario(String login) throws DAOException, CustomException {
-		UserVo userVo = null;
+	public void datosUsuario(UserVo userVo, String login) throws DAOException, CustomException {
 		try {
-			userVo = userDAO.datosUsuario(login);
+			userDAO.datosUsuario(userVo, login);
 		} catch (Exception e) {
 			logger.error("ParseException UserManager - datosUsuario ", e);
 		}
-		return userVo;
 	}
 
 	public UserVo datosUsuario(int user) throws DAOException, CustomException {
@@ -59,6 +54,22 @@ public class UserManager {
 			logger.error("ParseException UserManager - getNewUsersLevel ", e);
 		}
 		return level;
+	}
+		
+	public void listaInstutionType(List<SelectItem> selectInstitutionType) {
+		try {
+			userDAO.listaInstutionType(selectInstitutionType);
+		} catch (Exception e) {
+			logger.error("ParseException UserManager - listaInstution ", e);
+		}
+	}
+	
+	public void listaInstution(List<SelectItem> selectInstitution, short institutionType) {
+		try {
+			userDAO.listaInstution(selectInstitution, institutionType);
+		} catch (Exception e) {
+			logger.error("ParseException UserManager - listaInstution ", e);
+		}
 	}
 	
 	public List<SelectItem> listaUsuarios(List<SelectItem> distributer, short distrib) {
@@ -90,23 +101,13 @@ public class UserManager {
 		}
 		return userVo;
 	}
-
-	public boolean changeUser(Short company, String user, String doc, String login, String name, String mail, String cargo, String level, List<String> serviceCompany, String pass, String max_unsettled_balance, String max_selling_amount, String max_days_card_unsettled) {
+			//(company, user, doc, login, name, mail, cargo, level, pass)){
+	public boolean changeUser(Short company, String user, String doc, String login, String name, String mail, String cargo, String level, String pass) {
 		boolean result = false;
 		try{
-			result=userDAO.changeUser(company,user,doc,login,name,mail,cargo,level,serviceCompany, pass,max_unsettled_balance, max_selling_amount, max_days_card_unsettled);
+			result=userDAO.changeUser(company,user,doc,login,name,mail,cargo,level, pass);
 		}catch (Exception e) {
 			logger.error("ParseException UserManager - changeUser ", e);
-		}
-		return result;
-	}
-
-	public boolean approveUser(short company, String user, String level, List<String> serviceCompany, String max_unsettled_balance, String max_selling_amount, String max_days_card_unsettled) {
-		boolean result = false;
-		try{
-			result=userDAO.approveUser(company,user,level,serviceCompany,max_unsettled_balance,max_selling_amount,max_days_card_unsettled);
-		}catch (Exception e) {
-			logger.error("ParseException UserManager - approveUser ", e);
 		}
 		return result;
 	}
@@ -123,10 +124,10 @@ public class UserManager {
 
 
 
-	public int addUser(short company, String employer, String doc, String login, String name, String mail, String cargo, String level, String pass) {
+	public int addUser(String nameUser,String lastNameUser,String idUser,String phoneUser1, String mailUser, String selectedLevelUser, String jobtitleUser, String active, String loginUser, String passUser, String selectedInstitution) {
 		int result = 0;
 		try{
-			result=userDAO.addUser(company,employer, doc,login,name,mail,cargo,level,pass);
+			result=userDAO.addUser(nameUser,lastNameUser,idUser,phoneUser1, mailUser, selectedLevelUser, jobtitleUser, active, loginUser, passUser, selectedInstitution);
 		}catch (Exception e) {
 			logger.error("ParseException UserManager - addUser ", e);
 		}
@@ -168,14 +169,12 @@ public class UserManager {
 		return userList;
 	}
 
-	public List<SelectItem> getLevels(short level) {
-		List<SelectItem> userList = null;
+	public void getLevels(List<SelectItem> levelList, short level) {
 		try {
-			userList = userDAO.getLevels(level);
+			userDAO.getLevels(levelList, level);
 		} catch (Exception e) {
 			logger.error("ParseException UserManager - getUsersToApprove ", e);
 		}
-		return userList;
 	}
 
 

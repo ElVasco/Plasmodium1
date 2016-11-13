@@ -61,7 +61,7 @@
 			<to-view-id>/pages/MenuInicio.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
-	<!-- ASIGNACION DE TARJETAS A DISTRIBUIDORES-->
+	<!-- ASIGNACION DE TARJETAS A DISTRIBUIDORES -->
 	<navigation-rule>
 		<from-view-id>/pages/AsignarDistribuidor.xhtml</from-view-id>
 		<navigation-case>
@@ -81,7 +81,7 @@
 			<to-view-id>/pages/MenuInicio.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
-	<!-- ASIGNACION DE TARJETAS A RUTAS-->
+	<!-- ASIGNACION DE TARJETAS A RUTAS -->
 	<navigation-rule>
 		<from-view-id>/pages/AsignarRuta.xhtml</from-view-id>
 		<navigation-case>
@@ -136,7 +136,7 @@
 			<to-view-id>/pages/MenuInicio.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
-	
+
 	<!-- AGREGAR FACTURAS -->
 	<navigation-rule>
 		<from-view-id>/pages/AgregarFactura.xhtml</from-view-id>
@@ -171,7 +171,7 @@
 			<to-view-id>/pages/MenuInicio.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
-	
+
 	<navigation-rule>
 		<from-view-id>/pages/VisualizarFactura.xhtml</from-view-id>
 		<navigation-case>
@@ -782,7 +782,7 @@
 			<to-view-id>/pages/ReporteCuentasporPagar.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
-		<navigation-rule>
+	<navigation-rule>
 		<from-view-id>/pages/ReporteCuentasporCobrar.xhtml</from-view-id>
 		<navigation-case>
 			<from-outcome>successful</from-outcome>
@@ -902,7 +902,7 @@
 			<to-view-id>/pages/ReporteVentas.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
-	
+
 	<navigation-rule>
 		<from-view-id>/pages/ReporteDistribucion.xhtml</from-view-id>
 		<navigation-case>
@@ -918,7 +918,7 @@
 			<to-view-id>/pages/ReporteDistribucion.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
-	
+
 	<navigation-rule>
 		<from-view-id>/pages/ReporteVentasOp.xhtml</from-view-id>
 		<navigation-case>
@@ -1299,7 +1299,7 @@
 			<to-view-id>/pages/MenuInicio.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
-	
+
 	<navigation-rule>
 		<from-view-id>/pages/ReversoCierre.xhtml</from-view-id>
 		<navigation-case>
@@ -1416,7 +1416,7 @@
 			<to-view-id>/pages/ConciliacionBolsaUnica.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
-	
+
 	<navigation-rule>
 		<from-view-id>/pages/ReporteCierre.xhtml</from-view-id>
 		<navigation-case>
@@ -1432,7 +1432,7 @@
 			<to-view-id>/pages/MenuInicio.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
-	
+
 	<navigation-rule>
 		<from-view-id>/pages/UserEdit.xhtml</from-view-id>
 		<navigation-case>

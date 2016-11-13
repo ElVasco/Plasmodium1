@@ -38,7 +38,6 @@ public class UserEditBean {
 	//private String email;
 	private String cargo;
 	private String message;
-	private String creditLabel;
 	private Short level;
 	private String userNameNew = new String();
 	private String userIdNew = new String();
@@ -60,19 +59,19 @@ public class UserEditBean {
 	private String maxSellingAmount = new String();
 	private String maxDaysCardUnsettled = new String();
 
-	private String levelListUser;
+	private String selectedLevelUser;
 	private String levelListUserNew;
-	private List<String> serviceCompany;
-	private List<SelectItem> selectSercviceCompany;
 
-	//private List<SelectItem> levelList;
+
+	private List<SelectItem> selectInstitution;
+	private String selectedInstitution;
 	private List<SelectItem> selectUser;
-	private List<SelectItem> selectUserCallCenter;
-	private List<SelectItem> selectDistributer;
-	private String selectedDistributer;
-	private String selectedDistributeru;
 	private String selectedUser;
-	private String selectedUserCallCenter;
+	private List<SelectItem> selectInstitutionType;
+	private String selectedInstitutionType;
+	
+	private String selectedDistributer;
+
 	private UserVo userDetail;
 	private UserVo userDetail2;
 	private Short company;
@@ -82,9 +81,9 @@ public class UserEditBean {
 	private int masterClient;
 	private boolean showDetail=false; 
 	private boolean showDetailNew=false;
-	private boolean showTarven=false;
-	private boolean showNvRd=false;
-	private boolean showNvRdAdmin=false;
+	private boolean showInstitutionList=false;
+	private boolean showUserList=false;
+	private boolean showAddUser=false;
 	private boolean showNoHibrido=false;
 	private boolean showCreditOptions=false;
 	private boolean showPickUser=false;
@@ -108,7 +107,6 @@ public class UserEditBean {
 		logger.debug("Entro al constructor de UserEditBean");
 		userName="";
 		selectedUser = new String();
-		selectedUserCallCenter = new String();
 		nameUser = new String();
 		idUser = new String();
 		loginUser = new String();
@@ -117,29 +115,19 @@ public class UserEditBean {
 		maxUnsettledBalance = new String();
 		maxSellingAmount = new String();
 		maxDaysCardUnsettled = new String();
-		levelListUser = new String();
+		selectedLevelUser = new String();
 		passUser = new String();
-		AuthorizationBean sessionAuthorizationBean = (AuthorizationBean) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("AuthorizationBean");
 		UserBean sessionUserBean = (UserBean) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("UserBean");
 		Map<String, String> parameterMap = (Map<String, String>) FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
 		String param = parameterMap.get("modify");
 		logger.debug(param + "----------");
-		//short distributer = sessionUserBean.getDistributer();
-		resetSelectDistributer();
-		logger.debug(sessionUserBean.getCompany());
-		logger.debug(sessionUserBean.getCompanyName());
-		SelectItem si = new SelectItem(Short.toString(sessionUserBean.getCompany()),sessionUserBean.getCompanyName());
-		selectDistributer.add(si);
-
+		if(param!=null)
+			setShowAddUser(param.equals("0"));
+		resetSelectInstitutionType();
 		resetUserList();
-		//resetUserCallCenterList();
-		
 		company = sessionUserBean.getCompany();
-		resetServiceCompany();
-		//resetselectSercviceCompany();
 		resetLevelList();
-		if(sessionAuthorizationBean.isIS_APPROVE_USER()) //es aprobador de usuarios
-			resetAllLists(); 
+
 	}
 
 	private void resetAllLists() {
@@ -170,14 +158,6 @@ public class UserEditBean {
 		selectedCity = "9999";
 	}
 
-	public void resetServiceCompany(){
-		if(serviceCompany==null){
-			serviceCompany =  new ArrayList<String>();
-		}else{
-			serviceCompany.clear();
-		}
-	}
-
 	public void resetUser(){
 		if(!selectUser.isEmpty())	
 			selectUser.clear();
@@ -193,7 +173,7 @@ public class UserEditBean {
 		setNameUser("");
 		setPassUser("");
 		setMailUser("");
-		levelListUser = "9999";
+		selectedLevelUser = "9999";
 		setJobtitleUser("");
 		industryUser = null;
 		userEnabled = false;
@@ -249,56 +229,89 @@ public class UserEditBean {
 	 * @param distrib Distribuidor seleccionado.
 	 * @return
 	 */
+	public void buscarInstitutionType(){
+		UserManager userManager = new UserManager(SQLConstant.MYSQL);
+		try {
+			userManager.listaInstutionType(selectInstitutionType);
+		} catch (Exception e) {
+			logger.error("Exception UserEditBean - buscarUsuario ", e);
+		}	    
+		//return selectUser;
+	}
+	
+	/**
+	 * Busca la lista de usuario segun un Distribuidor
+	 * @param distrib Distribuidor seleccionado.
+	 * @return
+	 */
+	public void buscarInstitution(short institutionType){
+		UserManager userManager = new UserManager(SQLConstant.MYSQL);
+		try {
+			userManager.listaInstution(selectInstitution, institutionType);
+		} catch (Exception e) {
+			logger.error("Exception UserEditBean - buscarUsuario ", e);
+		}	    
+		//return selectUser;
+	}
+	
+	/**
+	 * Busca la lista de usuario segun un Distribuidor
+	 * @param distrib Distribuidor seleccionado.
+	 * @return
+	 */
 	public List<SelectItem> buscarUsuario(short distrib){
 		UserManager userManager = new UserManager(SQLConstant.MYSQL);
 		try {
-			selectUser = (List<SelectItem>) userManager.listaUsuarios(selectDistributer, distrib);
+			selectUser = (List<SelectItem>) userManager.listaUsuarios(selectInstitutionType, distrib);
 		} catch (Exception e) {
 			logger.error("Exception UserEditBean - buscarUsuario ", e);
 		}	    
 		return selectUser;
 	}
 	
-	public void serviceCompany(){
-		logger.debug(serviceCompany+" ....................................");
-	}
-	
 	/**
-	 * Recibe el dato seleccionado de la lista de distribuidores para llenar lista de usuario segun ese distribuidor
-	 * @param e Distribuidor seleccionado
+	 * Recibe el dato seleccionado de la lista de tipos de institucions para llenar lista de intituciones segun tipo
 	 */
-	public void distribListenerMethod2 (){
+	public void institutionTypeListenerMethod (){
 		setShowPickUser(false);
 		setShowDetail(false);
-		setSelectedUser("");
-		userListenerMethod();
-		resetUserList();
-		if(selectedDistributeru != null && !selectedDistributeru.equals("")){
-			buscarUsuario(Short.parseShort(selectedDistributeru));
-			setShowPickUser(true);
+		setShowInstitutionList(false);
+		setShowUserList(false);
+		setSelectedInstitution("");
+		resetInstitutionList();
+		institutionListenerMethod();		
+		if(selectedInstitutionType != null && !selectedInstitutionType.equals("")){
+			buscarInstitution(Short.parseShort(selectedInstitutionType));
+			//setShowPickUser(true);
+			setShowInstitutionList(true);
+			setShowUserList(true);
 		}
 		
 	}
 
-	/*	@SuppressWarnings("unchecked")
-	public void sercviceCompanyListener(){
-		resetServiceCompany();
-		serviceCompany.addAll((List<String>)e.getNewValue());
-	}*/
-
-	public void resetselectSercviceCompany(){
-		if(selectSercviceCompany==null){
-			selectSercviceCompany =  new ArrayList<SelectItem>();
-		}else{
-			selectSercviceCompany.clear();
+	/**
+	 * Recibe el dato seleccionado de la lista de distribuidores para llenar lista de usuario segun ese distribuidor
+	 * @param e Distribuidor seleccionado
+	 */
+	public void institutionListenerMethod (){
+		setShowPickUser(false);
+		setShowDetail(false);
+		setShowUserList(false);
+		setSelectedUser("");
+		resetUserList();
+		if(selectedInstitution != null && !selectedInstitutionType.equalsIgnoreCase("")){
+			buscarUsuario(Short.parseShort(selectedInstitution.equalsIgnoreCase("")?"999":selectedInstitution));
+			if(!selectedInstitution.equalsIgnoreCase("") && showAddUser)
+				setShowPickUser(true);
+			setShowUserList(true);
 		}
-		UserManager userManager = new UserManager(SQLConstant.MYSQL);
-		selectSercviceCompany.addAll(userManager.getServiceCompany(company));
+		
 	}
 
 	public void userListenerMethod1(){
 		userListenerMethod();
 	}
+	
 	public void userListenerMethod2(){
 		userListenerMethod();
 	}
@@ -323,7 +336,7 @@ public class UserEditBean {
 					nameUser = null;
 					passUser = "";
 					mailUser = null;
-					levelListUser = "9999";
+					selectedLevelUser = "9999";
 					jobtitleUser = null;
 					industryUser = null;
 					userEnabled = true;
@@ -337,7 +350,7 @@ public class UserEditBean {
 					passUser = ".....";
 					nameUser = userDetail2.getName();
 					mailUser = userDetail2.getEmail();
-					levelListUser = userDetail2.getLevel()+"";
+					selectedLevelUser = userDetail2.getLevel()+"";
 					jobtitleUser = userDetail2.getJobtitle();
 					userEnabled = userDetail2.getActive();
 				}
@@ -356,8 +369,7 @@ public class UserEditBean {
 	 */
 	public void approveUserListenerMethod(){
 		UserManager userManager = new UserManager(SQLConstant.MYSQL);
-		selectedUserCallCenter = selectedUser;
-		short userIDS  = selectedUser==null?Short.parseShort(selectedUserCallCenter):Short.parseShort(selectedUser);
+		short userIDS  = Short.parseShort(selectedUser);
 		if(userIDS==999 || userIDS==9999){
 			showDetail=false;
 			showDetailNew=true;
@@ -370,27 +382,10 @@ public class UserEditBean {
 			nameUser = userDetail2.getName();
 			lastNameUser = userDetail2.getLastname();
 			mailUser = userDetail2.getEmail();
-			levelListUser = userDetail2.getLevel()+"";
-			levelListUser = "9999";
+			selectedLevelUser = userDetail2.getLevel()+"";
+			selectedLevelUser = "9999";
 			jobtitleUser = userDetail2.getJobtitle();
 		}
-	}
-
-	/**
-	 * Recibe el dato seleccionado de la lista de usuario para traer los datos del mismo
-	 * @param e Usuario seleccionado
-	 */
-	public void creditListenerMethod(){
-		setShowCreditOptions(false);
-		String valor  = levelListUser;
-		if(valor.compareTo("42")!=0 && valor.compareTo("999")!=0){
-			if(valor.compareTo("43")==0){
-				creditLabel = "Monto Limite Pre-aprobado";
-			} else if(valor.compareTo("44")==0){
-				creditLabel = "Limite de Credito";
-			}
-			setShowCreditOptions(true);
-		} 
 	}
 
 	/**
@@ -407,25 +402,17 @@ public class UserEditBean {
 			UserManager userManager = new UserManager(SQLConstant.MYSQL);
 			UserBean sessionUserBean = (UserBean) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("UserBean");
 			company = sessionUserBean.getCompany();
-			String user,doc,login,name,mail,cargo,level,pass,max_unsettled_balance, max_selling_amount, max_days_card_unsettled;
-			user = selectedUser==null || selectedUser.equals("")?selectedUserCallCenter:selectedUser;
+			String user,doc,login,name,mail,cargo,level,pass;
+			user = selectedUser;
 			doc = idUser.substring(0,1).toUpperCase()+idUser.substring(1,idUser.length());
 			login = loginUser;
 			name = nameUser;
 			mail = mailUser;
 			cargo = jobtitleUser;
-			level = levelListUser;
-			pass =  passUser;
-			max_unsettled_balance ="";
-			max_selling_amount="0";
-			max_days_card_unsettled="0";
-			if(maxUnsettledBalance!=null) {
-				max_unsettled_balance = maxUnsettledBalance;
-				/*max_selling_amount = maxSellingAmount;
-					max_days_card_unsettled = maxDaysCardUnsettled;	*/			
-			} 		
-			logger.debug(serviceCompany.size());
-			if(userManager.changeUser(company, user, doc, login, name, mail, cargo, level,serviceCompany, pass, max_unsettled_balance, max_selling_amount, max_days_card_unsettled)){
+			level = selectedLevelUser;
+			pass =  passUser;		
+
+			if(userManager.changeUser(company, user, doc, login, name, mail, cargo, level, pass)){
 				navigation = "successful_change";
 				sessionUserBean.getMessages().add(0,"Operación satisfactoria - El usuario: "+nameUser+" "+lastNameUser+" ha sido actualizado en el sistema.");	    	
 				sessionUserBean.setMessageExit("");
@@ -442,18 +429,12 @@ public class UserEditBean {
 	 */
 	public String actionChangeUserApprove() throws CustomException{
 		String navigation = "fail";
-		UserManager userManager = new UserManager(SQLConstant.MYSQL);
 		AuthorizationBean sessionAuthorizationBean = (AuthorizationBean) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("AuthorizationBean");
 		UserBean sessionUserBean = (UserBean) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("UserBean");
 		company = sessionUserBean.getCompany();
-		String user,level,max_unsettled_balance, max_selling_amount, max_days_card_unsettled;
 
-		user = selectedUser==null || selectedUser.equals("")?selectedUserCallCenter:selectedUser;
-		level = levelListUser;
-		max_unsettled_balance ="0";
-		max_selling_amount="0";
-		max_days_card_unsettled="0";
-		if(!levelListUser.equals("999")) {
+
+		/*if(!levelListUser.equals("999")) {
 			if(userManager.approveUser(company, user, level, serviceCompany, max_unsettled_balance, max_selling_amount, max_days_card_unsettled)){
 				navigation = "successful_change";
 				sessionUserBean.getMessages().add(0,"Operación satisfactoria - El usuario: "+nameUser+" "+lastNameUser+" ha sido aprobado.");	    	
@@ -464,7 +445,7 @@ public class UserEditBean {
 			navigation = actionDeleteUser();
 			mailNotify(nameUser,lastNameUser,mailUser,maxUnsettledBalance,true);
 			sessionUserBean.getMessages().add(0,"Operacion Satisfactoria - El usuario: "+nameUser+" no ha sido aprobado");	    	
-		}
+		}*/
 		sessionUserBean.setMessageExit("");
 		FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("UserEditBean");
 		try {
@@ -476,6 +457,7 @@ public class UserEditBean {
 		return navigation;
 	}
 
+	@SuppressWarnings("unused")
 	private void mailNotify(String nameUser, String lastNameUser,
 			String mail, String maxUnsettledBalance, boolean accept) {
 		String subject = "Registro de Vendedor Externo";
@@ -516,13 +498,15 @@ public class UserEditBean {
 		UserManager userManager = new UserManager(SQLConstant.MYSQL);
 		UserBean sessionUserBean = (UserBean) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("UserBean");
 		company = sessionUserBean.getCompany();
-		if(idUser!=null &&  idUser.length()!=0 && loginUser!=null && loginUser.length()!=0 && nameUser!=null && nameUser.length()!=0 && mailUser!=null && mailUser.length()!=0 && jobtitleUser!=null && jobtitleUser.length()!=0 && !levelListUser.equals("9999") && passUser!=null && passUser.length()!=0){
+		if(idUser!=null &&  idUser.length()!=0 && loginUser!=null && loginUser.length()!=0 && nameUser!=null && nameUser.length()!=0 && mailUser!=null && mailUser.length()!=0 && jobtitleUser!=null && jobtitleUser.length()!=0 && !selectedLevelUser.equals("9999") && passUser!=null && passUser.length()!=0){
 			Pattern email = Pattern.compile("^[_A-Za-z0-9-+]+(\\.[_A-Za-z0-9-+]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
 			Matcher fit = email.matcher(mailUser);
 			if (!fit.matches())
 				return navigation;
 			idUser = idUser.substring(0,1).toUpperCase()+idUser.substring(1,idUser.length()); //Change the first letter to uppercase
-			switch(userManager.addUser(company, selectedDistributeru==null?"1":selectedDistributeru ,idUser, loginUser, nameUser, mailUser, jobtitleUser, levelListUser, passUser)){
+			//(first_name,first_last_name,num_ident,phone1,email,id_level,position,active,login,password)
+			//userManager.addUser(nameUser,"",idUser,"",mailUser,selectedLevelUser,jobtitleUser,"1",loginUser,passUser);
+			switch(userManager.addUser(nameUser,"",idUser,"",mailUser,selectedLevelUser,jobtitleUser,"1",loginUser,passUser, selectedInstitution)){
 			case -1:
 				message=" ATENCION: El usuario \""+loginUser+"\" ya existe por favor intente con otro.";
 				break;
@@ -540,11 +524,22 @@ public class UserEditBean {
 		}
 		return navigation;
 	}
-
+	
+	/**
+	 * Resetela (limpia) la lista de usuario para volverla a llenar segun la institucion seleccionado
+	 */
+	public void resetInstitutionList(){			
+		
+		if(selectInstitution == null){
+			selectInstitution = new ArrayList<SelectItem>();
+		}else{
+			selectInstitution.clear();
+		}
+	}
 
 
 	/**
-	 * Resetela (limpia) la lista de usuario para volverla a llenar segun el distribuidor seleccionado
+	 * Resetela (limpia) la lista de usuario para volverla a llenar segun la institucion seleccionado
 	 */
 	public void resetUserList(){			
 		
@@ -555,23 +550,7 @@ public class UserEditBean {
 		}
 	}
 
-	/**
-	 * Resetela (limpia) la lista de usuario para volverla a llenar segun el distribuidor seleccionado
-	 */
-	public void resetUserCallCenterList(){
-		logger.debug("Entro al reset User del Bean UserCallCenter");
-		UserManager userManager = new UserManager(SQLConstant.MYSQL);
-		SelectItem si ;
-		si = new SelectItem("9999","Seleccione un Usuario");
 
-		if(selectUserCallCenter==null){
-			selectUserCallCenter  =  new ArrayList<SelectItem>();
-		}else{
-			selectUserCallCenter.clear();
-		}
-		selectUserCallCenter.add(si);	 
-		selectUserCallCenter = (List<SelectItem>) userManager.listaUsuarios(selectDistributer, Short.parseShort("1"));
-	}
 
 	public void distribListenerMethod (){
 		UserBean sessionUserBean = (UserBean) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("UserBean");
@@ -583,11 +562,11 @@ public class UserEditBean {
 			if(global != null)
 				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("GlobalData");
 		}else{
-			short distrib = Short.parseShort(selectedDistributeru);
+			short distrib = Short.parseShort(selectedInstitutionType);
 			buscarUsuario(distrib);
 		}
 		GlobalDataBean globalDataBean = new GlobalDataBean();
-		logger.debug(selectedDistributeru);
+		logger.debug(selectedInstitutionType);
 		FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("GlobalData", globalDataBean);
 	}
 
@@ -595,17 +574,14 @@ public class UserEditBean {
 	/**
 	 * 
 	 */
-	public void resetSelectDistributer(){
-		SelectItem si;
-		//si = new SelectItem("9999","Seleccione un Distribuidor");
-		if(selectDistributer==null){
-			selectDistributer  =  new ArrayList<SelectItem>();
+	public void resetSelectInstitutionType(){
+		if(selectInstitutionType==null){
+			selectInstitutionType  =  new ArrayList<SelectItem>();
 		}else{
-			selectDistributer.clear();
+			selectInstitutionType.clear();
 		}
-		//selectDistributer.add(si);
+		buscarInstitutionType();
 	}
-
 
 
 	/**
@@ -657,13 +633,12 @@ public class UserEditBean {
 		}else{
 			selectedDistributer = "";
 			selectedUser = "";
-			selectedUserCallCenter = "";
 			nameUser = "";
 			idUser = "";
 			loginUser = "";
 			mailUser = "";
 			jobtitleUser = ""; 
-			levelListUser = "";
+			selectedLevelUser = "";
 			passUser = "";
 			passUserNew = "";
 			confirmPassNew = "";
@@ -680,83 +655,18 @@ public class UserEditBean {
 
 	public void resetLevelList(){
 		logger.debug("reset de lista de niveles");
-		SelectItem si;
-		si = new SelectItem("9999","Seleccione un Nivel de Acceso");
 		if(levelList==null){
 			levelList  =  new ArrayList<SelectItem>();
 		}else{
 			levelList.clear();
 		}
-		levelList.add(si);
-		si = new SelectItem("999","Usuario No Aprobado");
-		levelList.add(si);
 		UserBean sessionUserBean = (UserBean) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("UserBean");
 		short level = sessionUserBean.getLevel();
 		UserManager userManager = new UserManager(SQLConstant.MYSQL);
 		logger.debug("busco los niveles de usuario");
-		levelList.addAll(userManager.getLevels(level));
-		/*AuthorizationBean sessionAuthorizationBean = (AuthorizationBean) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("AuthorizationBean");
-		if(sessionAuthorizationBean.isCREATE_USER() && !sessionAuthorizationBean.isUSER_CALLCENTER()){
-			si = new SelectItem("1","Administrador Tarven");
-			levelList.add(si);
-		}
-		if(sessionAuthorizationBean.isCREATE_USER() && !sessionAuthorizationBean.isUSER_CALLCENTER()){
-			si = new SelectItem("36","Analista de Inventarios Tarven");
-			levelList.add(si);
-		}
-		if(sessionAuthorizationBean.isCREATE_USER() && !sessionAuthorizationBean.isUSER_CALLCENTER()){
-			si = new SelectItem("37","Analista Depositos  Tarven");
-			levelList.add(si);
-		}
-		if(sessionAuthorizationBean.isCREATE_USER() && !sessionAuthorizationBean.isUSER_CALLCENTER()){
-			si = new SelectItem("31","Supervisor de Distribuidor");
-			levelList.add(si);
-		}
-		if(sessionAuthorizationBean.isCREATE_USER() && sessionAuthorizationBean.isCHANGE_STATUS_NVRD()){
-			si = new SelectItem("8","Fabricante");
-			levelList.add(si);
-		}
-		if((sessionAuthorizationBean.isCREATE_USER() && sessionAuthorizationBean.isCHANGE_STATUS_NVRD())  || (sessionAuthorizationBean.isCREATE_USER() && sessionAuthorizationBean.isUSER_CALLCENTER())){
-			si = new SelectItem("4","Analista Credito y Cobranzas DTV ");
-			levelList.add(si);
-		}
-		if((sessionAuthorizationBean.isCREATE_USER() && sessionAuthorizationBean.isCHANGE_STATUS_NVRD()) || (sessionAuthorizationBean.isCREATE_USER() && sessionAuthorizationBean.isUSER_CALLCENTER())){
-			si = new SelectItem("3","Asistente Credito y Cobranzas DTV");
-			levelList.add(si);
-		}
-		if(sessionAuthorizationBean.isCREATE_USER() && sessionAuthorizationBean.isCHANGE_STATUS_NVRD()){
-			si = new SelectItem("30","Finanzas Novared");
-			levelList.add(si);
-		}
-		if(sessionAuthorizationBean.isCREATE_USER() && sessionAuthorizationBean.isCHANGE_STATUS_NVRD()){
-			si = new SelectItem("99","Administrador Sistema");
-			levelList.add(si);
-		}
-		if(sessionAuthorizationBean.isCREATE_USER() && sessionAuthorizationBean.isCHANGE_STATUS_NVRD()){
-			si = new SelectItem("98","Administrador Crypto-Web");
-			levelList.add(si);
-		}
-		if((sessionAuthorizationBean.isCREATE_USER() && sessionAuthorizationBean.isUSER_CALLCENTER()) || (sessionAuthorizationBean.isCREATE_USER() && sessionAuthorizationBean.isCHANGE_STATUS_NVRD())){
-			si = new SelectItem("12","Call Center");
-			levelList.add(si);
-		}
-		if(sessionAuthorizationBean.isIS_APPROVE_USER()){
-			getLevels();
-		}*/
+		userManager.getLevels(levelList,level);
 	}
 
-	public List<SelectItem> getLevels() { 
-		logger.debug("entro al getLevels en GobalDataBean \n");
-		UserBean sessionUserBean = (UserBean) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("UserBean");
-		UserManager userManager = new UserManager(SQLConstant.MYSQL);
-		short level=(short)sessionUserBean.getLevel();
-		try {
-			levelList = (List<SelectItem>) userManager.getLevels(level);
-		} catch (Exception e) {
-			logger.error("Exception GlobalDataBean - getLevels ", e);
-		}	    
-		return levelList;
-	}
 
 	/**
 	 * 
@@ -852,15 +762,6 @@ public class UserEditBean {
 	 */
 	public void setMessage(String message) {
 		this.message = message;
-	}
-
-
-	public void setCreditLabel(String creditLabel) {
-		this.creditLabel = creditLabel;
-	}
-
-	public String getCreditLabel() {
-		return creditLabel;
 	}
 
 	/**
@@ -1122,16 +1023,16 @@ public class UserEditBean {
 	/**
 	 * @return the levelListUser
 	 */
-	public String getLevelListUser() {
-		return levelListUser;
+	public String getSelectedLevelUser() {
+		return selectedLevelUser;
 	}
 
 
 	/**
 	 * @param levelListUser the levelListUser to set
 	 */
-	public void setLevelListUser(String levelListUser) {
-		this.levelListUser = levelListUser;
+	public void setSelectedLevelUser(String selectedLevelUser) {
+		this.selectedLevelUser = selectedLevelUser;
 	}
 
 
@@ -1166,36 +1067,19 @@ public class UserEditBean {
 		this.selectUser = selectUser;
 	}
 
-
-	/**
-	 * @return the selectUserCallCenter
-	 */
-	public List<SelectItem> getSelectUserCallCenter() {
-		return selectUserCallCenter;
-	}
-
-
-	/**
-	 * @param selectUserCallCenter the selectUserCallCenter to set
-	 */
-	public void setSelectUserCallCenter(List<SelectItem> selectUserCallCenter) {
-		this.selectUserCallCenter = selectUserCallCenter;
-	}
-
-
 	/**
 	 * @return the selectDistributer
 	 */
-	public List<SelectItem> getSelectDistributer() {
-		return selectDistributer;
+	public List<SelectItem> getSelectInstitutionType() {
+		return selectInstitutionType;
 	}
 
 
 	/**
 	 * @param selectDistributer the selectDistributer to set
 	 */
-	public void setSelectDistributer(List<SelectItem> selectDistributer) {
-		this.selectDistributer = selectDistributer;
+	public void setSelectInstitutionType(List<SelectItem> selectInstitutionType) {
+		this.selectInstitutionType = selectInstitutionType;
 	}
 
 
@@ -1218,16 +1102,16 @@ public class UserEditBean {
 	/**
 	 * @return the selectedDistributeru
 	 */
-	public String getSelectedDistributeru() {
-		return selectedDistributeru;
+	public String getSelectedInstitutionType() {
+		return selectedInstitutionType;
 	}
 
 
 	/**
 	 * @param selectedDistributeru the selectedDistributeru to set
 	 */
-	public void setSelectedDistributeru(String selectedDistributeru) {
-		this.selectedDistributeru = selectedDistributeru;
+	public void setSelectedInstitutionType(String selectedInstitutionType) {
+		this.selectedInstitutionType = selectedInstitutionType;
 	}
 
 
@@ -1245,23 +1129,6 @@ public class UserEditBean {
 	public void setSelectedUser(String selectedUser) {
 		this.selectedUser = selectedUser;
 	}
-
-
-	/**
-	 * @return the selectedUserCallCenter
-	 */
-	public String getSelectedUserCallCenter() {
-		return selectedUserCallCenter;
-	}
-
-
-	/**
-	 * @param selectedUserCallCenter the selectedUserCallCenter to set
-	 */
-	public void setSelectedUserCallCenter(String selectedUserCallCenter) {
-		this.selectedUserCallCenter = selectedUserCallCenter;
-	}
-
 
 	/**
 	 * @return the userDetail
@@ -1398,52 +1265,12 @@ public class UserEditBean {
 		this.showDetailNew = showDetailNew;
 	}
 
-
-	/**
-	 * @return the showTarven
-	 */
-	public boolean isShowTarven() {
-		return showTarven;
+	public boolean isShowAddUser() {
+		return showAddUser;
 	}
 
-
-	/**
-	 * @param showTarven the showTarven to set
-	 */
-	public void setShowTarven(boolean showTarven) {
-		this.showTarven = showTarven;
-	}
-
-
-	/**
-	 * @return the showNvRd
-	 */
-	public boolean isShowNvRd() {
-		return showNvRd;
-	}
-
-
-	/**
-	 * @param showNvRd the showNvRd to set
-	 */
-	public void setShowNvRd(boolean showNvRd) {
-		this.showNvRd = showNvRd;
-	}
-
-
-	/**
-	 * @return the showNvRdAdmin
-	 */
-	public boolean isShowNvRdAdmin() {
-		return showNvRdAdmin;
-	}
-
-
-	/**
-	 * @param showNvRdAdmin the showNvRdAdmin to set
-	 */
-	public void setShowNvRdAdmin(boolean showNvRdAdmin) {
-		this.showNvRdAdmin = showNvRdAdmin;
+	public void setShowAddUser(boolean showAddUser) {
+		this.showAddUser = showAddUser;
 	}
 
 
@@ -1612,22 +1439,6 @@ public class UserEditBean {
 		this.selectMunicipality = selectMunicipality;
 	}
 
-	public List<String> getServiceCompany() {
-		return serviceCompany;
-	}
-
-	public void setServiceCompany(List<String> serviceCompany) {
-		this.serviceCompany = serviceCompany;
-	}
-
-	public List<SelectItem> getSelectSercviceCompany() {
-		return selectSercviceCompany;
-	}
-
-	public void setSelectSercviceCompany(List<SelectItem> selectSercviceCompany) {
-		this.selectSercviceCompany = selectSercviceCompany;
-	}
-
 	public boolean isShowPickUser() {
 		return showPickUser;
 	}
@@ -1650,5 +1461,37 @@ public class UserEditBean {
 
 	public void setEditDetail(boolean editDetail) {
 		this.editDetail = editDetail;
+	}
+
+	public List<SelectItem> getSelectInstitution() {
+		return selectInstitution;
+	}
+
+	public void setSelectInstitution(List<SelectItem> selectInstitution) {
+		this.selectInstitution = selectInstitution;
+	}
+
+	public String getSelectedInstitution() {
+		return selectedInstitution;
+	}
+
+	public void setSelectedInstitution(String selectedInstitution) {
+		this.selectedInstitution = selectedInstitution;
+	}
+
+	public boolean isShowInstitutionList() {
+		return showInstitutionList;
+	}
+
+	public void setShowInstitutionList(boolean showInstitutionList) {
+		this.showInstitutionList = showInstitutionList;
+	}
+
+	public boolean isShowUserList() {
+		return showUserList;
+	}
+
+	public void setShowUserList(boolean showUserList) {
+		this.showUserList = showUserList;
 	}
 }

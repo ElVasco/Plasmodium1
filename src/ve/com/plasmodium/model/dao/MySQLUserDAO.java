@@ -10,6 +10,7 @@ import javax.faces.model.SelectItem;
 
 import ve.com.plasmodium.exception.CustomException;
 import ve.com.plasmodium.exception.DAOException;
+import ve.com.plasmodium.model.vo.Company;
 import ve.com.plasmodium.model.vo.UserVo;
 
 public class MySQLUserDAO implements UserDAO {
@@ -18,12 +19,17 @@ public class MySQLUserDAO implements UserDAO {
 		return null;
 	}
 
-	public UserVo datosUsuario(String login) throws DAOException, CustomException {
+
+	@Override
+	public UserVo datosUsuario(int user) throws DAOException, CustomException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	public void datosUsuario(UserVo userVo, String login) throws DAOException, CustomException {
 		final Connection conn = MySQLDAOFactory.createConnection();
 		PreparedStatement preparedStatement = null;
-		ResultSet resulSet = null;
-
-		UserVo userVo = null;	 
+		ResultSet resulSet = null;	 
 		try {
 			preparedStatement = conn.prepareStatement(SQLConstant.SELECT_USER);
 			preparedStatement.setString(1, login);
@@ -31,7 +37,6 @@ public class MySQLUserDAO implements UserDAO {
 			resulSet = preparedStatement.executeQuery();
 			if (resulSet.next()) {
 				//System.out.println("Trajo un registro de user");
-				userVo = new UserVo();
 				logger.debug("apenas corro el query, user es: "+resulSet.getShort("A.id_user"));
 				userVo.setUser(resulSet.getInt("A.id_user"));
 				userVo.setDoc(resulSet.getString("A.num_ident"));
@@ -44,26 +49,24 @@ public class MySQLUserDAO implements UserDAO {
 				userVo.setPwd(resulSet.getBytes("A.password"));
 				userVo.setPassword(resulSet.getString("A.password"));
 				userVo.setActive(resulSet.getBoolean("A.active"));
-				userVo.setCompany(resulSet.getShort("A.institution"));
-				userVo.setNameCompany(resulSet.getString("B.name"));
+				preparedStatement = conn.prepareStatement(SQLConstant.LIST_INSTITUTION_USER);
+				preparedStatement.setString(1, resulSet.getString("A.id_user"));
+				resulSet = preparedStatement.executeQuery();
+				while(resulSet.next()){
+					userVo.getCompanys().add(new Company(resulSet.getInt("i.id_institution"),resulSet.getString("i.name")));
+				}
 			} else {
 				System.out.println("no trajo registros");
 				userVo = null;
 			}
-		
+
 		} catch (Exception e) {
 			logger.error("Exception MySQLUserDAO - datosUsuario ", e);
 		}
-		try {
-			conn.close();
-		}catch (Exception e){
-			logger.error("Exception MySQLUserDAO - datosUsuario - close ", e);
-			new DAOException(SQLConstant.ERROR_CONNECTION, e.getCause());
-		}
-		return userVo;
+			MySQLDAOFactory.closeConection(conn, " MySQLUserDAO - datosUsuario");
 	}
 
-	public UserVo datosUsuario(int user) throws DAOException, CustomException {
+/*	public UserVo datosUsuario(int user) throws DAOException, CustomException {
 		final Connection conn = MySQLDAOFactory.createConnection();
 		PreparedStatement preparedStatement = null;
 		ResultSet resulSet = null;
@@ -75,9 +78,7 @@ public class MySQLUserDAO implements UserDAO {
 			logger.debug("Statement a ejecutarse " + preparedStatement.toString());
 			resulSet = preparedStatement.executeQuery();
 			if (resulSet.next()) {
-				//System.out.println("Trajo un registro de user");
 				userVo = new UserVo();
-				logger.debug("apenas corro el query, user es: "+resulSet.getShort("A.user"));
 				userVo.setUser(resulSet.getInt("A.user"));
 				userVo.setDoc(resulSet.getString("A.doc"));
 				userVo.setName(resulSet.getString("A.name"));
@@ -91,8 +92,8 @@ public class MySQLUserDAO implements UserDAO {
 				//userVo.setPassword(resulSet.getString("A.password"));
 				userVo.setActive(resulSet.getBoolean("A.active"));
 				userVo.setVersion(resulSet.getLong("A.version"));
-				userVo.setCompany(resulSet.getShort("A.company"));
-				userVo.setNameCompany(resulSet.getString("B.name"));
+				preparedStatement = conn.prepareStatement(SQLConstant.SELECT_USER2);
+				userVo.setCompanys(resulSet.getShort("A.company"));
 			} else {
 				System.out.println("no trajo registros");
 				userVo = null;
@@ -107,7 +108,7 @@ public class MySQLUserDAO implements UserDAO {
 			new DAOException(SQLConstant.ERROR_CONNECTION, e.getCause());
 		}
 		return userVo;
-	}
+	}*/
 
 	public List<SelectItem> listaUsuario(short distributer) {
 		final Connection conn = MySQLDAOFactory.createConnection();
@@ -138,9 +139,9 @@ public class MySQLUserDAO implements UserDAO {
 	}
 
 	/** Return the level that must be assigned to every new not approved user
-	  * @param company	The company where the user will work 
-	  * @return An int representing the level
-	  **/
+	 * @param company	The company where the user will work 
+	 * @return An int representing the level
+	 **/
 	public Short getNewUsersLevel() {
 		final Connection conn = MySQLDAOFactory.createConnection();
 		PreparedStatement preparedStatement = null;
@@ -156,7 +157,7 @@ public class MySQLUserDAO implements UserDAO {
 			resulSet = preparedStatement.executeQuery();
 			if (resulSet.next()) 
 				level = resulSet.getShort(1);
-			    
+
 		} catch (Exception e) {
 			logger.error("Exception MySQLUserDAO - getNewUsersLevel ", e);
 		}
@@ -185,33 +186,77 @@ public class MySQLUserDAO implements UserDAO {
 		return result;
 	}
 
+	public void listaInstutionType(List<SelectItem> selectInstitutionType) {
+		final Connection conn = MySQLDAOFactory.createConnection();
+		PreparedStatement preparedStatement = null;
+		ResultSet resulSet = null;
+		String select, from;
+		select = "SELECT id_institution_type, name ";
+		from = "FROM institution_type ";
+		try{
+			preparedStatement = conn.prepareStatement(select + from);
+			logger.debug("Statement a ejecutarse " + preparedStatement.toString());
+			resulSet = preparedStatement.executeQuery();
+			while(resulSet.next()){
+				selectInstitutionType.add(new SelectItem(resulSet.getString(1), resulSet.getString(2)));
+			}
+
+		}catch (Exception e){
+			logger.error("Exception MySQLUserDAO - listaInstution ", e);
+		}
+
+		MySQLDAOFactory.closeConection(conn, "MySQLUserDAO - listaInstution");
+	}
+
+	public void listaInstution(List<SelectItem> selectInstitution, short selectInstitutionType) {
+		final Connection conn = MySQLDAOFactory.createConnection();
+		PreparedStatement preparedStatement = null;
+		ResultSet resulSet = null;
+		String select, from, where;
+		select = "SELECT id_institution, name ";
+		from = "FROM institution ";
+		where=" WHERE id_institution_type IN ( ";
+
+		if(selectInstitutionType==999){
+			where +=  "SELECT id_institution_type FROM institution_type ";
+		}else{
+			where += selectInstitutionType;
+		}
+		where += ");";
+		try{
+			preparedStatement = conn.prepareStatement(select + from + where);
+			logger.debug("Statement a ejecutarse " + preparedStatement.toString());
+			resulSet = preparedStatement.executeQuery();
+			while(resulSet.next()){
+				selectInstitution.add(new SelectItem(resulSet.getString(1), resulSet.getString(2)));
+			}
+
+		}catch (Exception e){
+			logger.error("Exception MySQLUserDAO - listaInstution ", e);
+		}
+
+		MySQLDAOFactory.closeConection(conn, "MySQLUserDAO - listaInstution");
+	}
+
 	public List<SelectItem> listaUsuario(List<SelectItem> distributer, short distrib) {
 		final Connection conn = MySQLDAOFactory.createConnection();
 		PreparedStatement preparedStatement = null;
 		ResultSet resulSet = null;
 		List <SelectItem> userList = new ArrayList<SelectItem>();
 		String select, query, where;
-		select = "SELECT id_user, first_name FROM user ";
+		select = "SELECT id_user, first_name FROM user AS u STRAIGHT_JOIN user_institution AS ui ON ui.user = u.id_user ";
 		where=" WHERE institution IN( ";
 		String descriptionUser;
 		String userIdString ;
 
 
 		if(distrib==999){
-			for(int i=1;i<distributer.size();i++){
-				if(distributer.get(i).getValue().toString().compareTo("999")==0){
-					where=where+" 5 ";//hardcode distribuidor maestro 5
-				}else{
-					if(i!=1)
-						where=where+" , ";
-					where=where+distributer.get(i).getValue().toString();
-				}
-			}
+			where += "SELECT id_institution FROM institution";
 		}else{
-			where=where+distrib;
+			where += distrib;
 		}
 
-		where=where+")";
+		where += ")";
 		query=select+where;
 		try{
 			preparedStatement = conn.prepareStatement(query);
@@ -220,23 +265,15 @@ public class MySQLUserDAO implements UserDAO {
 			while(resulSet.next()){
 				userIdString=resulSet.getString(1);
 				descriptionUser=resulSet.getString(2);
-				//				logger.debug("llenando lista con usuarios  " + userId + " " + descriptionUser);
 				userList.add(new SelectItem(userIdString, descriptionUser));
 			}
-			/*if(distrib!=999){
-		    descriptionUser ="Agregar nueva Usuario...";
-		    userId=999;
-		    userList.add(new SelectItem(userId, descriptionUser));
-			}*/
+
 		}catch (Exception e){
 			logger.error("Exception MySQLUserDAO - listaUsuario ", e);
 		}
-		try {
-			conn.close();
-		}catch (Exception e){
-			logger.error("Exception MySQLUserDAO - listaUsuario - close ", e);
-			new DAOException(SQLConstant.ERROR_CONNECTION, e.getCause());
-		}
+
+		MySQLDAOFactory.closeConection(conn, "MySQLUserDAO - listaUsuario");
+
 		return userList;
 	}
 
@@ -272,7 +309,7 @@ public class MySQLUserDAO implements UserDAO {
 		}
 		return userList;
 	}
-	
+
 	public List<SelectItem> getUsersToApprove(Short company, Short state, Integer municipality, Integer city) {
 		logger.debug("entro al getUsersToApprove en MySQLUserDAO \n");
 		final Connection conn = MySQLDAOFactory.createConnection();
@@ -301,148 +338,51 @@ public class MySQLUserDAO implements UserDAO {
 		return userList;
 	}
 
-	public List<SelectItem> getLevels(short level) {
+	public void getLevels(List<SelectItem> levelList, short level) {
 		logger.debug("entro al getLevels en MySQLUserDAO \n");
 		final Connection conn = MySQLDAOFactory.createConnection();
 		PreparedStatement preparedStatement = null;
 		ResultSet resulSet = null;
-		List <SelectItem> levelList = new ArrayList<SelectItem>();
-		String descriptionUser;
-		Short userId;
-		String userIdString;
-		Short i=0;
 		try{
 			preparedStatement = conn.prepareStatement(SQLConstant.getLevels);
 			preparedStatement.setShort(1, level);
 			logger.debug("Statement a ejecutarse " + preparedStatement.toString());
 			resulSet = preparedStatement.executeQuery();
 			while(resulSet.next()){
-				i++;
-				userId=resulSet.getShort(1);
-				descriptionUser=userId + " - " + resulSet.getString(2);
-				userIdString = userId+"";
-				levelList.add(new SelectItem(userIdString, descriptionUser));
+				levelList.add(new SelectItem(resulSet.getString(1), resulSet.getString(2)));
 			}
 		}catch (Exception e){
 			logger.error("Exception MySQLUserDAO - getLevels ", e);
 		}
-		try {
-			conn.close();
-		}catch (Exception e){
-			logger.error("Exception MySQLUserDAO - getLevels - close ", e);
-			new DAOException(SQLConstant.ERROR_CONNECTION, e.getCause());
-		}
-		return levelList;
+		MySQLDAOFactory.closeConection(conn, "MySQLUserDAO - getLevels");
 	}
 
-	public boolean approveUser(short company, String user, String level,List<String> serviceCompany, String max_unsettled_balance,String max_selling_amount, String max_days_card_unsettled){
-		boolean result = false;
-		final Connection conn = MySQLDAOFactory.createConnection();
-		PreparedStatement preparedStatement = null;
-		String query ="UPDATE client SET date=DATE(CONVERT_TZ(NOW(),(SELECT @@global.system_time_zone),(SELECT time_zone FROM company WHERE company=?))) WHERE client = (SELECT client FROM user WHERE company=? AND user = ?)";
-		try {
-			for(int i=0;serviceCompany.size()>i;i++){
-				preparedStatement = null;
-				preparedStatement = conn.prepareStatement(SQLConstant.insertUserArrangement);
-				preparedStatement.setShort(1, company);
-				preparedStatement.setString(2, user);
-				preparedStatement.setString(3, serviceCompany.get(i));
-				logger.debug("Statement a ejecutarse " + preparedStatement.toString());
-				result = preparedStatement.executeUpdate()==1;
-			}
-			preparedStatement = null;
-			preparedStatement = conn.prepareStatement(query);
-			preparedStatement.setShort(1, company);
-			preparedStatement.setShort(2, company);
-			preparedStatement.setString(3, user);
-			logger.debug("Statement a ejecutarse " + preparedStatement.toString());
-			result = preparedStatement.executeUpdate()==1;
 
-			query ="UPDATE user SET level=?, active="+(level.compareTo("999")!=0);
-			if(max_unsettled_balance.compareTo("0")!=0) 
-				query += ", max_unsettled_balance=?, max_selling_amount=?, max_days_card_unsettled=? ";
-			query += " WHERE company=? AND user=?";
-			preparedStatement = conn.prepareStatement(query);
-			if(max_unsettled_balance.compareTo("0")!=0) {
-				preparedStatement.setString(1, level);
-				preparedStatement.setString(2, max_unsettled_balance);
-				preparedStatement.setString(3, max_selling_amount);
-				preparedStatement.setString(4, max_days_card_unsettled);
-				preparedStatement.setShort(5, company);
-				preparedStatement.setString(6, user);
-			}else{
-				preparedStatement.setString(1, level);
-				preparedStatement.setShort(2, company);
-				preparedStatement.setString(3, user);
-			}
-			logger.debug("Statement a ejecutarse " + preparedStatement.toString());
-			result = preparedStatement.executeUpdate()==1;
-		} catch (Exception e) {
-			logger.error("Exception MySQLUserDAO - approveUser ", e);
-		}
-		try {
-			conn.close();
-		}catch (Exception e){
-			logger.error("Exception MySQLUserDAO - approveUser ", e);
-			new DAOException(SQLConstant.ERROR_CONNECTION, e.getCause());
-		}
-		return result;		
-	}
+	public boolean changeUser(Short company, String user, String doc, String login, String name, String mail, String cargo, String level,  String pass) {
 
-	public boolean changeUser(Short company, String user, String doc, String login, String name, String mail, String cargo, String level, List<String> serviceCompany, String pass, String max_unsettled_balance, String max_selling_amount, String max_days_card_unsettled) {
-		logger.debug("el max_unsettled_balance es : " + max_unsettled_balance);
 		boolean result = true;
 		final Connection conn = MySQLDAOFactory.createConnection();
 		PreparedStatement preparedStatement = null;
 		String select, query, where;
-		select="update user set doc=?,login=?,name=?,email=?,jobtitle=?,level=?,active=true";
-		if(max_unsettled_balance.compareTo("")!=0) {
-			select+=", max_unsettled_balance=?, max_selling_amount=?, max_days_card_unsettled=?";
-		}
-		if(pass.compareTo("2222")!=0  && pass.compareTo("")!=0){
-			select=select+",pwd_web=md5(?) ";
-		}
+		select="update user set num_ident=?,login=?,first_name=?,email=?,position=?,id_level=?,active=true";
+		select=select+",password=md5(?) ";
+
 		where=" where user=?";
 		query=select+where;
 		try {
-			/*for(int i=0;serviceCompany.size()>i;i++){
-				preparedStatement = null;
-				preparedStatement = conn.prepareStatement(SQLConstant.insertUserArrangement);
-				preparedStatement.setShort(1, company);
-				preparedStatement.setString(2, user);
-				preparedStatement.setString(3, serviceCompany.get(i));
-				result = preparedStatement.executeUpdate()==1;
-			}*/
-			if(result){
-				preparedStatement = conn.prepareStatement(query);
-				preparedStatement.setString(1, doc);
-				preparedStatement.setString(2, login);
-				preparedStatement.setString(3, name);
-				preparedStatement.setString(4, mail);
-				preparedStatement.setString(5, cargo);
-				preparedStatement.setString(6, level);
-				if(max_unsettled_balance.compareTo("")!=0) {
-					preparedStatement.setString(7, max_unsettled_balance);
-					preparedStatement.setString(8, max_selling_amount);
-					preparedStatement.setString(9, max_days_card_unsettled);
-					if(pass.compareTo("2222")!=0 && pass.compareTo("")!=0){
-						preparedStatement.setString(10, pass);
-						preparedStatement.setString(11, user);
-					}else{
-						preparedStatement.setString(10, user);
-					}
-				} else {
-					if(pass.compareTo("2222")!=0 && pass.compareTo("")!=0){
-						preparedStatement.setString(7, pass);
-						preparedStatement.setString(8, user);
-					}else{
-						preparedStatement.setString(7, user);
-					}
-				}
-				logger.debug("Statement a ejecutarse " + preparedStatement.toString());
-				result = preparedStatement.executeUpdate()==1;
 
-			}
+			preparedStatement = conn.prepareStatement(query);
+			preparedStatement.setString(1, doc);
+			preparedStatement.setString(2, login);
+			preparedStatement.setString(3, name);
+			preparedStatement.setString(4, mail);
+			preparedStatement.setString(5, cargo);
+			preparedStatement.setString(6, level);
+			preparedStatement.setString(7, pass);
+			preparedStatement.setString(8, user);
+			logger.debug("Statement a ejecutarse " + preparedStatement.toString());
+			result = preparedStatement.executeUpdate()==1;
+
 		} catch (Exception e) {
 			logger.error("Exception MySQLUserDAO - changeUser ", e);
 		}
@@ -479,24 +419,35 @@ public class MySQLUserDAO implements UserDAO {
 		return result;
 	}
 
-	public int addUser(short company, String employer, String doc, String login, String name, String mail, String cargo, String level, String pass) {
-		int result = 0;
+	public int addUser(String nameUser,String lastNameUser,String idUser,String phoneUser1, String mailUser, String selectedLevelUser, String jobtitleUser, String active, String loginUser, String passUser, String selectedInstitution) {
+		int result = 0, id = 0;
 		final Connection conn = MySQLDAOFactory.createConnection();
 		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
 		try {
+			/*(first_name,first_last_name,num_ident,phone1,email,id_level,position,active,login,password) */
 			preparedStatement = conn.prepareStatement(SQLConstant.AddUser);
-			preparedStatement.setShort(1, company);
-			preparedStatement.setString(2, employer);
-			preparedStatement.setString(3, doc);
-			preparedStatement.setString(4, name);
-			preparedStatement.setString(5, mail);
-			preparedStatement.setString(6, cargo);
-			preparedStatement.setString(7, level);
-			preparedStatement.setString(8, login);
-			preparedStatement.setString(9, pass);
-
+			preparedStatement.setString(1, nameUser);
+			preparedStatement.setString(2, lastNameUser);
+			preparedStatement.setString(3, idUser);
+			preparedStatement.setString(4, phoneUser1);
+			preparedStatement.setString(5, mailUser);
+			preparedStatement.setString(6, selectedLevelUser);
+			preparedStatement.setString(7, jobtitleUser);
+			preparedStatement.setString(8, active);
+			preparedStatement.setString(9, loginUser);
+			preparedStatement.setString(10, passUser);
 			logger.debug("Statement a ejecutarse " + preparedStatement.toString());
 			result = preparedStatement.executeUpdate();
+			preparedStatement = conn.prepareStatement("SELECT LAST_INSERT_ID();");
+			resultSet = preparedStatement.executeQuery();
+			if(resultSet.next()){
+				id = resultSet.getInt(1);
+				preparedStatement = conn.prepareStatement(SQLConstant.AddUserInstitution);
+				preparedStatement.setInt(1, id);
+				preparedStatement.setString(2, selectedInstitution);
+				result = preparedStatement.executeUpdate();
+			}
 		} catch (com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException e){
 			logger.error("MySQLIntegrityConstraintViolationException MySQLUserDAO - addUser ", e);
 			result = -1;
@@ -679,7 +630,7 @@ public class MySQLUserDAO implements UserDAO {
 		}
 		return mailList;
 	}
-	
+
 	public List<String> getAuthorizedDepApproversMailList(Short company) {
 		logger.debug("entro a getAuthorizedApproversMailList en MySQLUserDAO \n");
 		final Connection conn = MySQLDAOFactory.createConnection();
@@ -759,5 +710,7 @@ public class MySQLUserDAO implements UserDAO {
 		}
 		return result;
 	}
+
+
 }
 

@@ -51,6 +51,15 @@ public class MySQLDAOFactory extends DAOFactory {
 
 		return conn;
 	}
+	
+	public static void closeConection(Connection conn, String classFunction){
+		try {
+			conn.close();
+		}catch (Exception e){
+			logger.error("Exception " + classFunction +" - close ", e);
+			new DAOException(SQLConstant.ERROR_CONNECTION, e.getCause());
+		}
+	}
 
 	public CardDAO getCardDAO() {
 		return new MySQLCardDAO();

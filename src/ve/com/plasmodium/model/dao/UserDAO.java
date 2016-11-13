@@ -19,7 +19,7 @@ public interface UserDAO {
 	 * @throws DAOException
 	 * @throws CustomException
 	 */
-    public UserVo datosUsuario(String login) throws DAOException, CustomException;
+    public void datosUsuario(UserVo userVo, String login) throws DAOException, CustomException;
   
     /**
      * 
@@ -39,6 +39,20 @@ public interface UserDAO {
      */
     public UserVo user_datosUsuarios(String login) throws DAOException, CustomException;
 
+	/**
+	 * Trae una lista de instituciones  
+	 * @param selectInstitution
+	 * @param selectInstitutionType
+	 */
+	public void listaInstutionType(List<SelectItem> selectInstitutionType);
+    
+	/**
+	 * Trae una lista de instituciones  
+	 * @param selectInstitution
+	 * @param selectInstitutionType
+	 */
+	public void listaInstution(List<SelectItem> selectInstitution, short selectInstitutionType);
+    
 	/**
 	 * Trae una lista de usuarios  
 	 * @param distributer
@@ -76,7 +90,7 @@ public interface UserDAO {
 	 * @param pass
 	 * @return Valor boolean 
 	 */
-	public boolean changeUser(Short company, String user, String doc, String login, String name, String mail, String cargo, String level, List<String> serviceCompany, String pass, String max_unsettled_balance, String max_selling_amount, String max_days_card_unsettled);
+	public boolean changeUser(Short company, String user, String doc, String login, String name, String mail, String cargo, String level,String pass);
 
 	/**
 	 * Desactiva un usuario especifio del sistema
@@ -87,6 +101,7 @@ public interface UserDAO {
 
 	/**
 	 * Agrega un usuario al sistema
+	 * @param selectedInstitution 
 	 * @param company
 	 * @param employer
 	 * @param doc
@@ -98,7 +113,7 @@ public interface UserDAO {
 	 * @param pass
 	 * @return Valor boolean
 	 */
-	public int addUser(short company, String employer, String doc, String login, String name, String mail, String cargo, String level, String pass);
+	public int addUser(String nameUser,String lastNameUser,String idUser,String phoneUser1, String mailUser, String selectedLevelUser, String jobtitleUser, String active, String loginUser, String passUser, String selectedInstitution);
 
 	/**
 	 * Valida clave actual del usuario
@@ -119,7 +134,7 @@ public interface UserDAO {
 	
 	public List<SelectItem> getUsersToApprove(Short company, Short state, Integer municipality, Integer city);
   
-	public List<SelectItem> getLevels(short level);
+	public void getLevels(List<SelectItem> levelList, short level);
 	
 	/** Return the level that must be assigned to every new not approved user
 	  * @return An int representing the level**/
@@ -135,9 +150,6 @@ public interface UserDAO {
 
 	public List<SelectItem> getServiceCompany(Short company);
 
-	public boolean approveUser(short company, String user, String level,
-			List<String> serviceCompany, String max_unsettled_balance,
-			String max_selling_amount, String max_days_card_unsettled);
 	
 	public List<String> getAuthorizedApproversMailList(Short company);
 
