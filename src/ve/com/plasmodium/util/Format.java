@@ -2,10 +2,8 @@ package ve.com.plasmodium.util;
 
 import java.math.BigDecimal;
 import java.util.Calendar;
-
 import org.apache.log4j.Logger;
 
-import ve.com.plasmodium.model.to.SimpleDecimalTo;
 
 public class Format {
 
@@ -188,35 +186,6 @@ public class Format {
 		   return roundedPaded;
 
 	}
-	
-
-	
-	
-	
-	
-	
-	
-	public final static SimpleDecimalTo splitIntegerDotDecimal(String aNumber, int decimalesToKeep){
-		String temp = aNumber;
-		SimpleDecimalTo simpleDecimalTo = new SimpleDecimalTo();
-		
-		//String result = "";
-		
-		
-		 int posi = temp.indexOf('.');
-		 simpleDecimalTo.setIntegerPart(temp.substring(0,posi));
-		 simpleDecimalTo.setDecimalPart(temp.substring(posi+1));		 
-		  //result = temp.substring(0,posi);
-		  // result = result + temp.substring(posi+1);
-		   //temp = result;
-		
-		   return simpleDecimalTo;
-	}
-	
-	
-	
-	
-	
 	
 	
 	public final static String removePoint(Object aObject, int decimales){

@@ -61,8 +61,8 @@ public class MySQLDAOFactory extends DAOFactory {
 		}
 	}
 
-	public CardDAO getCardDAO() {
-		return new MySQLCardDAO();
+	public InstitutionDAO getCardDAO() {
+		return new MySQLInstitutionDAO();
 	}
 
 

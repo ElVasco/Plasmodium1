@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class UserVo implements Serializable {
+public class UserDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private short idUser;
@@ -26,15 +26,15 @@ public class UserVo implements Serializable {
 	private List<Company> companys = new ArrayList<Company>();
 
 
-	public UserVo() {
+	public UserDTO() {
 	}
 
-	public UserVo(Integer user) {
+	public UserDTO(Integer user) {
 		this.user = user;
 	}
 
 	// Constructor esta incompleto
-	public UserVo(Integer user, String doc, String name, String lastname, String email, String jobtitle, short level, String login, byte[] pwd,
+	public UserDTO(Integer user, String doc, String name, String lastname, String email, String jobtitle, short level, String login, byte[] pwd,
 			/*String password,*/ boolean active, long version) {
 		this.user = user;
 		this.doc = doc;
@@ -49,7 +49,7 @@ public class UserVo implements Serializable {
 		this.version = version;
 	}
 
-	public UserVo(Integer user, String doc, String name, String lastname, String email, String jobtitle, short level, String login) {
+	public UserDTO(Integer user, String doc, String name, String lastname, String email, String jobtitle, short level, String login) {
 		this.user = user;
 		this.doc = doc;
 		this.name = name;
@@ -175,10 +175,10 @@ public class UserVo implements Serializable {
 	@Override
 	public boolean equals(Object object) {
 		// not set
-		if (!(object instanceof UserVo)) {
+		if (!(object instanceof UserDTO)) {
 			return false;
 		}
-		UserVo other = (UserVo) object;
+		UserDTO other = (UserDTO) object;
 		if ((this.user == null && other.user != null) || (this.user != null && !this.user.equals(other.user))) {
 			return false;
 		}

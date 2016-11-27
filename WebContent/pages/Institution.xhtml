@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+<ui:include src="/include/IncludeHeader.xhtml"></ui:include>
+
+<h:head></h:head>
+<body>
+	<!-- Esta parte es delicada la lista se llena en un bean "UserBean" -->
+	<ui:include src="/include/HiAndByeTrans.xhtml"></ui:include>
+	<ui:include src="/include/IncludeBanner.html"></ui:include>
+	<ui:include src="/include/IncludeTransMenu.xhtml"></ui:include>
+
+
+	<p:panel id="panel" header="Panel de edición de usuarios"
+		styleClass="blockUser">
+		<f:facet name="header">
+							Datos generales de la Institucion
+						</f:facet>
+		<h:form id="InstitutionId" styleClass="distributerSelector">
+
+			<!-- PANEL DE FILTRO DE USUARIOS   -->
+			<h:panelGrid id="test" columns="3" cellpadding="5">
+				<!-- Seleccion de tipo de institucion -->
+				<p:outputLabel value="Tipo de institución:" id="institutionTypeOPL"
+					for="institutionTypeFor" />
+				<p:selectOneMenu value="#{InstitutionBean.selectedInstitutionType}"
+					id="institutionTypeFor">
+					<p:ajax listener="#{InstitutionBean.institutionTypeListenerMethod}"
+						update="panel1,test,buttonPanel,panel12" />
+					<f:selectItem itemLabel="Seleccione un tipo de institución"
+						itemValue="" noSelectionOption="true" />
+					<f:selectItems value="#{InstitutionBean.selectInstitutionType}" />
+				</p:selectOneMenu>
+				<p:message for="institutionTypeFor" display="tooltip" />
+
+				<!-- Seleccion de institucion -->
+				<p:outputLabel value="Institución:" id="institutionOPL"
+					for="institutionFor" rendered="#{InstitutionBean.showInstitutionList}" />
+				<p:selectOneMenu value="#{InstitutionBean.selectedInstitution}"
+					id="institutionFor" rendered="#{InstitutionBean.showInstitutionList}">
+					<p:ajax listener="#{InstitutionBean.institutionListenerMethod}"
+						update="panel1,test,buttonPanel,panel12" />
+					<f:selectItem itemLabel="Seleccione una institución" itemValue=""
+						noSelectionOption="true" />
+					<f:selectItems value="#{InstitutionBean.selectInstitution}" />
+				</p:selectOneMenu>
+				<p:message for="institutionFor" display="tooltip"
+					rendered="#{InstitutionBean.showInstitutionList}" />
+
+			</h:panelGrid>
+
+			<h:panelGrid id="panel12" columns="1" cellpadding="5">
+
+				<p:outputLabel rendered="#{InstitutionBean.showDetail}">
+					<th>Detalles del Instituto</th>
+				</p:outputLabel>
+			</h:panelGrid>
+
+			<!-- PANEL DE INFORMACION DE USARIO  -->
+			<h:panelGrid id="panel1" columns="3" cellpadding="5">
+
+				<p:outputLabel value="Nombre:" for="name"
+					rendered="#{InstitutionBean.showDetail}" />
+				<p:inputText id="name" value="#{InstitutionBean.nameUser}"
+					required="#{(InstitutionBean.showDetailNew or InstitutionBean.editDetail)}"
+					readonly="#{!(InstitutionBean.showDetailNew or InstitutionBean.editDetail)}"
+					rendered="#{InstitutionBean.showDetail}"
+					validatorMessage="Solo letras papá">
+					<p:ajax event="keyup" update="namemsg" />
+					<f:validateRegex pattern="[a-zA-Z]+" />
+				</p:inputText>
+				<p:message id="namemsg" for="name" display="text,tooltip" />
+
+
+				<p:outputLabel value="Nivel de Acceso:" id="level" for="levelList"
+					rendered="#{InstitutionBean.showDetail}" />
+				<p:selectOneMenu id="levelList"
+					value="#{InstitutionBean.selectedLevelUser}"
+					disabled="#{!(InstitutionBean.showDetailNew or InstitutionBean.editDetail)}"
+					rendered="#{InstitutionBean.showDetail}">
+					<f:selectItem itemLabel="Seleccione un Nivel de Acceso"
+						itemValue="" noSelectionOption="true" />
+					<f:selectItems value="#{InstitutionBean.levelList}" />
+				</p:selectOneMenu>
+				<p:message for="levelList" display="text,tooltip" />
+
+				<p:gmap center="#{InstitutionBean.center}" zoom="7" type="HYBRID"
+					style="width:100%;height:400px" model="#{InstitutionBean.model}" rendered="{InstitutionBean.showMap}" />
+
+			</h:panelGrid>
+
+			<!-- PANEL DE BOTONES  -->
+			<h:panelGrid id="buttonPanel" columns="3" cellpadding="5">
+
+				<p:commandButton ajax="false" value="#{msg.change}"
+					id="buttonChange" action="#{InstitutionBean.actionChangeUser}"
+					validateClient="true"
+					rendered="#{!InstitutionBean.showDetailNew and InstitutionBean.showDetail}"
+					update="error,userEditPanel" />
+				<p:commandButton ajax="false"
+					value="#{InstitutionBean.userEnabled ? msg.deactivate:msg.reactivate}"
+					id="buttonDelete" action="#{InstitutionBean.actionDeleteUser}"
+					validateClient="true"
+					rendered="#{!InstitutionBean.showDetailNew and InstitutionBean.showDetail and !InstitutionBean.editDetail}"
+					process="@none" />
+				<p:commandButton ajax="false" value="#{msg.actionAddUser}"
+					id="buttonAdd" action="#{InstitutionBean.actionAddUser}"
+					validateClient="true"
+					rendered="#{InstitutionBean.showDetailNew and InstitutionBean.showDetail}"
+					update="error" />
+				<p:commandButton ajax="false" value="#{msg.cancel}" immediate="true"
+					id="cancel" process="@none" action="#{InstitutionBean.actionExit}" />
+			</h:panelGrid>
+		</h:form>
+	</p:panel>
+	<ui:include src="/include/IncludeFooter.html"></ui:include>
+
+</body>
+</html>

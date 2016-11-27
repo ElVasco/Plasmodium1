@@ -1,18 +1,16 @@
-<!-- Added by Leonardo Djekki to implement Oracle datasouce and connection pool -->
 
 <Context path="/PlasmodiumBI" docBase="PlasmodiumBI"
          reloadable="true" crossContext="true">
 
-    <!-- Default set of monitored resources -->
     <WatchedResource>WEB-INF/web.xml</WatchedResource>
 
 
 <Resource 	name="jdbc/mysqlPlasmodium" 
 			auth="Container"
               	type="javax.sql.DataSource"
-              	maxActive="400"
-              	maxIdle="45"
-              	maxWait="12000"
+           		maxActive="50" 
+           		maxIdle="30" 
+           		maxWait="10000"
               	username="root"
               	logAbandoned="true"
               	removeAbandoned="true"
@@ -21,10 +19,4 @@
 				driverClassName="com.mysql.jdbc.Driver"
               	url="jdbc:mysql://127.0.0.1:3306/plasmodium?autoReconnect=true"/>
 
-
-<!--The connection pool will be bound into JNDI with the name "java:comp/env/jdbc/mysqlPlasmodium"-->
-
-
 </Context>
-
-<!-- End added by Leonardo Djekki to implement connection pool -->

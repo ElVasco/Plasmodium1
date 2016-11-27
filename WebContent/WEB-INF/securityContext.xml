@@ -44,7 +44,7 @@
 	class="org.springframework.context.support.ResourceBundleMessageSource">
 	<beans:property name="basenames">
 	    <beans:list>
-		<beans:value>mymessages</beans:value>
+		<beans:value>ve/com/plasmodium/bundle/mymessages</beans:value>
 	    </beans:list>
 	</beans:property>
   </beans:bean>
@@ -54,7 +54,6 @@
 		<beans:property name="driverClassName" value="com.mysql.jdbc.Driver" />
 		<beans:property name="url" value="jdbc:mysql://127.0.0.1:3306/plasmodium?autoReconnect=true" />
 		<beans:property name="username" value="root" />
-		<!-- <beans:property name="password" value="0tpyrcsmbd" />  -->
 		<beans:property name="password" value="Tx0m1n.00" />
 	</beans:bean>
 	

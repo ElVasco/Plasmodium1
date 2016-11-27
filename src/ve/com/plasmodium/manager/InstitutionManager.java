@@ -2,27 +2,26 @@ package ve.com.plasmodium.manager;
 
 import org.apache.log4j.Logger;
 
-import ve.com.plasmodium.model.dao.CardDAO;
+import ve.com.plasmodium.model.dao.InstitutionDAO;
+import ve.com.plasmodium.model.vo.InstitutionDTO;
 import ve.com.plasmodium.model.dao.DAOFactory;
 
-public class CardManager {
+public class InstitutionManager {
 
-    public static final Logger logger = Logger.getLogger(CardManager.class);
+    public static final Logger logger = Logger.getLogger(InstitutionManager.class);
 
-    final CardDAO cardDAO;
+    final InstitutionDAO institutionDAO;
 
-    public CardManager(short aFactoryNumber) {
-    	this.cardDAO = DAOFactory.getDAOFactory(aFactoryNumber).getCardDAO();
+    public InstitutionManager(short aFactoryNumber) {
+    	this.institutionDAO = DAOFactory.getDAOFactory(aFactoryNumber).getCardDAO();
     }
 
-	public boolean updateDistributerManuf(short company, short distributer, int user, int from, int to) {
-		boolean result = false;
+	public void institutionDetail(InstitutionDTO institutionDTO, String institution) {
 		try {
-	    	result = cardDAO.updateDistributerManuf(company, distributer, user, from, to);
+	    	institutionDAO.institutionDetail(institutionDTO, institution);
 		} catch (Exception e) {
-			 logger.error("Exception CardManager - updateDistributerManuf ", e);
+			 logger.error("Exception institutionManager - institutionDetail ", e);
 		}
-	    return result;
 	}
 //    public UserCompanyVo datosUsuario(String login) throws DAOException, CustomException {
 //	UserCompanyVo userCompanyVo = null;

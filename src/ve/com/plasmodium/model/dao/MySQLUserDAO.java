@@ -11,22 +11,23 @@ import javax.faces.model.SelectItem;
 import ve.com.plasmodium.exception.CustomException;
 import ve.com.plasmodium.exception.DAOException;
 import ve.com.plasmodium.model.vo.Company;
-import ve.com.plasmodium.model.vo.UserVo;
+import ve.com.plasmodium.model.vo.UserDTO;
+import ve.com.plasmodium.util.Utils;
 
 public class MySQLUserDAO implements UserDAO {
 
-	public UserVo user_datosUsuarios(String login) throws DAOException, CustomException {
+	public UserDTO user_datosUsuarios(String login) throws DAOException, CustomException {
 		return null;
 	}
 
 
 	@Override
-	public UserVo datosUsuario(int user) throws DAOException, CustomException {
+	public UserDTO datosUsuario(int user) throws DAOException, CustomException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 	
-	public void datosUsuario(UserVo userVo, String login) throws DAOException, CustomException {
+	public void datosUsuario(UserDTO userVo, String login) throws DAOException, CustomException {
 		final Connection conn = MySQLDAOFactory.createConnection();
 		PreparedStatement preparedStatement = null;
 		ResultSet resulSet = null;	 
@@ -62,8 +63,9 @@ public class MySQLUserDAO implements UserDAO {
 
 		} catch (Exception e) {
 			logger.error("Exception MySQLUserDAO - datosUsuario ", e);
+			MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
 		}
-			MySQLDAOFactory.closeConection(conn, " MySQLUserDAO - datosUsuario");
+			MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
 	}
 
 /*	public UserVo datosUsuario(int user) throws DAOException, CustomException {
@@ -133,7 +135,10 @@ public class MySQLUserDAO implements UserDAO {
 
 		} catch (Exception e) {
 			logger.error("Exception MySQLUserDAO - listaUsuario ", e);
+			MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
 		}
+		
+		MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
 		return userList;
 
 	}
@@ -160,15 +165,17 @@ public class MySQLUserDAO implements UserDAO {
 
 		} catch (Exception e) {
 			logger.error("Exception MySQLUserDAO - getNewUsersLevel ", e);
+			MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
 		}
+		MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
 		return level;
 	}
 
-	public UserVo usuarioDetail(short userIDS) {
+	public UserDTO usuarioDetail(short userIDS) {
 		final Connection conn = MySQLDAOFactory.createConnection();
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
-		UserVo result = null;
+		UserDTO result = null;
 
 		try {
 			preparedStatement = conn.prepareStatement(SQLConstant.UsuarioDetail);
@@ -176,13 +183,15 @@ public class MySQLUserDAO implements UserDAO {
 			logger.debug("Statement a ejecutarse " + preparedStatement.toString());
 			resultSet = preparedStatement.executeQuery();
 			if (resultSet.next()) {
-				result = new UserVo (resultSet.getInt("u.id_user"), resultSet.getString("u.num_ident"), resultSet.getString("u.first_name") , resultSet.getString("u.fist_last_name"), resultSet.getString("u.email"), resultSet.getString("u.position"), resultSet.getShort("u.id_level"),resultSet.getString("u.login"));
+				result = new UserDTO (resultSet.getInt("u.id_user"), resultSet.getString("u.num_ident"), resultSet.getString("u.first_name") , resultSet.getString("u.fist_last_name"), resultSet.getString("u.email"), resultSet.getString("u.position"), resultSet.getShort("u.id_level"),resultSet.getString("u.login"));
 				result.setActive(resultSet.getBoolean("u.active"));	
 			}
 
 		}catch (Exception e) {
 			logger.error("Exception MySQLUserDAO - usuarioDetail ", e);
+			MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
 		}
+		MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
 		return result;
 	}
 
@@ -190,11 +199,8 @@ public class MySQLUserDAO implements UserDAO {
 		final Connection conn = MySQLDAOFactory.createConnection();
 		PreparedStatement preparedStatement = null;
 		ResultSet resulSet = null;
-		String select, from;
-		select = "SELECT id_institution_type, name ";
-		from = "FROM institution_type ";
 		try{
-			preparedStatement = conn.prepareStatement(select + from);
+			preparedStatement = conn.prepareStatement(SQLConstant.getInstitutionTypeList);
 			logger.debug("Statement a ejecutarse " + preparedStatement.toString());
 			resulSet = preparedStatement.executeQuery();
 			while(resulSet.next()){
@@ -203,9 +209,10 @@ public class MySQLUserDAO implements UserDAO {
 
 		}catch (Exception e){
 			logger.error("Exception MySQLUserDAO - listaInstution ", e);
+			MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
 		}
 
-		MySQLDAOFactory.closeConection(conn, "MySQLUserDAO - listaInstution");
+		MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
 	}
 
 	public void listaInstution(List<SelectItem> selectInstitution, short selectInstitutionType) {
@@ -233,9 +240,10 @@ public class MySQLUserDAO implements UserDAO {
 
 		}catch (Exception e){
 			logger.error("Exception MySQLUserDAO - listaInstution ", e);
+			MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
 		}
 
-		MySQLDAOFactory.closeConection(conn, "MySQLUserDAO - listaInstution");
+		MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
 	}
 
 	public List<SelectItem> listaUsuario(List<SelectItem> distributer, short distrib) {
@@ -270,9 +278,10 @@ public class MySQLUserDAO implements UserDAO {
 
 		}catch (Exception e){
 			logger.error("Exception MySQLUserDAO - listaUsuario ", e);
+			MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
 		}
 
-		MySQLDAOFactory.closeConection(conn, "MySQLUserDAO - listaUsuario");
+		MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
 
 		return userList;
 	}
@@ -300,13 +309,9 @@ public class MySQLUserDAO implements UserDAO {
 			}
 		}catch (Exception e){
 			logger.error("Exception MySQLUserDAO - listaUsuarioRecargasElect ", e);
+			MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
 		}
-		try {
-			conn.close();
-		}catch (Exception e){
-			logger.error("Exception MySQLUserDAO - listaUsuarioRecargasElect - close ", e);
-			new DAOException(SQLConstant.ERROR_CONNECTION, e.getCause());
-		}
+		MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
 		return userList;
 	}
 
@@ -331,10 +336,11 @@ public class MySQLUserDAO implements UserDAO {
 				descriptionUser=resulSet.getString(2) + " " + resulSet.getString(3);
 				userList.add(new SelectItem(userIdString, descriptionUser));
 			}
-			conn.close();
 		}catch (Exception e){
 			logger.error("Exception MySQLUserDAO - getUsersToApprove ", e);
+			MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
 		}
+		MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
 		return userList;
 	}
 
@@ -353,8 +359,9 @@ public class MySQLUserDAO implements UserDAO {
 			}
 		}catch (Exception e){
 			logger.error("Exception MySQLUserDAO - getLevels ", e);
+			MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
 		}
-		MySQLDAOFactory.closeConection(conn, "MySQLUserDAO - getLevels");
+		MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
 	}
 
 
@@ -367,7 +374,7 @@ public class MySQLUserDAO implements UserDAO {
 		select="update user set num_ident=?,login=?,first_name=?,email=?,position=?,id_level=?,active=true";
 		select=select+",password=md5(?) ";
 
-		where=" where user=?";
+		where=" where id_user=?";
 		query=select+where;
 		try {
 
@@ -385,13 +392,9 @@ public class MySQLUserDAO implements UserDAO {
 
 		} catch (Exception e) {
 			logger.error("Exception MySQLUserDAO - changeUser ", e);
+			MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
 		}
-		try {
-			conn.close();
-		}catch (Exception e){
-			logger.error("Exception MySQLUserDAO - changeUser ", e);
-			new DAOException(SQLConstant.ERROR_CONNECTION, e.getCause());
-		}
+		MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
 		return result;
 	}
 
@@ -409,13 +412,9 @@ public class MySQLUserDAO implements UserDAO {
 
 		} catch (Exception e) {
 			logger.error("Exception MySQLUserDAO - deleteUser ", e);
+			MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
 		}
-		try {
-			conn.close();
-		}catch (Exception e){
-			logger.error("Exception MySQLUserDAO - deleteUser - close ", e);
-			new DAOException(SQLConstant.ERROR_CONNECTION, e.getCause());
-		}
+		MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
 		return result;
 	}
 
@@ -451,15 +450,12 @@ public class MySQLUserDAO implements UserDAO {
 		} catch (com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException e){
 			logger.error("MySQLIntegrityConstraintViolationException MySQLUserDAO - addUser ", e);
 			result = -1;
+			MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
 		} catch (Exception e) {
 			logger.error("Exception MySQLUserDAO - addUser ", e);
+			MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
 		}
-		try {
-			conn.close();
-		}catch (Exception e){
-			logger.error("Exception MySQLUserDAO - addUser - close ", e);
-			new DAOException(SQLConstant.ERROR_CONNECTION, e.getCause());
-		}
+		MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
 		return result;
 	}
 
@@ -477,13 +473,9 @@ public class MySQLUserDAO implements UserDAO {
 
 		} catch (Exception e) {
 			logger.error("Exception MySQLUserDAO - updatePass ", e);
+			MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
 		}
-		try {
-			conn.close();
-		}catch (Exception e){
-			logger.error("Exception MySQLUserDAO - updatePass - close ", e);
-			new DAOException(SQLConstant.ERROR_CONNECTION, e.getCause());
-		}
+		MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
 		return result;  
 	}
 
@@ -503,13 +495,9 @@ public class MySQLUserDAO implements UserDAO {
 
 		} catch (Exception e) {
 			logger.error("Exception MySQLUserDAO - validatePassword ", e);
+			MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
 		}
-		try {
-			conn.close();
-		}catch (Exception e){
-			logger.error("Exception MySQLUserDAO - validatePassword - close ", e);
-			new DAOException(SQLConstant.ERROR_CONNECTION, e.getCause());
-		}
+		MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
 		return result;
 	}
 
@@ -531,13 +519,9 @@ public class MySQLUserDAO implements UserDAO {
 
 		} catch (Exception e) {
 			logger.error("Exception MySQLUserDAO - getDeduction ", e);
+			MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
 		}
-		try {
-			conn.close();
-		}catch (Exception e){
-			logger.error("Exception MySQLUserDAO - getDeduction - close ", e);
-			new DAOException(SQLConstant.ERROR_CONNECTION, e.getCause());
-		}
+		MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
 		return result;
 	}
 
@@ -555,11 +539,11 @@ public class MySQLUserDAO implements UserDAO {
 			while(resulSet.next()){
 				stateList.add(new SelectItem(resulSet.getString(1), resulSet.getString(2)+" ("+resulSet.getString(3)+")"));
 			}
-			conn.close();
 		}catch (Exception e){
 			logger.error("Exception MySQLUserDAO - getPendingStates ", e);
+			MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
 		}
-
+		MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
 		return stateList;
 	}
 
@@ -578,11 +562,11 @@ public class MySQLUserDAO implements UserDAO {
 			while(resulSet.next()){
 				municipalityList.add(new SelectItem(resulSet.getString(1), resulSet.getString(2)+" ("+resulSet.getString(3)+")"));
 			}
-			conn.close();
 		}catch (Exception e){
 			logger.error("Exception MySQLUserDAO - getPendingMunicipalities ", e);
+			MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
 		}
-
+		MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
 		return municipalityList;
 	}
 
@@ -602,11 +586,11 @@ public class MySQLUserDAO implements UserDAO {
 			while(resulSet.next()){
 				cityList.add(new SelectItem(resulSet.getString(1), resulSet.getString(2)+" ("+resulSet.getString(3)+")"));
 			}
-			conn.close();
 		}catch (Exception e){
 			logger.error("Exception MySQLUserDAO - getPendingCities ", e);
+			MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
 		}
-
+		MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
 		return cityList;
 	}
 
@@ -624,10 +608,11 @@ public class MySQLUserDAO implements UserDAO {
 			while(resulSet.next()){
 				mailList.add(resulSet.getString(1));
 			}
-			conn.close();
 		}catch (Exception e){
 			logger.error("Exception MySQLUserDAO - getAuthorizedApproversMailList ", e);
+			MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
 		}
+		MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
 		return mailList;
 	}
 
@@ -645,10 +630,11 @@ public class MySQLUserDAO implements UserDAO {
 			while(resulSet.next()){
 				mailList.add(resulSet.getString(1));
 			}
-			conn.close();
 		}catch (Exception e){
 			logger.error("Exception MySQLUserDAO - getAuthorizedApproversMailList ", e);
+			MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
 		}
+		MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
 		return mailList;
 	}
 
@@ -676,13 +662,9 @@ public class MySQLUserDAO implements UserDAO {
 			}
 		}catch (Exception e){
 			logger.error("Exception MySQLUserDAO - getServiceCompany ", e);
+			MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
 		}
-		try {
-			conn.close();
-		}catch (Exception e){
-			logger.error("Exception MySQLUserDAO - getLevels - close ", e);
-			new DAOException(SQLConstant.ERROR_CONNECTION, e.getCause());
-		}
+		MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
 		return serviceCompany;
 	}
 
@@ -701,13 +683,9 @@ public class MySQLUserDAO implements UserDAO {
 				result = resulSet.getInt(1)==0;
 		}catch(Exception e){
 			logger.error("Exception MySQLUserDAO - validUserExist ", e);
+			MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
 		}
-		try {
-			conn.close();
-		}catch (Exception e){
-			logger.error("Exception MySQLUserDAO - getLevels - close ", e);
-			new DAOException(SQLConstant.ERROR_CONNECTION, e.getCause());
-		}
+		MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
 		return result;
 	}
 

@@ -162,8 +162,7 @@ public final class SQLConstant {
 	public final static String Usuarios = 
 			"SELECT user, name FROM user WHERE employer=?";
 
-	public final static String UsuarioDetail = 
-			"SELECT u.id_user ,ui.institution ,u.num_ident ,u.first_name,u.fist_last_name,u.email,u.position,u.id_level,u.login,u.active FROM user AS u STRAIGHT_JOIN user_institution AS ui ON ui.user = u.id_user WHERE u.id_user=?";
+
 
 	public final static String DeleteUser = 
 			"UPDATE user SET active=? WHERE user=?";
@@ -940,5 +939,19 @@ public final class SQLConstant {
 	public static final String videoListComp = "SELECT v.id_video,description,link FROM company_video AS uv JOIN video AS v ON uv.id_video=v.id_video WHERE uv.id_company=?;";
 	
 	public static final String userList = "SELECT user,name FROM user WHERE company=?;";
+	
+	
+	
+	//************************************ PLAMOSDIUM ******************************//
+
+		//************************************ USER ******************************//			
+	public final static String UsuarioDetail = 
+			"SELECT u.id_user ,ui.institution ,u.num_ident ,u.first_name,u.fist_last_name,u.email,u.position,u.id_level,u.login,u.active FROM user AS u STRAIGHT_JOIN user_institution AS ui ON ui.user = u.id_user WHERE u.id_user=?";
+
+		//************************************ INSTITUCION ******************************//
+	public static final String getInstitutionDetail = "SELECT i.id_institution, i.`name`, it.`name`, l.latitude,l.longitude,l.state, l.city, l.municipality, l.demarcation FROM institution i JOIN institution_type it ON i.id_institution_type=it.id_institution_type JOIN location_gps l ON i.id_location=l.id_location WHERE i.id_institution=?;";
+	
+			//************************************ INSTITUCION TYPE ******************************//	
+	public static final String getInstitutionTypeList = "SELECT id_institution_type, name FROM institution_type";
 }	
 

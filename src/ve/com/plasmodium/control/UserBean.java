@@ -20,7 +20,7 @@ import ve.com.novared.model.vo.CryptoError;
 import ve.com.plasmodium.exception.CustomException;
 import ve.com.plasmodium.manager.UserManager;
 import ve.com.plasmodium.model.dao.SQLConstant;
-import ve.com.plasmodium.model.vo.UserVo;
+import ve.com.plasmodium.model.vo.UserDTO;
 
 @ManagedBean(name="UserBean")
 @SessionScoped
@@ -64,8 +64,8 @@ public class UserBean {
 	private List<SelectItem> selectUser;
 	private String selectedUser;
 	// antes era string
-	private UserVo userDetail;
-	private UserVo userDetail2;
+	private UserDTO userDetail;
+	private UserDTO userDetail2;
 	private Short company;
 	private short employer;
 	private Short distributer;
@@ -171,7 +171,7 @@ public class UserBean {
 		UserManager userManager = new UserManager(SQLConstant.MYSQL);
 		logger.debug("CARGAR EMPLEADO!\n!");
 		try {
-			UserVo userVo = new UserVo();
+			UserDTO userVo = new UserDTO();
 			userManager.datosUsuario(userVo, login);
 			logger.debug("el usuario es " + userVo.getUser());
 			if(userVo!=null) {
@@ -699,7 +699,7 @@ public class UserBean {
 	/**
 	 * @return the userDetail
 	 */
-	public UserVo getUserDetail() {
+	public UserDTO getUserDetail() {
 		return userDetail;
 	}
 
@@ -707,7 +707,7 @@ public class UserBean {
 	/**
 	 * @param userDetail the userDetail to set
 	 */
-	public void setUserDetail(UserVo userDetail) {
+	public void setUserDetail(UserDTO userDetail) {
 		this.userDetail = userDetail;
 	}
 
@@ -715,7 +715,7 @@ public class UserBean {
 	/**
 	 * @return the userDetail2
 	 */
-	public UserVo getUserDetail2() {
+	public UserDTO getUserDetail2() {
 		return userDetail2;
 	}
 
@@ -723,7 +723,7 @@ public class UserBean {
 	/**
 	 * @param userDetail2 the userDetail2 to set
 	 */
-	public void setUserDetail2(UserVo userDetail2) {
+	public void setUserDetail2(UserDTO userDetail2) {
 		this.userDetail2 = userDetail2;
 	}
 

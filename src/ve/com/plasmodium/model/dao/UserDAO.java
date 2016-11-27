@@ -8,7 +8,7 @@ import org.apache.log4j.Logger;
 
 import ve.com.plasmodium.exception.CustomException;
 import ve.com.plasmodium.exception.DAOException;
-import ve.com.plasmodium.model.vo.UserVo;
+import ve.com.plasmodium.model.vo.UserDTO;
 public interface UserDAO {
     public static final Logger logger = Logger.getLogger(UserDAO.class);
 
@@ -19,7 +19,7 @@ public interface UserDAO {
 	 * @throws DAOException
 	 * @throws CustomException
 	 */
-    public void datosUsuario(UserVo userVo, String login) throws DAOException, CustomException;
+    public void datosUsuario(UserDTO userVo, String login) throws DAOException, CustomException;
   
     /**
      * 
@@ -28,7 +28,7 @@ public interface UserDAO {
      * @throws DAOException
      * @throws CustomException
      */
-    public UserVo datosUsuario(int user) throws DAOException, CustomException;
+    public UserDTO datosUsuario(int user) throws DAOException, CustomException;
     
      /**
      * 
@@ -37,7 +37,7 @@ public interface UserDAO {
      * @throws DAOException
      * @throws CustomException
      */
-    public UserVo user_datosUsuarios(String login) throws DAOException, CustomException;
+    public UserDTO user_datosUsuarios(String login) throws DAOException, CustomException;
 
 	/**
 	 * Trae una lista de instituciones  
@@ -74,7 +74,7 @@ public interface UserDAO {
 	 * @param userIDS
 	 * @return Objeto UserVo
 	 */
-	public UserVo usuarioDetail(short userIDS);
+	public UserDTO usuarioDetail(short userIDS);
 
 	/**
 	 * Cambia informacion de un usuario en especifico del sistema

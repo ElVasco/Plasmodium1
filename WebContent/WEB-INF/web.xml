@@ -154,16 +154,13 @@
 		<location>/timeout.jsp</location>
 	</error-page>
 
-	<!-- Added by Leonardo Djekki to implement Datasource and connection pool -->
 	<resource-ref>
 		<description>MySQL Datasource</description>
-		<res-ref-name>jdbc:mysql://127.0.01:3306/plasmodium?autoReconnect=true</res-ref-name>
-		<res-type>
-			javax.sql.DataSource
-		</res-type>
+		<res-ref-name>jdbc/mysqlPlasmodium</res-ref-name>
+		<res-type>javax.sql.DataSource</res-type>
 			<res-auth>Container</res-auth>
 	</resource-ref>
-	<!-- End added by Leonardo Djekki to implement connection pool -->
+
 	<context-param>
 		<param-name>primefaces.PRIVATE_CAPTCHA_KEY</param-name>
 		<param-value>6LdzI94SAAAAAGp6sV3MMjDMyux5e5WK53R0p25h</param-value>

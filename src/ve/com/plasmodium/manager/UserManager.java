@@ -10,7 +10,7 @@ import ve.com.plasmodium.exception.CustomException;
 import ve.com.plasmodium.exception.DAOException;
 import ve.com.plasmodium.model.dao.DAOFactory;
 import ve.com.plasmodium.model.dao.UserDAO;
-import ve.com.plasmodium.model.vo.UserVo;
+import ve.com.plasmodium.model.vo.UserDTO;
 
 public class UserManager {
 
@@ -24,7 +24,7 @@ public class UserManager {
 
 
 
-	public void datosUsuario(UserVo userVo, String login) throws DAOException, CustomException {
+	public void datosUsuario(UserDTO userVo, String login) throws DAOException, CustomException {
 		try {
 			userDAO.datosUsuario(userVo, login);
 		} catch (Exception e) {
@@ -32,8 +32,8 @@ public class UserManager {
 		}
 	}
 
-	public UserVo datosUsuario(int user) throws DAOException, CustomException {
-		UserVo userVo = null;
+	public UserDTO datosUsuario(int user) throws DAOException, CustomException {
+		UserDTO userVo = null;
 		try {
 			userVo = userDAO.datosUsuario(user);
 		} catch (Exception e) {
@@ -92,8 +92,8 @@ public class UserManager {
 		return userList;
 	}
 
-	public UserVo usuarioDetail(short userIDS) {
-		UserVo userVo = null;
+	public UserDTO usuarioDetail(short userIDS) {
+		UserDTO userVo = null;
 		try {
 			userVo = userDAO.usuarioDetail(userIDS);
 		} catch (Exception e) {

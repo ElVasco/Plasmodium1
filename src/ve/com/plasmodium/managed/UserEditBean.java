@@ -21,7 +21,7 @@ import ve.com.plasmodium.control.UserBean;
 import ve.com.plasmodium.exception.CustomException;
 import ve.com.plasmodium.manager.UserManager;
 import ve.com.plasmodium.model.dao.SQLConstant;
-import ve.com.plasmodium.model.vo.UserVo;
+import ve.com.plasmodium.model.vo.UserDTO;
 import ve.com.plasmodium.util.MailNotifier;
 
 @ManagedBean(name="UserEditBean")
@@ -72,8 +72,8 @@ public class UserEditBean {
 	
 	private String selectedDistributer;
 
-	private UserVo userDetail;
-	private UserVo userDetail2;
+	private UserDTO userDetail;
+	private UserDTO userDetail2;
 	private Short company;
 	private Short distributer;
 	private Short route;
@@ -326,6 +326,7 @@ public class UserEditBean {
 			clearDataUser();
 			showDetail=false;
 			showDetailNew=false;
+			editDetail=false;
 			if(selectedUser != null && !selectedUser.equals("")){
 				short userIDS  = Short.parseShort(selectedUser);
 				if(userIDS==999){
@@ -344,6 +345,7 @@ public class UserEditBean {
 					UserManager userManager = new UserManager(SQLConstant.MYSQL);
 					showDetail=true;
 					showDetailNew=false;
+					editDetail=true;
 					userDetail2 = userManager.usuarioDetail(userIDS);
 					idUser = userDetail2.getDoc();
 					loginUser = userDetail2.getLogin();
@@ -356,7 +358,7 @@ public class UserEditBean {
 				}
 			}
 			/*If an existent user is selected his details can't be edited unless the button with label "Modificar" is pressed*/
-			editDetail=false; 
+			 
 		}catch (Exception e){
 			logger.error("Exception UserEditBean - userListenerMethod ", e);
 		}
@@ -1133,7 +1135,7 @@ public class UserEditBean {
 	/**
 	 * @return the userDetail
 	 */
-	public UserVo getUserDetail() {
+	public UserDTO getUserDetail() {
 		return userDetail;
 	}
 
@@ -1141,7 +1143,7 @@ public class UserEditBean {
 	/**
 	 * @param userDetail the userDetail to set
 	 */
-	public void setUserDetail(UserVo userDetail) {
+	public void setUserDetail(UserDTO userDetail) {
 		this.userDetail = userDetail;
 	}
 
@@ -1149,7 +1151,7 @@ public class UserEditBean {
 	/**
 	 * @return the userDetail2
 	 */
-	public UserVo getUserDetail2() {
+	public UserDTO getUserDetail2() {
 		return userDetail2;
 	}
 
@@ -1157,7 +1159,7 @@ public class UserEditBean {
 	/**
 	 * @param userDetail2 the userDetail2 to set
 	 */
-	public void setUserDetail2(UserVo userDetail2) {
+	public void setUserDetail2(UserDTO userDetail2) {
 		this.userDetail2 = userDetail2;
 	}
 
