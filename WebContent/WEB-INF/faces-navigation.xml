@@ -63,10 +63,10 @@
 	</navigation-rule>
 	<!-- ASIGNACION DE TARJETAS A DISTRIBUIDORES -->
 	<navigation-rule>
-		<from-view-id>/pages/AsignarDistribuidor.xhtml</from-view-id>
+		<from-view-id>/pages/Institution.xhtml</from-view-id>
 		<navigation-case>
 			<from-outcome>successful</from-outcome>
-			<to-view-id>/pages/AsignarDistribuidor.xhtml</to-view-id>
+			<to-view-id>/pages/MenuInicio.xhtml</to-view-id>
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>successful_assign</from-outcome>
@@ -74,7 +74,7 @@
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>fail</from-outcome>
-			<to-view-id>/pages/AsignarDistribuidor.xhtml</to-view-id>
+			<to-view-id>/pages/Institution.xhtml</to-view-id>
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>successful_exit</from-outcome>

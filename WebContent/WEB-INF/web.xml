@@ -23,11 +23,11 @@
 	</context-param>
 	<context-param>
 		<param-name>log4jConfigLocation</param-name>
-		<param-value>WEB-INF/config/log4j.properties</param-value>
+		<param-value>/WEB-INF/config/log4j.properties</param-value>
 	</context-param>
 	<context-param>
 		<param-name>simdeConfigLocation</param-name>
-		<param-value>WEB-INF/config/plasmodium.properties</param-value>
+		<param-value>/WEB-INF/config/plasmodium.properties</param-value>
 	</context-param>
 	<context-param>
 		<param-name>contextConfigLocation</param-name>

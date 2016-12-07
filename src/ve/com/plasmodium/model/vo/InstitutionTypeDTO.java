@@ -5,16 +5,27 @@ import java.io.Serializable;
 public class InstitutionTypeDTO implements Serializable {
 
 	private static final long serialVersionUID = -6413742488576935913L;
-	private String name;
+	public int idIstitutionType;
+	public String name;
 	
 	public InstitutionTypeDTO() {}
 	
 	public String getName() {
 		return name;
 	}
+	
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	public int getIdIstitutionType() {
+		return idIstitutionType;
+	}
+
+	public void setIdIstitutionType(int idIstitutionType) {
+		this.idIstitutionType = idIstitutionType;
+	}
+
 
 	@Override
 	public int hashCode() {

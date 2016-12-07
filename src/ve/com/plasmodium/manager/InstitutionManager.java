@@ -1,9 +1,12 @@
 package ve.com.plasmodium.manager;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 
 import ve.com.plasmodium.model.dao.InstitutionDAO;
 import ve.com.plasmodium.model.vo.InstitutionDTO;
+import ve.com.plasmodium.model.vo.InstitutionTypeDTO;
 import ve.com.plasmodium.model.dao.DAOFactory;
 
 public class InstitutionManager {
@@ -32,5 +35,21 @@ public class InstitutionManager {
 //	}
 //	return userCompanyVo;
 //    }
+
+	public void institutionList(List<InstitutionDTO> institution, String selectedInstitutionType) {
+		try {
+	    	institutionDAO.institutionList(institution, selectedInstitutionType);
+		} catch (Exception e) {
+			 logger.error("Exception institutionManager - institutionList ", e);
+		}
+	}
+
+	public void getIntitutionTypeList(List<InstitutionTypeDTO> institutionTypeList) {
+		try {
+	    	institutionDAO.getIntitutionTypeList(institutionTypeList);
+		} catch (Exception e) {
+			 logger.error("Exception institutionManager - institutionList ", e);
+		}
+	}
 
 }

@@ -21,6 +21,7 @@ import ve.com.plasmodium.control.UserBean;
 import ve.com.plasmodium.exception.CustomException;
 import ve.com.plasmodium.manager.UserManager;
 import ve.com.plasmodium.model.dao.SQLConstant;
+import ve.com.plasmodium.model.vo.InstitutionTypeDTO;
 import ve.com.plasmodium.model.vo.UserDTO;
 import ve.com.plasmodium.util.MailNotifier;
 
@@ -230,13 +231,14 @@ public class UserEditBean {
 	 * @return
 	 */
 	public void buscarInstitutionType(){
-		UserManager userManager = new UserManager(SQLConstant.MYSQL);
-		try {
-			userManager.listaInstutionType(selectInstitutionType);
-		} catch (Exception e) {
-			logger.error("Exception UserEditBean - buscarUsuario ", e);
+		GlobalDataBean gd = (GlobalDataBean) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("GlobalData");
+		if(gd.getInstitutionTypeList().size() == 0){
+			gd.findInstitutionType();
+		}
+		for(InstitutionTypeDTO inty : gd.getInstitutionTypeList()){
+			SelectItem e = new SelectItem( inty.getIdIstitutionType() + "", inty.getName());
+			selectInstitutionType.add(e);
 		}	    
-		//return selectUser;
 	}
 	
 	/**

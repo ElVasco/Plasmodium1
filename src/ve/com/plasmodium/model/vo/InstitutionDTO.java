@@ -5,13 +5,14 @@ import java.io.Serializable;
 public class InstitutionDTO implements Serializable {
 
 	private static final long serialVersionUID = -1977342721293261236L;
-	private String name;
-	private LocationDTO location;
-	private InstitutionTypeDTO institutionType;
+	public int idIstitution;
+	public String name;
+	public LocationDTO location;
+	public InstitutionTypeDTO institutionType;
 	
 	public InstitutionDTO() {
 	}
-
+	
 	public String getName() {
 		return name;
 	}
@@ -34,6 +35,14 @@ public class InstitutionDTO implements Serializable {
 
 	public void setInstitutionType(InstitutionTypeDTO institutionType) {
 		this.institutionType = institutionType;
+	}
+	
+	public int getIdIstitution() {
+		return idIstitution;
+	}
+
+	public void setIdIstitution(int idIstitution) {
+		this.idIstitution = idIstitution;
 	}
 
 	@Override
@@ -79,8 +88,5 @@ public class InstitutionDTO implements Serializable {
 				+ (location != null ? "location=" + location + ", " : "")
 				+ (institutionType != null ? "institutionType=" + institutionType : "") + "]";
 	}
-
-
-
 
 }

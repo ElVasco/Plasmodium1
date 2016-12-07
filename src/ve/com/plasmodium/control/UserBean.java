@@ -16,7 +16,7 @@ import javax.faces.model.SelectItem;
 import org.apache.log4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import ve.com.novared.model.vo.CryptoError;
+import ve.com.plasmodium.control.GlobalDataBean;
 import ve.com.plasmodium.exception.CustomException;
 import ve.com.plasmodium.manager.UserManager;
 import ve.com.plasmodium.model.dao.SQLConstant;
@@ -86,7 +86,7 @@ public class UserBean {
 	private float unsettledBalance = 0;
 	private float deduction = 0; 
 
-	public UserBean()throws IOException, ParseException, CryptoError{
+	public UserBean()throws IOException, ParseException{
 		messages.add("Ingreso al Sistema");
 		userName="";
 		selectedUser = new String();
@@ -110,6 +110,8 @@ public class UserBean {
 		levelListUserNew = new String();
 		setLogin(SecurityContextHolder.getContext().getAuthentication().getName());
 		//setLogin(login);
+		GlobalDataBean globalDataBean = new GlobalDataBean();
+		FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("GlobalData", globalDataBean);
 	}
 
 
