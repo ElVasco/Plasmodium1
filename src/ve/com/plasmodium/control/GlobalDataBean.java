@@ -2,6 +2,7 @@ package ve.com.plasmodium.control;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -73,10 +74,12 @@ public class GlobalDataBean {
 	}
 
 	public void findInstitution(String selectedInstitutionType) {
+		mapInstitution_Type = new HashMap<String, List<InstitutionDTO>>();
 		InstitutionManager institutionManager = new InstitutionManager(SQLConstant.MYSQL);
 		institutionList = resetInstitutionList();
 		institutionManager.institutionList(institutionList, selectedInstitutionType);
 		mapInstitution_Type.put(selectedInstitutionType, institutionList);
+		logger.debug(mapInstitution_Type);
 	}
 	
 	public void findInstitutionType() {

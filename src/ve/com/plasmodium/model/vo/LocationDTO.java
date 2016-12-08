@@ -13,6 +13,7 @@ public class LocationDTO implements Serializable {
 	public String locality;
 	public String administrative_area_level_2;
 	public String route;
+	public String placeId;
 	public String demarcation;
 	
 	
@@ -128,6 +129,54 @@ public class LocationDTO implements Serializable {
 
 
 
+	public String getAdministrative_area_level_1() {
+		return administrative_area_level_1;
+	}
+
+
+
+	public void setAdministrative_area_level_1(String administrative_area_level_1) {
+		this.administrative_area_level_1 = administrative_area_level_1;
+	}
+
+
+
+	public String getLocality() {
+		return locality;
+	}
+
+
+
+	public void setLocality(String locality) {
+		this.locality = locality;
+	}
+
+
+
+	public String getAdministrative_area_level_2() {
+		return administrative_area_level_2;
+	}
+
+
+
+	public void setAdministrative_area_level_2(String administrative_area_level_2) {
+		this.administrative_area_level_2 = administrative_area_level_2;
+	}
+
+
+
+	public String getPlaceId() {
+		return placeId;
+	}
+
+
+
+	public void setPlaceId(String placeId) {
+		this.placeId = placeId;
+	}
+
+
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -140,6 +189,7 @@ public class LocationDTO implements Serializable {
 		result = prime * result + ((latitude == null) ? 0 : latitude.hashCode());
 		result = prime * result + ((locality == null) ? 0 : locality.hashCode());
 		result = prime * result + ((longitude == null) ? 0 : longitude.hashCode());
+		result = prime * result + ((placeId == null) ? 0 : placeId.hashCode());
 		result = prime * result + ((route == null) ? 0 : route.hashCode());
 		return result;
 	}
@@ -192,6 +242,11 @@ public class LocationDTO implements Serializable {
 				return false;
 		} else if (!longitude.equals(other.longitude))
 			return false;
+		if (placeId == null) {
+			if (other.placeId != null)
+				return false;
+		} else if (!placeId.equals(other.placeId))
+			return false;
 		if (route == null) {
 			if (other.route != null)
 				return false;
@@ -204,14 +259,16 @@ public class LocationDTO implements Serializable {
 
 	@Override
 	public String toString() {
-		return (country != null ? "country=" + country + ", " : "")
+		return "LocationDTO [idLocation=" + idLocation + ", " + (latitude != null ? "latitude=" + latitude + ", " : "")
+				+ (longitude != null ? "longitude=" + longitude + ", " : "")
+				+ (country != null ? "country=" + country + ", " : "")
 				+ (administrative_area_level_1 != null
 						? "administrative_area_level_1=" + administrative_area_level_1 + ", " : "")
 				+ (locality != null ? "locality=" + locality + ", " : "")
 				+ (administrative_area_level_2 != null
 						? "administrative_area_level_2=" + administrative_area_level_2 + ", " : "")
-				+ (route != null ? "route=" + route + ", " : "")
-				+ (demarcation != null ? "demarcation=" + demarcation : "");
+				+ (route != null ? "route=" + route + ", " : "") + (placeId != null ? "placeId=" + placeId + ", " : "")
+				+ (demarcation != null ? "demarcation=" + demarcation : "") + "]";
 	}
 
 

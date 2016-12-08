@@ -59,9 +59,11 @@ public class MySQLInstitutionDAO implements InstitutionDAO {
 				institution.getLocation().setLatitude(resultSet.getString("latitude"));
 				institution.getLocation().setLongitude(resultSet.getString("longitude"));
 				institution.getLocation().setLongitude(resultSet.getString("longitude"));
-				institution.getLocation().setState(resultSet.getString("state"));
-				institution.getLocation().setCity(resultSet.getString("city"));
-				institution.getLocation().setMunicipality(resultSet.getString("municipality"));
+				institution.getLocation().setState(resultSet.getString("administrative_area_level_1"));
+				institution.getLocation().setCity(resultSet.getString("locality"));
+				institution.getLocation().setMunicipality(resultSet.getString("administrative_area_level_2"));
+				institution.getLocation().setRoute(resultSet.getString("route"));
+				institution.getLocation().setPlaceId(resultSet.getString("place_ID"));
 				institution.getLocation().setDemarcation(resultSet.getString("demarcation"));
 				institutionList.add(institution);
 			}

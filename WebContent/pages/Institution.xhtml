@@ -83,6 +83,44 @@
 				</p:inputText>
 				<p:message id="namemsg" for="name" display="text,tooltip" />
 
+				<p:outputLabel value="Tipo de institucion:" for="type"
+					rendered="#{InstitutionBean.showDetail}" />
+				<p:inputText id="type"
+					value="#{InstitutionBean.institution.institutionType.name}"
+					required="#{(InstitutionBean.showDetailNew or InstitutionBean.editDetail)}"
+					readonly="#{!(InstitutionBean.showDetailNew or InstitutionBean.editDetail)}"
+					rendered="#{InstitutionBean.showDetail}"
+					validatorMessage="Solo letras papá">
+					<p:ajax event="keyup" update="typemsg" />
+					<f:validateRegex pattern="[a-zA-Z]+" />
+				</p:inputText>
+				<p:message id="typemsg" for="type" display="text,tooltip" />
+
+				<p:outputLabel value="Latitud:" for="gpslat"
+					rendered="#{InstitutionBean.showDetail}" />
+				<p:inputText id="gpslat"
+					value="#{InstitutionBean.institution.location.latitude}"
+					required="#{(InstitutionBean.showDetailNew or InstitutionBean.editDetail)}"
+					readonly="#{!(InstitutionBean.showDetailNew or InstitutionBean.editDetail)}"
+					rendered="#{InstitutionBean.showDetail}"
+					validatorMessage="Solo coordenadas papá">
+					<p:ajax event="keyup" update="gpslatmsg" />
+					<f:validateRegex pattern="(^-?[0-9]\d*(\.\d+)?$)" />
+				</p:inputText>
+				<p:message id="gpslatmsg" for="gpslat" display="text,tooltip" />
+
+				<p:outputLabel value="Longitud:" for="gpslon"
+					rendered="#{InstitutionBean.showDetail}" />
+				<p:inputText id="gpslon"
+					value="#{InstitutionBean.institution.location.longitude}"
+					required="#{(InstitutionBean.showDetailNew or InstitutionBean.editDetail)}"
+					readonly="#{!(InstitutionBean.showDetailNew or InstitutionBean.editDetail)}"
+					rendered="#{InstitutionBean.showDetail}"
+					validatorMessage="Solo coordenadas papá">
+					<p:ajax event="keyup" update="gpslonmsg" />
+					<f:validateRegex pattern="^-?[0-9]\d*(\.\d+)?$" />
+				</p:inputText>
+				<p:message id="gpslonmsg" for="gpslon" display="text,tooltip" />
 
 				<p:spacer width="100" height="10" />
 				<p:spacer width="100" height="10" />
