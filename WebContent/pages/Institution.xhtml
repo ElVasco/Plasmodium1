@@ -25,16 +25,19 @@
 							Datos generales de la Institucion
 						</f:facet>
 		<h:form id="InstitutionId" styleClass="distributerSelector">
-
-			<!-- PANEL DE FILTRO DE USUARIOS   -->
-			<h:panelGrid id="test" columns="3" cellpadding="5">
+			<p:inputText type="hidden" id="test" name="hidden1"
+				value="#{InstitutionBean.center}">
+				<p:ajax event="valueChange"/>
+			</p:inputText>
+			<!-- PANEL DE FILTRO DE INSTITUTO   -->
+			<h:panelGrid id="panelInstitute" columns="3" cellpadding="5">
 				<!-- Seleccion de tipo de institucion -->
 				<p:outputLabel value="Tipo de institución:" id="institutionTypeOPL"
 					for="institutionTypeFor" />
 				<p:selectOneMenu value="#{InstitutionBean.selectedInstitutionType}"
 					id="institutionTypeFor">
 					<p:ajax listener="#{InstitutionBean.institutionTypeListenerMethod}"
-						update="panel1,test,buttonPanel,panel12" />
+						update="panel1,panelInstitute,buttonPanel,panel12,mapitaNew,dialogo" />
 					<f:selectItem itemLabel="Seleccione un tipo de institución"
 						itemValue="" noSelectionOption="true" />
 					<f:selectItems value="#{InstitutionBean.selectInstitutionType}" />
@@ -46,10 +49,10 @@
 					for="institutionFor"
 					rendered="#{InstitutionBean.showInstitutionList}" />
 				<p:selectOneMenu value="#{InstitutionBean.selectedInstitution}"
-					id="institutionFor"
+					id="institutionFor" disabled="#{InstitutionBean.showDetailNew}"
 					rendered="#{InstitutionBean.showInstitutionList}">
 					<p:ajax listener="#{InstitutionBean.institutionListenerMethod}"
-						update="panel1,test,buttonPanel,panel12,mapita,dialogo" />
+						update="panel1,panelInstitute,buttonPanel,panel12,mapita,dialogo" />
 					<f:selectItem itemLabel="Seleccione una institución" itemValue=""
 						noSelectionOption="true" />
 					<f:selectItems value="#{InstitutionBean.selectInstitution}" />
@@ -74,8 +77,8 @@
 				<p:outputLabel value="Nombre de institucion:" for="name"
 					rendered="#{InstitutionBean.showDetail}" />
 				<p:inputText id="name" value="#{InstitutionBean.institution.name}"
-					required="#{(InstitutionBean.showDetailNew or InstitutionBean.editDetail)}"
-					readonly="#{!(InstitutionBean.showDetailNew or InstitutionBean.editDetail)}"
+					required="#{InstitutionBean.editDetail}"
+					readonly="#{!(InstitutionBean.editDetail)}"
 					rendered="#{InstitutionBean.showDetail}"
 					validatorMessage="Solo letras papá">
 					<p:ajax event="keyup" update="namemsg" />
@@ -87,8 +90,8 @@
 					rendered="#{InstitutionBean.showDetail}" />
 				<p:inputText id="type"
 					value="#{InstitutionBean.institution.institutionType.name}"
-					required="#{(InstitutionBean.showDetailNew or InstitutionBean.editDetail)}"
-					readonly="#{!(InstitutionBean.showDetailNew or InstitutionBean.editDetail)}"
+					required="#{InstitutionBean.editDetail}"
+					readonly="#{!(InstitutionBean.editDetail)}"
 					rendered="#{InstitutionBean.showDetail}"
 					validatorMessage="Solo letras papá">
 					<p:ajax event="keyup" update="typemsg" />
@@ -100,8 +103,8 @@
 					rendered="#{InstitutionBean.showDetail}" />
 				<p:inputText id="gpslat"
 					value="#{InstitutionBean.institution.location.latitude}"
-					required="#{(InstitutionBean.showDetailNew or InstitutionBean.editDetail)}"
-					readonly="#{!(InstitutionBean.showDetailNew or InstitutionBean.editDetail)}"
+					required="#{InstitutionBean.editDetail}"
+					readonly="#{!(InstitutionBean.editDetail)}"
 					rendered="#{InstitutionBean.showDetail}"
 					validatorMessage="Solo coordenadas papá">
 					<p:ajax event="keyup" update="gpslatmsg" />
@@ -113,8 +116,8 @@
 					rendered="#{InstitutionBean.showDetail}" />
 				<p:inputText id="gpslon"
 					value="#{InstitutionBean.institution.location.longitude}"
-					required="#{(InstitutionBean.showDetailNew or InstitutionBean.editDetail)}"
-					readonly="#{!(InstitutionBean.showDetailNew or InstitutionBean.editDetail)}"
+					required="#{InstitutionBean.editDetail}"
+					readonly="#{!(InstitutionBean.editDetail)}"
 					rendered="#{InstitutionBean.showDetail}"
 					validatorMessage="Solo coordenadas papá">
 					<p:ajax event="keyup" update="gpslonmsg" />
@@ -156,12 +159,22 @@
 				closeOnEscape="true">
 				<p:gmap center="#{InstitutionBean.center}" zoom="13" type="HYBRID"
 					id="mapita" style="width:100%;height:400px"
-					model="#{InstitutionBean.simpleModel}" />
+					model="#{InstitutionBean.simpleModel}"
+					rendered="#{!(InstitutionBean.editDetail)}" />
+				<p:gmap center="#{InstitutionBean.center}" zoom="13" type="HYBRID"
+					id="mapitaNew" style="width:100%;height:400px"
+					rendered="#{InstitutionBean.editDetail}" />
 			</p:dialog>
-
 		</h:form>
 	</p:panel>
 	<ui:include src="/include/IncludeFooter.html"></ui:include>
-
+	<script>
+		function ip_callback(o) {
+			var latlong = "";
+			latlong = latlong.concat(o.latitude, ",", o.longitude)
+			document.getElementById("InstitutionId:test").value = latlong;
+		}
+	</script>
+	<script src="http://freegeoip.net/json/?callback=ip_callback"></script>
 </body>
 </html>

@@ -2,11 +2,13 @@ package ve.com.plasmodium.managed;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
@@ -47,6 +49,11 @@ public class InstitutionBean {
 		setShowMap(false);
 		resetInstitutionType();
 		resetInstitution();
+		Map<String, String> parameterMap = (Map<String, String>) FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+		String param = parameterMap.get("modify");
+		logger.debug(param + "----------");
+		if(param!=null)
+			setShowDetailNew(param.equals("0"));
 	}
 
 	private void resetInstitutionType() {
@@ -103,8 +110,11 @@ public class InstitutionBean {
 	}
 
 	public void institutionTypeListenerMethod(){
-		setShowInstitutionList(false);
-		if(selectedInstitutionType!=null || !selectedInstitutionType.equals("")){
+		setShowInstitutionList(false);	
+		setShowDetail(false);
+		setEditDetail(false);
+		setShowMap(false);	
+		if(selectedInstitutionType!=null && !selectedInstitutionType.equalsIgnoreCase("")){
 			GlobalDataBean gd = (GlobalDataBean) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("GlobalData");
 			if(gd.getMapInstitution_Type() == null || gd.getMapInstitution_Type().get(selectedInstitutionType).size() == 0){
 				gd.findInstitution(selectedInstitutionType);
@@ -114,9 +124,19 @@ public class InstitutionBean {
 				selectInstitution.add(e);
 			}
 			setShowInstitutionList(true);
+			if(showDetailNew){
+				setSelectedInstitution("999");
+				setShowDetail(true);
+				setEditDetail(true);
+				setShowMap(true);
+				ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+			    setCenter(ec.getRequestParameterMap().get("InstitutionId:test"));
+			}
 		}
 	}
 
+	
+	
 	public void setGPS() {
 		simpleModel = new DefaultMapModel();
 		setCenter(institution.getLocation().getLatitude()+","+institution.getLocation().getLongitude());
@@ -132,7 +152,6 @@ public class InstitutionBean {
 	@PostConstruct
 	public void init() {
 		simpleModel = new DefaultMapModel();
-
 	}
 
 	public MapModel getSimpleModel() {
