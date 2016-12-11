@@ -160,10 +160,10 @@
 				<p:gmap center="#{InstitutionBean.center}" zoom="13" type="HYBRID"
 					id="mapita" style="width:100%;height:400px"
 					model="#{InstitutionBean.simpleModel}"
-					rendered="#{!(InstitutionBean.editDetail)}" />
+					rendered="#{!(InstitutionBean.showDetailNew)}" />
 				<p:gmap center="#{InstitutionBean.center}" zoom="13" type="HYBRID"
 					id="mapitaNew" style="width:100%;height:400px"
-					rendered="#{InstitutionBean.editDetail}" />
+					rendered="#{InstitutionBean.showDetailNew}" />
 			</p:dialog>
 		</h:form>
 	</p:panel>

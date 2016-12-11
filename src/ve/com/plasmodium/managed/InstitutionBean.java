@@ -84,6 +84,7 @@ public class InstitutionBean {
 		try{
 			setShowDetail(false);
 			setEditDetail(false);
+			setShowDetailNew(false);
 			if(selectedInstitution != null && !selectedInstitution.equals("")){
 				short instIDS  = Short.parseShort(selectedInstitution);
 				if(instIDS==999){
@@ -127,7 +128,6 @@ public class InstitutionBean {
 			if(showDetailNew){
 				setSelectedInstitution("999");
 				setShowDetail(true);
-				setEditDetail(true);
 				setShowMap(true);
 				ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
 			    setCenter(ec.getRequestParameterMap().get("InstitutionId:test"));
