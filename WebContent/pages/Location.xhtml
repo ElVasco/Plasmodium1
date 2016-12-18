@@ -36,7 +36,7 @@
 					<f:selectItem itemLabel="Coordenas" itemValue="2" />
 					<f:selectItem itemLabel="Mapa" itemValue="3" />
 					<p:ajax event="change" update="panelLocationDetail"
-						listener="#{LocationBean.changeLanguage}" />
+						listener="#{LocationBean.locationEntryListenerMethod}" />
 				</p:selectOneButton>
 
 				<p:spacer />
@@ -46,57 +46,108 @@
 			<h:panelGrid id="panelLocationDetail" columns="1" cellpadding="5">
 				<p:spacer />
 
-				<p:dialog header="Mapa" widgetVar="dlg1" modal="true"
-					resizable="false" id="dialogo1" height="400" width="80%"
-					closeOnEscape="true">
-					<h:outputText id="display2" value="#{LocationBean.center}"
-						rendered="#{LocationBean.option == '1'}" style="font-weight: bold" />
-				</p:dialog>
 
-				<p:dialog header="Mapa" widgetVar="dlg2" modal="true"
-					resizable="false" id="dialogo2" height="400" width="50%"
-					closeOnEscape="true">
-					<h:panelGrid id="panel1" columns="3" cellpadding="5">
-						<p:outputLabel value="Latitud:" for="gpslat"
-							rendered="#{LocationBean.option == '2'}" />
-						<p:inputText id="gpslat"
-							value="#{InstitutionBean.institution.location.latitude}"
-							required="#{InstitutionBean.editDetail}"
-							readonly="#{!(InstitutionBean.editDetail)}"
-							rendered="#{LocationBean.option == '2'}"
-							validatorMessage="Solo coordenadas papá">
-							<p:ajax event="keyup" update="gpslatmsg" />
-							<f:validateRegex pattern="(^-?[0-9]\d*(\.\d+)?$)" />
-						</p:inputText>
-						<p:message id="gpslatmsg" for="gpslat" display="text,tooltip" />
+				<h:outputText id="display2" value="#{LocationBean.center}"
+					rendered="#{LocationBean.option == '1'}" style="font-weight: bold" />
 
-						<p:outputLabel value="Longitud:" for="gpslon"
-							rendered="#{LocationBean.option == '2'}" />
-						<p:inputText id="gpslon"
-							value="#{InstitutionBean.institution.location.longitude}"
-							required="#{InstitutionBean.editDetail}"
-							readonly="#{!(InstitutionBean.editDetail)}"
-							rendered="#{LocationBean.option == '2'}"
-							validatorMessage="Solo coordenadas papá">
-							<p:ajax event="keyup" update="gpslonmsg" />
-							<f:validateRegex pattern="^-?[0-9]\d*(\.\d+)?$" />
-						</p:inputText>
-						<p:message id="gpslonmsg" for="gpslon" display="text,tooltip" />
-					</h:panelGrid>
-				</p:dialog>
 
-				<p:dialog header="Mapa" widgetVar="dlg3" modal="true"
+				<h:panelGrid id="panel1" columns="3" cellpadding="5">
+					<p:outputLabel value="Latitud:" for="gpslat"
+						rendered="#{LocationBean.option == '2'}" />
+					<p:inputText id="gpslat" value="#{LocationBean.location.latitude}"
+						required="#{LocationBean.editDetail}"
+						readonly="#{!(LocationBean.editDetail)}"
+						rendered="#{LocationBean.option == '2'}"
+						validatorMessage="Solo coordenadas papá">
+						<p:ajax event="keyup" update="gpslatmsg" />
+						<f:validateRegex pattern="(^-?[0-9]\d*(\.\d+)?$)" />
+					</p:inputText>
+					<p:message id="gpslatmsg" for="gpslat" display="text,tooltip" />
+
+					<p:outputLabel value="Longitud:" for="gpslon"
+						rendered="#{LocationBean.option == '2'}" />
+					<p:inputText id="gpslon" value="#{LocationBean.location.longitude}"
+						required="#{LocationBean.editDetail}"
+						readonly="#{!(LocationBean.editDetail)}"
+						rendered="#{LocationBean.option == '2'}"
+						validatorMessage="Solo coordenadas papá">
+						<p:ajax event="keyup" update="gpslonmsg" />
+						<f:validateRegex pattern="^-?[0-9]\d*(\.\d+)?$" />
+					</p:inputText>
+					<p:message id="gpslonmsg" for="gpslon" display="text,tooltip" />
+				</h:panelGrid>
+
+				<p:dialog header="Mapa" widgetVar="dlg" modal="true"
 					resizable="false" id="dialogo3" height="400" width="80%"
 					closeOnEscape="true">
 					<p:gmap center="#{LocationBean.center}" zoom="13" type="HYBRID"
 						id="mapitaNew" style="width:100%;height:400px"
-						rendered="#{LocationBean.option == '3'}" />
+						rendered="#{LocationBean.option == '3'}"
+						model="#{LocationBean.emptyModel}">
+						<p:ajax event="pointSelect" listener="#{LocationBean.addMarkerListinerMethod}"/>
+						</p:gmap>
 				</p:dialog>
+			</h:panelGrid>
+			<!-- PANEL DE BOTONES  -->
+			<h:panelGrid id="buttonPanel" columns="3" cellpadding="5">
+
+				<p:commandButton ajax="false" value="#{msg.change}"
+					id="buttonChange" action="#{LocationBean.actionChangeUser}"
+					validateClient="true"
+					rendered="#{!LocationBean.showDetailNew and LocationBean.showDetail}"
+					update="error,userEditPanel" />
+				<p:commandButton ajax="false"
+					value="#{LocationBean.userEnabled ? msg.deactivate:msg.reactivate}"
+					id="buttonDelete" action="#{LocationBean.actionDeleteUser}"
+					validateClient="true"
+					rendered="#{!LocationBean.showDetailNew and LocationBean.showDetail and !LocationBean.editDetail}"
+					process="@none" />
+				<p:commandButton ajax="false" value="#{msg.actionAddUser}"
+					id="buttonAdd" action="#{LocationBean.actionAddUser}"
+					validateClient="true"
+					rendered="#{LocationBean.showDetailNew and LocationBean.showDetail}"
+					update="error" />
+				<p:commandButton ajax="false" value="#{msg.cancel}" immediate="true"
+					id="cancel" process="@none" action="#{LocationBean.actionExit}" />
 			</h:panelGrid>
 		</h:form>
 	</p:panel>
 	<ui:include src="/include/IncludeFooter.html"></ui:include>
 	<script>
+		var currentMarker = null;
+
+		function handlePointClick(event) {
+			if (currentMarker === null) {
+				document.getElementById('LocationId:gpslat').value = event.latLng.lat();
+				document.getElementById('LocationId:gpslon').value = event.latLng.lng();
+
+				currentMarker = new google.maps.Marker({
+					position : new google.maps.LatLng(event.latLng.lat(),
+							event.latLng.lng())
+				});
+
+				PF('map').addOverlay(currentMarker);
+
+				PF('dlg').show();
+			}
+		}
+
+		function markerAddComplete() {
+			var title = document.getElementById('title');
+			currentMarker.setTitle(title.value);
+			title.value = "";
+
+			currentMarker = null;
+			PF('dlg').hide();
+		}
+
+		function cancel() {
+			PF('dlg').hide();
+			currentMarker.setMap(null);
+			currentMarker = null;
+
+			return false;
+		}
 		function ip_callback(o) {
 			var latlong = "";
 			latlong = latlong.concat(o.latitude, ",", o.longitude)
