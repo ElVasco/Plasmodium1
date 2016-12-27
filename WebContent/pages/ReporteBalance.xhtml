@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:include src="/include/IncludeHeader.xhtml"></ui:include>
+
+<h:head></h:head>
+<body>
+	<ui:include src="/include/HiAndByeTrans.xhtml"></ui:include>
+	<ui:include src="/include/IncludeBanner.html"></ui:include>
+	<ui:include src="/include/IncludeTransMenu.xhtml"></ui:include>
+
+	<h2>Reporte del balance</h2>
+
+
+	<h:form id="reportForm">
+
+		<p:commandButton ajax="false"   value="#{msg.reporte}" id="myActionLink3"
+			action="#{ReportBean.actionGetBalanceReportIS}" 
+			rendered="true" onclick="this.style.display='none'" />
+		<p:commandButton ajax="false"    validateClient="false"  immediate="true" value="#{msg.cancelReport}" id="cancel"
+			action="#{ReportBean.actionExit}" process="@none" />
+
+	</h:form>
+
+	<p>
+		<p:message showSummary="true" showDetail="false"
+			errorClass="message-e" id="reportMessage" for="reportType"
+			style="color:red;font-style: oblique;text-decoration: overline;font-family: 'New Century Shoolbook',serif;" />
+	</p>
+
+
+	<ui:include src="/include/IncludeFooter.html"></ui:include>
+
+</body>
+</html>

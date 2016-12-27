@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:include src="/include/IncludeHeader.xhtml"></ui:include>
+
+<h:head></h:head>
+<body>
+	<ui:include src="/include/HiAndByeTrans.xhtml"></ui:include>
+	<ui:include src="/include/IncludeBanner.html"></ui:include>
+	<ui:include src="/include/IncludeTransMenu.xhtml"></ui:include>
+
+	<h2>Reportes financieros de ventas</h2>
+
+	<h:form id="reportForm">
+		<p:panelGrid border="0" columns="2">
+			<p:outputLabel> Reportes financieros de ventas</p:outputLabel>
+			<p:selectOneMenu id="reportType"
+				value="#{SalesReportBean.selectedReport}">
+				<p:ajax listener="#{SalesReportBean.reportListener}"
+					update="filtrosPanel,panelButton" />
+				<f:selectItems value="#{SalesReportBean.reportList}" />
+			</p:selectOneMenu>
+		</p:panelGrid>
+
+		<p:outputPanel id="filtrosPanel">
+			<p:panelGrid columns="2" border="1" rules="all" id="Panel"
+				rendered="#{SalesReportBean.showFilters}">
+				<f:facet name="header">
+							Opciones de selección
+						</f:facet>
+
+				<p:outputLabel value="Zona:" id="distOT"
+					rendered="#{SalesReportBean.showDistributer}" />
+				<p:selectOneMenu value="#{SalesReportBean.selectedDistributer}"
+					id="distribuidorList" rendered="#{SalesReportBean.showDistributer}">
+					<p:ajax listener="#{SalesReportBean.distributerListenerMethod}"
+						update="rutaList" />
+					<f:selectItems value="#{SalesReportBean.selectDistributer}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Ruta:" id="rutaOT"
+					rendered="#{SalesReportBean.showRoute}" />
+				<p:selectOneMenu value="#{SalesReportBean.selectedRoute}"
+					id="rutaList" rendered="#{SalesReportBean.showRoute}">
+					<p:ajax listener="#{SalesReportBean.routeListenerMethod}"
+						update="clientList" />
+					<f:selectItems value="#{SalesReportBean.selectRoute}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Cliente:" id="clientOT"
+					rendered="#{SalesReportBean.showClient}" />
+				<p:selectOneMenu value="#{SalesReportBean.selectedClient}"
+					id="clientList" rendered="#{SalesReportBean.showClient}">
+					<f:selectItems value="#{SalesReportBean.selectClient}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Denominación:" id="denominacionOT"
+					rendered="#{SalesReportBean.showDenom}" />
+				<p:selectOneMenu id="denominacionList"
+					value="#{SalesReportBean.selectedDenom}"
+					rendered="#{SalesReportBean.showDenom}">
+					<f:selectItems value="#{GlobalData.selectPacking}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Promoción:" id="promocionOT"
+					rendered="#{SalesReportBean.showPromotions}" />
+				<p:selectOneMenu id="selectPromotion"
+					value="#{SalesReportBean.selectedPromotion}"
+					rendered="#{SalesReportBean.showPromotions}">
+					<f:selectItems value="#{SalesReportBean.selectPromotion}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Unidad de tiempo:" id="tiempoOT"
+					rendered="#{SalesReportBean.showDate}" />
+				<p:selectOneMenu value="#{SalesReportBean.selectedTimePeriod}"
+					id="timePeriodList" rendered="#{SalesReportBean.showDate}"
+					validator="#{ValidadorBean.validate}" required="true">
+					<f:selectItems value="#{SalesReportBean.selectTimePeriod}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Fecha desde:" id="fechaOT"
+					rendered="#{SalesReportBean.showDate}" />
+				<p:calendar id="selectDate" value="#{SalesReportBean.date}"
+					pattern="dd/MM/yyyy" effect="slideDown"
+					rendered="#{SalesReportBean.showDate}">
+				</p:calendar>
+
+				<p:outputLabel value="Fecha hasta:" id="fechaHastaOT"
+					rendered="#{SalesReportBean.showDateTo}" />
+				<p:calendar id="selectDateTo" value="#{SalesReportBean.dateTo}"
+					pattern="dd/MM/yyyy" effect="slideDown"
+					rendered="#{SalesReportBean.showDateTo}">
+				</p:calendar>
+
+				<p:outputLabel value="Incluir Archivo:" id="showArchive"
+					rendered="#{SalesReportBean.showArch}" />
+				<p:selectBooleanCheckbox value="#{SalesReportBean.includeArchive}"
+					id="archBox" rendered="#{SalesReportBean.showArch}">
+				</p:selectBooleanCheckbox>
+
+			</p:panelGrid>
+		</p:outputPanel>
+
+		<p:messages id="message" showDetail="true" autoUpdate="true"
+			closable="true" />
+
+		<p:outputPanel id="panelButton">
+			<p:commandButton ajax="false"   value="#{msg.reporte}" id="myActionLink3"
+				action="#{SalesReportBean.actionGetReport}"
+				rendered="#{SalesReportBean.showFilters}" update="message"
+				 />
+			<p:commandButton ajax="false"    validateClient="false"  immediate="true" value="#{msg.cancelReport}" id="cancel"
+				action="#{SalesReportBean.actionExit}" process="@none" />
+		</p:outputPanel>
+	</h:form>
+
+
+
+	<ui:include src="/include/IncludeFooter.html"></ui:include>
+
+</body>
+</html>

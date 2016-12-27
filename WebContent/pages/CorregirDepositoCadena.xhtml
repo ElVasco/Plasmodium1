@@ -1,0 +1,179 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:include src="/include/IncludeHeader.xhtml"></ui:include>
+
+<h:head></h:head>
+<body>
+	<ui:include src="/include/HiAndByeTrans.xhtml"></ui:include>
+	<ui:include src="/include/IncludeBanner.html"></ui:include>
+	<ui:include src="/include/IncludeTransMenu.xhtml"></ui:include>
+
+	<h2>Aprobación</h2>
+
+	<h:form id="Busqueda">
+
+		<p:outputPanel id="panel">
+			<p:panelGrid columns="2" border="1" rules="all" id="searchPanel">
+				<f:facet name="header">
+							Datos 
+				</f:facet>
+
+				<p:outputLabel value="Compañía de servicio" id="company" />
+				<p:selectOneMenu id="companyList"
+					value="#{LiquidationBean.selectedCompany}"
+					validator="#{ValidadorBean.validate}">
+					<p:ajax listener="#{LiquidationBean.companyListenerMethod}"
+						update="chain,chainList,usuario,userList,pos,posList" />
+					<f:selectItems value="#{LiquidationBean.companyList}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Cadena comercial" id="chain"
+					rendered="#{LiquidationBean.showChain}" />
+				<p:selectOneMenu id="chainList"
+					rendered="#{LiquidationBean.showChain}"
+					value="#{LiquidationBean.selectedChain}">
+					<f:selectItems value="#{LiquidationBean.chainList}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Banco" id="banco" />
+				<p:selectOneMenu id="bankList"
+					value="#{LiquidationBean.selectedBank}">
+					<f:selectItems value="#{LiquidationBean.bankList}" />
+				</p:selectOneMenu>
+
+
+				<p:outputLabel value="Fecha desde:" id="fechadesde" />
+				<p:calendar id="FechaDesde" value="#{LiquidationBean.dateFrom}"
+					pattern="dd/MM/yyyy" effect="slideDown">
+				</p:calendar>
+
+				<p:outputLabel value="Fecha hasta:" id="fechahasta" />
+				<p:calendar id="FechaHasta" value="#{LiquidationBean.dateTo}"
+					pattern="dd/MM/yyyy" effect="slideDown">
+				</p:calendar>
+
+			</p:panelGrid>
+
+			<p:commandButton ajax="false"   value="#{msg.search}" id="myActionBack"
+				actionListener="#{LiquidationBean.selectedApproveDepositListener}"
+				update="panel,panelApDeposit" />
+
+			<p:commandButton ajax="false"   value="#{msg.cancel}" immediate="true" validateClient="false" id="cancelActionSearch"
+				rendered="#{!LiquidationBean.showBlock}"
+				action="#{LiquidationBean.actionExit}" process="@none" />
+
+			<p:panelGrid columns="2" border="1" rules="all"
+				rendered="#{LiquidationBean.showBlock}" id="panelApDeposit">
+				<p:outputLabel value="Depositos" id="dep" />
+				<p:selectOneMenu id="depositList"
+					value="#{LiquidationBean.selectedDeposit}"
+					validator="#{ValidadorBean.validate}">
+					<p:ajax listener="#{LiquidationBean.companyListenerMethod}"
+						update="chain,chainList,usuario,userList,pos,posList" />
+					<f:selectItems value="#{LiquidationBean.depositList}" />
+				</p:selectOneMenu>
+			</p:panelGrid>
+
+			<p:messages id="message" showDetail="true" closable="true"
+				autoUpdate="true" />
+
+		</p:outputPanel>
+
+	</h:form>
+
+
+	<h:form id="Deposito" rendered="#{LiquidationBean.showEbuys}">
+		<p:outputPanel id="panelDeposit">
+			<p:panelGrid columns="2" border="1" rules="all" id="depositPanel">
+				<f:facet name="header">
+							Datos Generales del Depósito
+						</f:facet>
+				<p:outputLabel value="Banco:" id="banco" />
+				<p:selectOneMenu id="bankList"
+					value="#{LiquidationBean.selectedBank}"
+					validator="#{ValidadorBean.validate}" required="true">
+					<f:selectItems value="#{LiquidationBean.bankList}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Fecha:" id="fecha" />
+				<p:calendar id="Fecha" value="#{LiquidationBean.date}"
+					pattern="dd/MM/yyyy" effect="slideDown">
+				</p:calendar>
+
+				<p:outputLabel value="Monto:" id="monto" />
+				<p:inputText value="#{LiquidationBean.amount}" id="Monto" size="40"
+					required="true" maxlength="10" disabled="true"
+					validator="#{ValidadorBean.validate}" />
+
+				<p:outputLabel value="Ráfaga Bancaria:" id="rafaga" />
+				<p:inputText value="#{LiquidationBean.controlNum}" id="Rafaga"
+					required="true" maxlength="16" size="40"
+					validator="#{ValidadorBean.validate}" />
+			</p:panelGrid>
+		</p:outputPanel>
+
+		<p:outputPanel id="panelDepositAux">
+			<p:panelGrid columns="2" border="1" rules="all"
+				id="depositoAuxiliarPanel"
+				rendered="#{LiquidationBean.showDepositAux}">
+				<f:facet name="header">
+							Datos Generales del Depósito de Ajuste
+						</f:facet>
+
+				<p:outputLabel value="Banco:" id="bancoAux" />
+				<p:selectOneMenu id="bankAuxList"
+					value="#{LiquidationBean.selectedBankAux}" required="true"
+					validator="#{ValidadorBean.validate}">
+					<f:selectItems value="#{LiquidationBean.bankList}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Fecha:" id="fechaAux" />
+				<p:calendar id="FechaAjuste" value="#{LiquidationBean.dateAux}"
+					pattern="dd/MM/yyyy" effect="slideDown">
+				</p:calendar>
+
+				<p:outputLabel value="Monto:" id="montoAux" />
+				<p:inputText id="MontoDepositoAjuste" disabled="true"
+					value="#{LiquidationBean.amountAux}" maxlength="10" size="40"
+					required="true" validator="#{ValidadorBean.validate}" />
+
+				<p:outputLabel value="Ráfaga Bancaria:" id="rafagaAux" />
+				<p:inputText id="RafagaDepositoAjuste"
+					value="#{LiquidationBean.controlNumAux}" maxlength="16" size="40"
+					required="true" validator="#{ValidadorBean.validate}" />
+
+			</p:panelGrid>
+
+		</p:outputPanel>
+
+		<p:messages id="message1" showDetail="true" closable="true"
+			autoUpdate="true" />
+
+		<p:outputPanel id="panelButton">
+			<p:commandButton ajax="false"   value="#{msg.validar}" id="validateBtn"
+				rendered="#{!LiquidationBean.valid}"
+				actionListener="#{LiquidationBean.validateDeposit}"
+				update="message1,panelButton,panelDepositAux" />
+
+			<p:commandButton ajax="false"   value="#{msg.grabarDeposito}" id="grabarBtnGRE"
+				rendered="#{LiquidationBean.valid}"
+				action="#{LiquidationBean.actionCreateDeposit}" update="message1" />
+
+			<p:commandButton ajax="false"   value="#{msg.cancel}" immediate="true" validateClient="false" id="cancelAction"
+				rendered="#{!LiquidationBean.valid or LiquidationBean.valid}"
+				action="#{LiquidationBean.actionExit}" process="@none" />
+		</p:outputPanel>
+
+	</h:form>
+
+
+
+	<ui:include src="/include/IncludeFooter.html"></ui:include>
+
+</body>
+</html>
+

@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:p="http://primefaces.org/ui">
+<ui:include src="/include/IncludeHeader.xhtml"></ui:include>
+
+<h:head></h:head>
+<body>
+	<ui:include src="/include/HiAndBye.xhtml"></ui:include>
+	<ui:include src="/include/IncludeBanner.html"></ui:include>
+	<ui:include src="/include/IncludeInicioMenu.xhtml"></ui:include>
+
+	<h2></h2>
+	<h:form>
+		<p:dataTable styleClass="dataTables" value="#{UserBean.messages}"
+			var="rows" rendered="#{AuthorizationBean.SESSION_LOG}">
+			<p:column headerText="Historial de Operaciones">
+				<p:outputLabel value="#{rows}" />
+			</p:column>
+		</p:dataTable>
+	</h:form>
+	<p>
+
+		<p:outputLabel
+			value="Estimado Usuario, Usted se encuentra en espera de aprobación."
+			rendered="#{AuthorizationBean.IS_NON_APPROVED_USER}"
+			style="font-weight:bold;color:red;" />
+	</p>
+
+
+	<p:growl id="growl" showDetail="true" sticky="false" life="7000" />
+
+
+	<ui:include src="/include/IncludeFooter.html"></ui:include>
+
+</body>
+</html>

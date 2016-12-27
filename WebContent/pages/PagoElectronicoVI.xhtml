@@ -1,0 +1,115 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:include src="/include/IncludeHeader.xhtml"></ui:include>
+
+<h:head></h:head>
+<body>
+	<ui:include src="/include/HiAndByeTrans.xhtml"></ui:include>
+	<ui:include src="/include/IncludeBanner.html"></ui:include>
+	<ui:include src="/include/IncludeTransMenu.xhtml"></ui:include>
+
+	<h2>Registro de compra electrónica con tarjeta de crédito</h2>
+
+	<h:form id="Credito">
+		<p:panelGrid columns="2" border="1" rules="all" id="creditoPanel">
+			<f:facet name="header">
+						Datos generales de la compra electrónica
+					</f:facet>
+			<p:outputLabel value="Número de Tarjeta:" id="tarjetaOT" />
+			<p:inputText value="#{EPaymentBean.cardNumber}" id="cardEP"
+				onchange="this.form.submit()" size="16" required="true"
+				maxlength="16" converter="MyConverter" immediate="true"
+				validator="#{ValidadorBean.validate}" />
+			<p:outputLabel value="Código de Seguridad:" id="seguridadOT" />
+			<p:inputText value="#{EPaymentBean.securityCode}" id="securityCode"
+				onchange="this.form.submit()" size="4" required="true" maxlength="4"
+				converter="MyConverter" immediate="true"
+				validator="#{ValidadorBean.validate}" />
+			<p:outputLabel value="Fecha de Vencimiento:" id="fechaOT" />
+			<p:inputText value="#{EPaymentBean.validThruDate}" id="validThru"
+				onchange="this.form.submit()" size="4" required="true" maxlength="4"
+				converter="MyConverter" immediate="true"
+				validator="#{ValidadorBean.validate}" />
+			<p:outputLabel value="Nombre Tarjetahabiente:" id="nombreOT" />
+			<p:inputText value="#{EPaymentBean.cardholderName}"
+				id="cardHolderName" onchange="this.form.submit()" size="40"
+				required="true" maxlength="20" converter="MyConverter"
+				immediate="true" validator="#{ValidadorBean.validate}" />
+			<p:outputLabel value="Número de Identificación Tarjetahabiente:"
+				id="idOT" />
+			<p:inputText value="#{EPaymentBean.cardholderId}" id="cardHolderId"
+				onchange="this.form.submit()" size="40" required="true"
+				maxlength="20" converter="MyConverter" immediate="true"
+				validator="#{ValidadorBean.validate}" />
+			<p:outputLabel value="Monto:" id="montoOT" />
+			<p:inputText value="#{EPaymentBean.amount}" id="amount"
+				onchange="this.form.submit()" size="40" required="true"
+				maxlength="12" converter="MyConverter" immediate="true"
+				validator="#{ValidadorBean.validate}"
+				rendered="#{!DepositBean.showBlock}" />
+		</p:panelGrid>
+
+		<p>
+			<p:message showSummary="true" showDetail="false"
+				errorClass="message-e" id="cardMessage" for="cardEP"
+				style="color:red;font-style: oblique;text-decoration: overline;font-family: 'New Century Shoolbook',serif;" />
+		</p>
+		<p>
+			<p:message showSummary="true" showDetail="false"
+				errorClass="message-e" id="securityCodeMessage" for="securityCode"
+				style="color:red;font-style: oblique;text-decoration: overline;font-family: 'New Century Shoolbook',serif;" />
+		</p>
+		<p>
+			<p:message showSummary="true" showDetail="false"
+				errorClass="message-e" id="validThruMessage" for="validThru"
+				style="color:red;font-style: oblique;text-decoration: overline;font-family: 'New Century Shoolbook',serif;" />
+		</p>
+		<p>
+			<p:message showSummary="true" showDetail="false"
+				errorClass="message-e" id="cardHolderNameMessage"
+				for="cardHolderName"
+				style="color:red;font-style: oblique;text-decoration: overline;font-family: 'New Century Shoolbook',serif;" />
+		</p>
+		<p>
+			<p:message showSummary="true" showDetail="false"
+				errorClass="message-e" id="cardHolderIdMessage" for="cardHolderId"
+				style="color:red;font-style: oblique;text-decoration: overline;font-family: 'New Century Shoolbook',serif;" />
+		</p>
+		<p>
+			<p:message showSummary="true" showDetail="false"
+				errorClass="message-e" id="amountMessage" for="amount"
+				style="color:red;font-style: oblique;text-decoration: overline;font-family: 'New Century Shoolbook',serif;" />
+		</p>
+
+		<p:panelGrid columns="1" border="1" rules="all"
+			title="Recibo de Compra Electronica" id="reciboPanel" style=""
+			rendered="#{EPaymentBean.success}">
+			<f:facet name="header">
+				<p:outputLabel value="Detalle del Recibo" id="reciboDatos" />
+			</f:facet>
+			<p>
+				<p:outputLabel value="#{EPaymentBean.receipt}" id="reciboOT"
+					rendered="#{EPaymentBean.success}" />
+			</p>
+		</p:panelGrid>
+
+		<p:commandButton ajax="false"   value="#{msg.ePayment}"
+			action="#{EPaymentBean.actionCreateEPayment}" immediate="true"
+			rendered="#{!EPaymentBean.success}" />
+		<p:commandButton ajax="false"   value="#{msg.end}" action="#{EPaymentBean.actionEnd}"
+			immediate="true" rendered="#{EPaymentBean.success}" />
+		<p:commandButton ajax="false"   value="#{msg.cancel}"
+			action="#{EPaymentBean.actionExit}" immediate="true"
+			rendered="#{!EPaymentBean.success}" />
+
+
+	</h:form>
+
+	<ui:include src="/include/IncludeFooter.html"></ui:include>
+
+</body>
+</html>

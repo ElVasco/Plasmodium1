@@ -1,0 +1,137 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:include src="/include/IncludeHeader.xhtml"></ui:include>
+
+<h:head></h:head>
+<body>
+	<ui:include src="/include/HiAndByeTrans.xhtml"></ui:include>
+	<ui:include src="/include/IncludeBanner.html"></ui:include>
+	<ui:include src="/include/IncludeTransMenu.xhtml"></ui:include>
+
+	<h2>Reporte de inventario</h2>
+
+
+	<h:form id="reportForm">
+		<p:panelGrid border="0" columns="2">
+			<p:outputLabel> Reporte de inventarios</p:outputLabel>
+			<p:selectOneMenu id="reportType"
+				value="#{StockReportBean.selectedReport}">
+				<p:ajax listener="#{StockReportBean.reportListener}"
+					update="filtrosPanel,panelButton" />
+				<f:selectItems value="#{StockReportBean.reportList}" />
+			</p:selectOneMenu>
+		</p:panelGrid>
+
+		<p:outputPanel id="filtrosPanel">
+			<p:panelGrid columns="2" border="1" rules="all"
+				rendered="#{StockReportBean.showFilters}">
+				<f:facet name="header">
+							Opciones de inventario
+						</f:facet>
+
+				<p:outputLabel value="Zona:" id="distOT"
+					rendered="#{StockReportBean.showDistributer}" />
+				<p:selectOneMenu value="#{StockReportBean.selectedDistributer}"
+					id="distList" rendered="#{StockReportBean.showDistributer}">
+					<p:ajax listener="#{StockReportBean.distributerListenerMethod}"
+						update="rutaList" />
+					<f:selectItems value="#{StockReportBean.selectDistributer}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Ruta:" id="rutaOT"
+					rendered="#{StockReportBean.showRoute}" />
+				<p:selectOneMenu value="#{StockReportBean.selectedRoute}"
+					id="rutaList" rendered="#{StockReportBean.showRoute}">
+					<p:ajax update="denominacionList" />
+					<f:selectItems value="#{StockReportBean.selectRoute}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Denominación:" id="denominacionOT"
+					rendered="#{StockReportBean.showDenom}" />
+				<p:selectOneMenu id="denominacionList"
+					value="#{StockReportBean.selectedDenom}"
+					rendered="#{StockReportBean.showDenom}">
+					<p:ajax update="statusList" />
+					<f:selectItems value="#{StockReportBean.selectDenom}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Estatus:" id="statusOT"
+					rendered="#{StockReportBean.showStatus}" />
+				<p:selectOneMenu id="statusList"
+					value="#{StockReportBean.selectedActive}"
+					rendered="#{StockReportBean.showStatus}">
+					<f:selectItems value="#{StockReportBean.selectActive}" />
+					<p:ajax listener="#{StockReportBean.statusInvListenerMethod}"
+						update="filtrosPanel" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Estatus:" id="statusInvOT"
+					rendered="#{StockReportBean.showStatusInv}" />
+				<p:selectOneMenu id="statusInvList"
+					value="#{StockReportBean.selectedStatusInv}"
+					rendered="#{StockReportBean.showStatusInv}">
+					<f:selectItems value="#{StockReportBean.selectStatusInv}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Cluster:" id="clusterOT"
+					rendered="#{StockReportBean.showCluster}" />
+				<p:selectOneMenu id="clusterList"
+					value="#{StockReportBean.selectedCluster}"
+					rendered="#{StockReportBean.showCluster}">
+					<f:selectItems value="#{StockReportBean.selectCluster}" />
+					<p:ajax listener="#{StockReportBean.clusterListenerMethod}"
+						update="filtrosPanel" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Cluster:" id="clusterInvOT"
+					rendered="#{StockReportBean.showClusterInv}" />
+				<p:selectOneMenu id="clusterInvList"
+					value="#{StockReportBean.selectedClusterInv}"
+					rendered="#{StockReportBean.showClusterInv}">
+					<f:selectItems value="#{StockReportBean.selectClusterInv}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Consecutivo Desde:" id="consecutivoFrom"
+					rendered="#{StockReportBean.showConsecutive}" />
+				<p:inputText id="consecutivoList"
+					value="#{StockReportBean.selectedConsecutiveFrom}"
+					rendered="#{StockReportBean.showConsecutive}" required="true" />
+
+				<p:outputLabel value="Consecutivo Hasta:" id="consecutivoTo"
+					rendered="#{StockReportBean.showConsecutive}" />
+				<p:inputText id="consecutivoListTo"
+					rendered="#{StockReportBean.showConsecutive}"
+					value="#{StockReportBean.selectedConsecutiveTo}" />
+
+				<p:outputLabel value="Incluir Archivo:" id="showArchive"
+					rendered="#{StockReportBean.showArch}" />
+				<p:selectBooleanCheckbox value="#{StockReportBean.includeArchive}"
+					id="archBox" rendered="#{StockReportBean.showArch}" />
+
+			</p:panelGrid>
+		</p:outputPanel>
+
+		<p:messages id="message" showDetail="true" autoUpdate="true"
+			closable="true" />
+
+		<p:outputPanel id="panelButton">
+			<p:commandButton ajax="false" value="#{msg.reporte}"
+				id="myActionLink3" action="#{StockReportBean.actionGetReport}"
+				rendered="#{StockReportBean.showFilters}" udpate="message" />
+
+			<p:commandButton ajax="false" validateClient="false" immediate="true"
+				value="#{msg.cancelReport}" id="cancel"
+				action="#{StockReportBean.actionExit}" process="@none" />
+		</p:outputPanel>
+
+	</h:form>
+
+
+	<ui:include src="/include/IncludeFooter.html"></ui:include>
+
+</body>
+</html>

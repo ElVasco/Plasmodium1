@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:include src="/include/IncludeHeader.xhtml"></ui:include>
+
+<h:head></h:head>
+<body>
+	<ui:include src="/include/HiAndByeTrans.xhtml"></ui:include>
+	<ui:include src="/include/IncludeBanner.html"></ui:include>
+	<ui:include src="/include/IncludeTransMenu.xhtml"></ui:include>
+
+	<h2>Creación de Depósitos</h2>
+
+	<h:form id="Deposito">
+		<p:outputPanel id="panel1">
+			<p:panelGrid columns="2" border="1" rules="all" id="clientPanel">
+				<f:facet name="header">
+							Datos generales del depósito
+						</f:facet>
+
+				<p:outputLabel value="Distribuidor:" id="rutaOT" />
+				<p:selectOneMenu value="#{DepositBean.selectedDistributer}"
+					id="Distribuidor_Lista">
+					<p:ajax listener="#{DepositBean.DepositListener2Method}"
+						update="panel2" />
+					<f:selectItems value="#{DepositBean.selectDistributer}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Tipo de Deposito:" id="apDepositOT" />
+				<p:selectOneMenu value="#{DepositBean.selectedApDeposit}"
+					id="apDepositList">
+					<p:ajax listener="#{DepositBean.DepositListenerMethodList}"
+						update="panelButton,panel2" />
+					<f:selectItems value="#{DepositBean.selectApDeposit}" />
+				</p:selectOneMenu>
+			</p:panelGrid>
+		</p:outputPanel>
+
+		<p:outputPanel id="panel2">
+			<p:panelGrid columns="1" rules="all" id="depositosApPanel"
+				rendered="#{DepositBean.showBlock}">
+				<f:facet name="header">
+					<p:outputLabel value="Panel de Aprobacion de Depósitos"
+						id="depositosAp" />
+				</f:facet>
+				<p:selectManyCheckbox value="#{DepositBean.selectedItems}"
+					layout="pageDirection">
+					<f:selectItems value="#{DepositBean.billList}" />
+				</p:selectManyCheckbox>
+			</p:panelGrid>
+		</p:outputPanel>
+
+		<p:outputPanel id="panelButton">
+			<p:commandButton ajax="false"   value="#{msg.aproval}"
+				action="#{DepositBean.actionList}"
+				rendered="#{!DepositBean.conciliate and DepositBean.showBlock}" />
+
+			<p:commandButton ajax="false"   value="#{msg.noaproval}"
+				action="#{DepositBean.actionList}"
+				rendered="#{DepositBean.conciliate and DepositBean.showBlock}" />
+		</p:outputPanel>
+
+		<p:commandButton ajax="false"   value="#{msg.cancel}" immediate="true" validateClient="false" id="myActionLink5"
+			action="#{DepositBean.actionExit}" process="@none" />
+
+
+	</h:form>
+
+	<ui:include src="/include/IncludeFooter.html"></ui:include>
+
+</body>
+</html>

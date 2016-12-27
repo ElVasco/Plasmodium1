@@ -1,0 +1,145 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:include src="/include/IncludeHeader.xhtml"></ui:include>
+
+<h:head></h:head>
+<body>
+	<ui:include src="/include/HiAndByeTrans.xhtml"></ui:include>
+	<ui:include src="/include/IncludeBanner.html"></ui:include>
+	<ui:include src="/include/IncludeTransMenu.xhtml"></ui:include>
+
+
+	<h2>Editor de Puntos de Ventas</h2>
+
+	<h:form id="EposId">
+
+		<p:panelGrid columns="2" id="tarjetasPanel">
+			<f:facet name="header">
+						Panel de edición de Puntos de Venta
+					</f:facet>
+
+			<p:outputLabel value="Usuario:" id="userList" />
+			<p:selectOneMenu value="#{EposBean.selectedUser}" id="selectUser"
+				disabled="#{EposBean.showCreate or (AuthorizationBean.IS_UPDATE_POS_WEB and EposBean.showModify)}">
+				<p:ajax listener="#{EposBean.userListenerMethod}"
+					update="selectEpos" />
+				<f:selectItems value="#{EposBean.selectUser}" />
+				<f:selectItem itemValue="9999" itemLabel="Seleccione un Usuario" />
+			</p:selectOneMenu>
+
+			<p:outputLabel value="Estado de los Puntos de Venta:" id="posStatusList" />
+			<p:selectOneMenu value="#{EposBean.selectedStatus}" id="selectEposStatus"
+				disabled="#{EposBean.showCreate or (AuthorizationBean.IS_UPDATE_POS_WEB and EposBean.showModify)}">
+				<p:ajax listener="#{EposBean.eposStatusListenerMethod}"
+					update="selectEpos" />
+				<f:selectItems value="#{EposBean.selectStatus}" />
+			</p:selectOneMenu>
+			
+			<p:outputLabel value="Puntos de Venta del Usuario:" id="userPos" />
+			<p:selectOneMenu value="#{EposBean.selectedEpos}" id="selectEpos"
+				disabled="#{EposBean.showCreate or (AuthorizationBean.IS_UPDATE_POS_WEB and EposBean.showModify)}">
+				<p:ajax listener="#{EposBean.eposListenerMethod}"
+					update="detailPanel,buttonPanel,tarjetasPanel" />
+				<f:selectItems value="#{EposBean.selectEpos}" />
+			</p:selectOneMenu>
+		</p:panelGrid>
+
+		<p:outputPanel id="detailPanel">
+
+			<p:panelGrid columns="2" id="detalleepos"
+				rendered="#{EposBean.showDetail}">
+
+				<p:outputLabel value="Codigo:" id="Codigo" />
+				<p:inputText value="#{EposBean.eposCodigo}" id="codigopos"
+					required="true" validator="#{ValidadorBean.validate}"
+					readonly="#{!AuthorizationBean.IS_CREATE_POS_WEB or !EposBean.showCreate}" />
+
+				<p:outputLabel value="Descripción:" id="Descripcion" />
+				<p:inputText value="#{EposBean.eposDescription}"
+					id="eposDescription" validator="#{ValidadorBean.validate}"
+					size="60"
+					readonly="#{!(EposBean.showCreate or EposBean.showModify)}" />
+
+				<p:outputLabel value="Segmento:" id="Industria" />
+				<p:selectOneMenu value="#{EposBean.selectedIndustry}"
+					id="selectindustry" validator="#{ValidadorBean.validate}"
+					required="true" disabled="#{!(EposBean.showCreate or EposBean.showModify)}">
+					<f:selectItem itemLabel="Seleccione un tipo de Industria"
+						itemValue="9999" />
+					<f:selectItems value="#{EposBean.selectIndustry}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Estado:" id="Estado" />
+				<p:selectOneMenu value="#{EposBean.selectedState}" id="selectState"
+					validator="#{ValidadorBean.validate}" required="true" 
+					disabled="#{!(EposBean.showCreate or EposBean.showModify)}">
+					<p:ajax listener="#{EposBean.stateListenerMethod}"
+						update="selectMunicipality,selectCity" />
+					<f:selectItem itemLabel="Seleccione un Estado" itemValue="9999" />
+					<f:selectItems value="#{EposBean.selectState}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Municipio:" id="Municipio" />
+				<p:selectOneMenu value="#{EposBean.selectedMunicipality}"
+					id="selectMunicipality" validator="#{ValidadorBean.validate}"
+					required="true" disabled="#{!(EposBean.showCreate or EposBean.showModify)}">
+					<p:ajax listener="#{EposBean.municipalityListenerMethod}"
+						update="selectCity" />
+					<f:selectItem itemLabel="Seleccione un Municipio" itemValue="9999" />
+					<f:selectItems value="#{EposBean.selectMunicipality}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Ciudad:" id="Ciudad" />
+				<p:selectOneMenu value="#{EposBean.selectedCity}" id="selectCity"
+					validator="#{ValidadorBean.validate}" required="true"
+					disabled="#{!(EposBean.showCreate or EposBean.showModify)}">
+					<f:selectItem itemLabel="Seleccione una Ciudad" itemValue="9999" />
+					<f:selectItems value="#{EposBean.selectCity}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Punto de Venta Activo:" id="estadoPos" 
+					rendered="#{!(EposBean.showCreate or EposBean.showModify)}" />
+				<p:selectBooleanCheckbox value="#{EposBean.posOperacion}" id="posStatus"
+					disabled="true" rendered="#{!(EposBean.showCreate or EposBean.showModify)}" />
+			
+			</p:panelGrid>
+		</p:outputPanel>
+
+		<p:messages id="error" showDetail="true" autoUpdate="true"
+			closable="true" />
+
+		<p:outputPanel id="buttonPanel">
+
+			<p:commandButton ajax="false"   value="#{msg.grabar}" id="buttonAdd"
+				action="#{EposBean.actionAddEpos}"
+				rendered="#{EposBean.showCreate and AuthorizationBean.IS_CREATE_POS_WEB}"
+				update="error,detailPanel">
+			</p:commandButton>
+
+			<p:commandButton ajax="false"   value="#{msg.change}" id="buttonChange"
+				action="#{EposBean.actionChangeEpos}"
+				rendered="#{EposBean.showDetail and AuthorizationBean.IS_UPDATE_POS_WEB and !EposBean.showCreate}"
+				update="error,detailPanel,tarjetasPanel,buttonPanel">
+			</p:commandButton>
+
+			<p:commandButton ajax="false"   value="#{EposBean.message}" id="buttonDelete"
+				action="#{EposBean.actionDeleteEpos}"
+				rendered="#{EposBean.showDelete and AuthorizationBean.IS_DELETE_POS_WEB and !EposBean.showModify}"
+				update="error,detailPanel">
+			</p:commandButton>
+
+			<p:commandButton ajax="false"   value="#{msg.cancel}" immediate="true" validateClient="false" id="cancel"
+				action="#{EposBean.actionExit}" process="@none">
+			</p:commandButton>
+		</p:outputPanel>
+
+	</h:form>
+
+	<ui:include src="/include/IncludeFooter.html"></ui:include>
+
+</body>
+</html>

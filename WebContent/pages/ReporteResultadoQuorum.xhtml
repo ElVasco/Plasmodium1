@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:include src="/include/IncludeHeader.xhtml"></ui:include>
+
+<h:head></h:head>
+<body>
+
+	<!-- Esta parte es delicada la lista se llena en un bean "UserBean" pero se selecciona con otro "AsignarDistribuidor1Bean" -->
+	<ui:include src="/include/HiAndByeTrans.xhtml"></ui:include>
+	<ui:include src="/include/IncludeBanner.html"></ui:include>
+	<ui:include src="/include/IncludeTransMenu.xhtml"></ui:include>
+
+	<h2>Resultado de Reporte</h2>
+
+	<h:form id="ReporteResultadoQuorumForm">
+		<p:commandButton ajax="false"   value="#{msg.exitReport}" id="cancel"
+			action="#{ReportBeanQuorum.actionExit}" immediate="true" />
+		<p:panelGrid border="1" columns="1">
+			<f:facet name="header">
+				<p:outputLabel
+					value="#{ReportBeanQuorum.title} #{ReportBeanQuorum.rangoFechasStr}"
+					escape="false" />
+			</f:facet>
+			<p:commandLink value="#{msg.print}" target="_blank"
+				action="#{ReportBeanQuorum.actionPrintVersion}"
+				rendered="#{ReportBeanQuorum.showPrintVersion}" />
+			<p:dataTable styleClass="dataTables"
+				value="#{ReportBeanQuorum.resultList.fields}" var="rows"
+				columnClasses="t-number,t-number,t-number,t-number,t-number,t-number,t-number,t-number,t-number,t-number"
+				rowClasses="t-graybg,t-whitebg" headerClass="t-header">
+				<p:column rendered="#{ReportBeanQuorum.label1b}">
+					<f:facet name="header">
+						<p:outputLabel value="#{ReportBeanQuorum.label1}" />
+					</f:facet>
+					<p:outputLabel value="#{rows.field1}" />
+				</p:column>
+				<p:column rendered="#{ReportBeanQuorum.label2b}">
+					<f:facet name="header">
+						<p:outputLabel value="#{ReportBeanQuorum.label2}" />
+					</f:facet>
+					<p:outputLabel value="#{rows.field2}" />
+				</p:column>
+				<p:column rendered="#{ReportBeanQuorum.label3b}">
+					<f:facet name="header">
+						<p:outputLabel value="#{ReportBeanQuorum.label3}" />
+					</f:facet>
+					<p:outputLabel value="#{rows.field3}" />
+				</p:column>
+				<p:column rendered="#{ReportBeanQuorum.label4b}">
+					<f:facet name="header">
+						<p:outputLabel value="#{ReportBeanQuorum.label4}" />
+					</f:facet>
+					<p:outputLabel value="#{rows.field4}" />
+				</p:column>
+				<p:column rendered="#{ReportBeanQuorum.label5b}">
+					<f:facet name="header">
+						<p:outputLabel value="#{ReportBeanQuorum.label5}" />
+					</f:facet>
+					<p:outputLabel value="#{rows.field5}" />
+				</p:column>
+				<p:column rendered="#{ReportBeanQuorum.label6b}">
+					<f:facet name="header">
+						<p:outputLabel value="#{ReportBeanQuorum.label6}" />
+					</f:facet>
+					<p:outputLabel value="#{rows.field6}" />
+				</p:column>
+				<p:column rendered="#{ReportBeanQuorum.label7b}">
+					<f:facet name="header">
+						<p:outputLabel value="#{ReportBeanQuorum.label7}" />
+					</f:facet>
+					<p:outputLabel value="#{rows.field7}" />
+				</p:column>
+				<p:column rendered="#{ReportBeanQuorum.label8b}">
+					<f:facet name="header">
+						<p:outputLabel value="#{ReportBeanQuorum.label8}" />
+					</f:facet>
+					<p:outputLabel value="#{rows.field8}" />
+				</p:column>
+				<p:column rendered="#{ReportBeanQuorum.label9b}">
+					<f:facet name="header">
+						<p:outputLabel value="#{ReportBeanQuorum.label9}" />
+					</f:facet>
+					<p:outputLabel value="#{rows.field9}" />
+				</p:column>
+				<p:column rendered="#{ReportBeanQuorum.label10b}">
+					<f:facet name="header">
+						<p:outputLabel value="#{ReportBeanQuorum.label10}" />
+					</f:facet>
+					<p:outputLabel value="#{rows.field10}" />
+				</p:column>
+			</p:dataTable>
+		</p:panelGrid>
+		<p>
+			<p:outputLabel value="#{ReportBeanQuorum.message}"
+				id="messageNoPromOT" rendered="#{ReportBeanQuorum.message!=null }"
+				style="font-weight:bold;color:red;" />
+		</p>
+		<br></br>
+		<p:commandButton ajax="false"   value="#{msg.exitReport}" id="cancelBottom"
+			action="#{ReportBeanQuorum.actionExit}" immediate="true" />
+	</h:form>
+
+	<ui:include src="/include/IncludeFooter.html"></ui:include>
+
+</body>
+</html>

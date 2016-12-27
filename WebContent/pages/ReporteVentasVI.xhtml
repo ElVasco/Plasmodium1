@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:include src="/include/IncludeHeader.xhtml"></ui:include>
+
+<h:head></h:head>
+<body>
+	<ui:include src="/include/HiAndByeTrans.xhtml"></ui:include>
+	<ui:include src="/include/IncludeBanner.html"></ui:include>
+	<ui:include src="/include/IncludeTransMenu.xhtml"></ui:include>
+
+	<h2>Reporte de ventas</h2>
+
+
+	<h:form id="reportForm">
+
+		<p:panelGrid border="0" columns="2">
+			<p:outputLabel> Reportes de ventas</p:outputLabel>
+			<p:selectOneMenu id="reportType"
+				value="#{SalesVIReportBean.selectedReport}">
+				<p:ajax listener="#{SalesVIReportBean.reportListener}"
+					update="filtrosPanel,panelButton" />
+				<f:selectItems value="#{SalesVIReportBean.reportList}" />
+			</p:selectOneMenu>
+		</p:panelGrid>
+		
+		<p:outputPanel id="filtrosPanel">
+			<p:panelGrid columns="2" border="1" rules="all" rendered="#{SalesVIReportBean.showFilters}">
+				<f:facet name="header">
+					Opciones de selección
+				</f:facet>
+				<p:outputLabel value="Servicio:" id="Segmento_Nuevo"
+					rendered="#{SalesVIReportBean.showServiceCompany}" />
+				<p:selectOneMenu value="#{SalesVIReportBean.selectedServiceCompany}"
+					id="selectIndustryNew" validator="#{ValidadorBean.validate}"
+					rendered="#{SalesVIReportBean.showServiceCompany}">
+					<f:selectItem itemValue="999" itemLabel="Todos los servicios" />
+					<f:selectItems value="#{SalesVIReportBean.selectServicesCompany}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Usuario:" id="vendedor"
+					rendered="#{SalesVIReportBean.showSeller}" />
+				<p:selectOneMenu value="#{SalesVIReportBean.selectedSeller}"
+					id="selectSeller" required="true"
+					validator="#{ValidadorBean.validate}"
+					rendered="#{SalesVIReportBean.showSeller}">
+					<p:ajax listener="#{SalesVIReportBean.selectPosListenerMethod}"
+						update="selectPos" />
+					<f:selectItem itemValue="999" itemLabel="Todos los usuarios" />
+					<f:selectItems value="#{SalesVIReportBean.selectSeller}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Pos:" id="vendedorPos"
+					rendered="#{SalesVIReportBean.showPos}" />
+				<p:selectOneMenu value="#{SalesVIReportBean.selectedPos}"
+					id="selectPos" required="true"
+					validator="#{ValidadorBean.validate}"
+					rendered="#{SalesVIReportBean.showPos}">
+					<f:selectItem itemValue="999" itemLabel="Todos los Pos" />
+					<f:selectItems value="#{SalesVIReportBean.selectPos}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Fecha desde:" id="fechaOC"
+					rendered="#{SalesVIReportBean.showDate}" />
+				<p:calendar id="selectDates" value="#{SalesVIReportBean.date}"
+					pattern="dd/MM/yyyy" effect="slideDown"
+					rendered="#{SalesVIReportBean.showDate}">
+				</p:calendar>
+
+				<p:outputLabel value="Fecha hasta:" id="fechaOT"
+					rendered="#{SalesVIReportBean.showDateTo}" />
+				<p:calendar id="selectDate" value="#{SalesVIReportBean.dateTo}"
+					pattern="dd/MM/yyyy" effect="slideDown"
+					rendered="#{SalesVIReportBean.showDateTo}">
+				</p:calendar>
+
+			</p:panelGrid>
+		</p:outputPanel>
+
+		<p:messages id="message" showDetail="true" autoUpdate="true"
+			closable="true" />
+
+		<p:outputPanel id="panelButton">
+			<p:commandButton ajax="false"   value="#{msg.reporte}" id="myActionLink3"
+				action="#{SalesVIReportBean.actionGetReport}" update="message"
+				rendered="#{SalesVIReportBean.showFilters}"
+				 />
+
+			<p:commandButton ajax="false"    validateClient="false"  immediate="true" value="#{msg.cancelReport}" id="cancel"
+				action="#{SalesVIReportBean.actionExit}" process="@none" />
+		</p:outputPanel>
+	</h:form>
+
+	<ui:include src="/include/IncludeFooter.html"></ui:include>
+
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:include src="/include/IncludeHeader.xhtml"></ui:include>
+
+<h:head></h:head>
+<body>
+	<ui:include src="/include/HiAndByeTrans.xhtml"></ui:include>
+	<ui:include src="/include/IncludeBanner.html"></ui:include>
+	<ui:include src="/include/IncludeTransMenu.xhtml"></ui:include>
+
+	<h2>Reporte de resumen de actividad de cierre de zona</h2>
+
+
+	<h:form id="reportForm">
+
+		<p:panelGrid columns="2" border="1" rules="all" id="panel2"
+			rendered="#{AuthorizationBean.PRECLOSING_REPORT_ZONE_GRE}">
+			<f:facet name="header">
+						Opciones del reporte
+					</f:facet>
+			<p:outputLabel>Compañia de Servicio:</p:outputLabel>
+			<p:selectOneMenu id="serviceCompany"
+				value="#{VIZonePreClosureReportBean.selectedServiceCompany}">
+				<f:selectItems
+					value="#{VIZonePreClosureReportBean.selectServiceCompany}" />
+			</p:selectOneMenu>
+			<p:outputLabel value="Fecha:" id="fechaT" />
+			<p:calendar id="selectDateGRE"
+				value="#{VIZonePreClosureReportBean.date}" pattern="dd/MM/yyyy"
+				effect="slideDown" required="true"
+				validator="#{ValidadorBean.validate}">
+			</p:calendar>
+		</p:panelGrid>
+
+		<p:outputPanel
+			rendered="#{AuthorizationBean.PRECLOSING_REPORT_ZONE_GRE}">
+			<p:commandButton ajax="false"   value="#{msg.reportePreCierre}" id="myActionLink3"
+				action="#{VIZonePreClosureReportBean.actionGetReport}" />
+			<p:commandButton ajax="false"   value="#{msg.cancel}" immediate="true" validateClient="false" id="cancel"
+				action="#{VIZonePreClosureReportBean.actionExit}" process="@none" />
+		</p:outputPanel>
+
+		<p:messages id="error" showDetail="true" autoUpdate="true"
+			closable="true" />
+
+	</h:form>
+
+
+	<ui:include src="/include/IncludeFooter.html"></ui:include>
+
+</body>
+</html>

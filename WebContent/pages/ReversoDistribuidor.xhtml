@@ -1,0 +1,157 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:include src="/include/IncludeHeader.xhtml"></ui:include>
+
+<h:head></h:head>
+<body>
+	<ui:include src="/include/HiAndByeTrans.xhtml"></ui:include>
+	<ui:include src="/include/IncludeBanner.html"></ui:include>
+	<ui:include src="/include/IncludeTransMenu.xhtml"></ui:include>
+
+	<h2>Reverso de tarjetas a zona</h2>
+
+
+	<h:form id="ReversoDistribuidorForm">
+		<p:panelGrid border="1" columns="2" id="PanelZoneSelect">
+			<f:facet name="header">
+				<p:outputLabel value="Seleccion de Zona" />
+			</f:facet>
+			<p:outputLabel value="Zona:" id="distribuidorOT" />
+			<p:selectOneMenu id="distribuidorList" disabled="#{ReversoDistribuidorBean.disponibleListDistribuidor!=null}"
+				value="#{ReversoDistribuidorBean.selectedDistributer}"
+				converter="MyConverter" required="true">
+				<p:ajax listener="#{ReversoDistribuidorBean.denomListenerMethod}" resetValues="true"
+					update="panel,panelZone,panelB,error" process="distribuidorList" />
+				<f:selectItems value="#{GlobalData.selectDistribuidores}" />
+			</p:selectOneMenu>
+			<p:outputLabel value="Denominación:" id="denominacionOT" />
+			<p:selectOneMenu value="#{ReversoDistribuidorBean.selectedDenom}" disabled="#{ReversoDistribuidorBean.disponibleListDistribuidor!=null}"
+				id="denominacionList" converter="MyConverter">
+				<p:ajax listener="#{ReversoDistribuidorBean.denomListenerMethod}" resetValues="true"
+					update="panel,PanelZoneSelect,panelZone,panelB,error" />
+				<f:selectItems value="#{GlobalData.selectPacking}" />
+			</p:selectOneMenu>
+		</p:panelGrid>
+
+		<p:outputPanel id="panelZone">
+			<p:dataTable styleClass="dataTables"
+				value="#{ReversoDistribuidorBean.disponibleList}" var="loc"
+				rendered="#{ReversoDistribuidorBean.disponibleList!=null}">
+				<f:facet name="header">
+					<p:outputLabel value="Inventario actual Distribuidor" />
+				</f:facet>
+
+				<p:column>
+					<f:facet name="header">
+						<p:outputLabel value="Denominación" />
+					</f:facet>
+					<p:outputLabel value="#{loc.value}" converter="AmountConverter" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<p:outputLabel value="Facial" />
+					</f:facet>
+					<p:outputLabel value="#{loc.facing}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<p:outputLabel value="Cant. Tarjetas" />
+					</f:facet>
+					<p:outputLabel value="#{loc.cantidad}" converter="AmountConverter" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">
+						<p:outputLabel value="Total en Bs." />
+					</f:facet>
+					<p:outputLabel value="#{loc.monto}" converter="AmountConverter" />
+				</p:column>
+
+			</p:dataTable>
+
+
+			<p:dataTable styleClass="dataTables"
+				value="#{ReversoDistribuidorBean.disponibleListDistribuidor}"
+				var="loc"
+				rendered="#{ReversoDistribuidorBean.disponibleListDistribuidor!=null}">
+				<f:facet name="header">
+					<p:outputLabel value="Inventario actual Zona" />
+				</f:facet>
+
+				<p:column>
+					<f:facet name="header">
+						<p:outputLabel value="Denominación" />
+					</f:facet>
+					<p:outputLabel value="#{loc.value}" converter="AmountConverter" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<p:outputLabel value="Facial" />
+					</f:facet>
+					<p:outputLabel value="#{loc.facing}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<p:outputLabel value="Cant. Tarjetas" />
+					</f:facet>
+					<p:outputLabel value="#{loc.cantidad}" converter="AmountConverter" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">
+						<p:outputLabel value="Total en Bs." />
+					</f:facet>
+					<p:outputLabel value="#{loc.monto}" converter="AmountConverter" />
+				</p:column>
+
+			</p:dataTable>
+		</p:outputPanel>
+
+		<p:outputPanel id="panel">
+			<p:panelGrid columns="6" border="1" rules="all" id="tarjetasPanel"
+				rendered="#{ReversoDistribuidorBean.disponibleListDistribuidor!=null}">
+				<f:facet name="header">
+					Panel de reverso de tarjetas a zona
+				</f:facet>
+				<p:outputLabel value="Desde:" id="desdeOT" />
+				<p:inputText value="#{ReversoDistribuidorBean.fromCardT}"
+					id="desdecard" maxlength="8" size="8" converter="MyConverter"
+					validator="#{ValidadorBean.validate}" required="true" />
+				<p:outputLabel value="Hasta:" id="hastaT" />
+				<p:inputText value="#{ReversoDistribuidorBean.toCardT}"
+					id="hastacard" maxlength="8" size="8" converter="MyConverter"
+					validator="#{ValidadorBean.validate}" required="true" />
+				<p:outputLabel value="Total:" id="totalOT" />
+				<p:inputText value="#{ReversoDistribuidorBean.countCardT}"
+					id="totalcard" maxlength="8" size="8" converter="MyConverter"
+					validator="#{ValidadorBean.validate}" required="true" />
+			</p:panelGrid>
+
+		</p:outputPanel>
+
+		<p:messages id="error" showDetail="true" autoUpdate="true"
+			closable="true" />
+
+
+		<p:outputPanel id="panelB">
+			<p:commandButton ajax="false"   value="#{msg.reverso}" id="myActionLink"
+				action="#{ReversoDistribuidorBean.action}"
+				rendered="#{ReversoDistribuidorBean.disponibleListDistribuidor!=null}"
+				update="error" />
+			<p:commandButton ajax="false" value="#{msg.reset}" action="#{ReversoDistribuidorBean.undo}" immediate="true"
+				rendered="#{ReversoDistribuidorBean.disponibleListDistribuidor!=null}" update="panel,PanelZoneSelect,panelZone,panelB,error" />
+			<p:commandButton ajax="false"   value="#{msg.cancel}" immediate="true" validateClient="false" id="myActionLink5"
+				action="#{ReversoDistribuidorBean.actionExit}" process="@none">
+			</p:commandButton>
+		</p:outputPanel>
+	</h:form>
+
+
+	<ui:include src="/include/IncludeFooter.html"></ui:include>
+
+</body>
+</html>

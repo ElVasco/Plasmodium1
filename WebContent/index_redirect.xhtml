@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui"
+    >
+<ui:include src="/include/IncludeHeader.xhtml"></ui:include>
+
+<head>
+<script>
+var time = null;
+function move() {
+	window.location = '../Login.jsp';
+}
+</script>
+</head>
+		<body >
+		<div id="container">
+			<div id="header">
+				<ui:include src="/include/IncludeBanner.html"></ui:include>
+			</div>
+			<div id="content2Colums">
+				<h2>
+					Ingreso al Sistema Control de Gestión de Ventas - v2.0
+				</h2>
+				<div style="message-e">
+					<p>
+						El usuario ha sido registrado satisfactoriamente. Usted será redireccionado a la página principal.<br/>
+						<a href="../Login.jsp">Click aquí</a> si no es redireccionado.
+					</p>
+				
+				</div>
+				
+			</div>
+			<div id="news">
+				<h2>
+					Importante
+				</h2>
+				<p>
+					Sólo personas autorizadas pueden utilizar esta aplicación
+				</p>
+			</div>
+			<ui:include src="/include/IncludeFooter.html"></ui:include>
+		</div>
+		<script>
+			timer=setTimeout('move()',5000);
+		</script>
+	</body>
+</html>

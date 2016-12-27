@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:include src="/include/IncludeHeader.xhtml"></ui:include>
+
+<h:head></h:head>
+<body>
+	<ui:include src="/include/HiAndByeTrans.xhtml"></ui:include>
+	<ui:include src="/include/IncludeBanner.html"></ui:include>
+	<ui:include src="/include/IncludeTransMenu.xhtml"></ui:include>
+
+	<h2>Reportes de transacciones</h2>
+
+
+	<h:form id="reportForm">
+		<!--<<p:panelGrid border="0" columns="2">
+					<p:outputLabel> Reportes de Transacciones</p:outputLabel>
+					<p:selectOneMenu   id="reportType" value="#{ReportBean.selectedReport}" converter="MyConverter" onchange="this.form.submit()" valueChangeListener="#{ReportBean.salesReportListenerMethod}" immediate="true">
+						<f:selectItems  value="#{ReportBean.salesReportList}"/>
+					</p:selectOneMenu>
+					</p:panelGrid>-->
+
+		<p:panelGrid columns="2" border="1" rules="all" id="filtrosPanel"
+			rendered="true">
+			<f:facet name="header">
+						Opciones de selección
+					</f:facet>
+			<p:outputLabel value="Banco:" id="bancoOT" />
+			<p:selectOneMenu id="bankList" value="#{ReportBean.selectedBank}"
+				converter="MyConverter" immediate="true"
+				validator="#{ValidadorBean.validate}"
+				valueChangeListener="#{ReportBean.selectedBankListener}">
+				<f:selectItems value="#{GlobalData.selectBanks}" />
+			</p:selectOneMenu>
+			<p:outputLabel value="Fecha Desde:" id="fechaOT" rendered="true" />
+			<p:calendar id="selectDate" value="#{ReportBean.date}"
+				pattern="dd/MM/yyyy" effect="slideDown"
+				validator="#{ValidadorBean.validate}" rendered="true">
+				<p:ajax event="dateSelect" listener="#{ReportBean.dateListener}" />
+			</p:calendar>
+			<p:outputLabel value="Fecha Hasta:" id="fechaHastaOT" rendered="true" />
+			<p:calendar id="selectDateTo" value="#{ReportBean.dateTo}"
+				pattern="dd/MM/yyyy" effect="slideDown"
+				validator="#{ValidadorBean.validate}" rendered="true">
+				<p:ajax event="dateSelect" listener="#{ReportBean.dateToListener}" />
+			</p:calendar>
+			<p:outputLabel value="Conciliación:" id="conciliation"
+				rendered="#{ReportBean.showConciliation}" />
+			<p:selectOneMenu value="#{ReportBean.selectedConciliation}"
+				id="conciliationList" converter="MyConverter" immediate="true"
+				rendered="#{ReportBean.showConciliation}"
+				validator="#{ValidadorBean.validate}" required="true"
+				valueChangeListener="#{ReportBean.selectedConciliationListener}">
+				<f:selectItems value="#{ReportBean.selectConciliation}" />
+			</p:selectOneMenu>
+		</p:panelGrid>
+		<p>
+			<p:message showSummary="true" showDetail="false"
+				errorClass="message-e" id="bankListMessage" for="bankList"
+				style="color:red;font-style: oblique;text-decoration: overline;font-family: 'New Century Shoolbook',serif;" />
+		</p>
+		<p>
+			<p:message showSummary="true" showDetail="false"
+				errorClass="message-e" id="reportMessage" for="reportType"
+				style="color:red;font-style: oblique;text-decoration: overline;font-family: 'New Century Shoolbook',serif;" />
+		</p>
+		<p>
+			<p:message showSummary="true" showDetail="false"
+				errorClass="message-e" id="timePeriodMessage" for="timePeriodList"
+				style="color:red;font-style: oblique;text-decoration: overline;font-family: 'New Century Shoolbook',serif;" />
+		</p>
+		<p>
+			<p:message showSummary="true" showDetail="false"
+				errorClass="message-e" id="selectDateMessage" for="selectDate"
+				style="color:red;font-style: oblique;text-decoration: overline;font-family: 'New Century Shoolbook',serif;" />
+		</p>
+		<p>
+			<p:message showSummary="true" showDetail="false"
+				errorClass="message-e" id="selectDateToMessage" for="selectDateTo"
+				style="color:red;font-style: oblique;text-decoration: overline;font-family: 'New Century Shoolbook',serif;" />
+		</p>
+		<p:outputLabel value="#{ReportBean.message}" id="messageNoPromOT"
+			rendered="#{ReportBean.message!=null}"
+			style="font-weight:bold;color:red;" />
+		<br></br>
+		<p:commandButton ajax="false"   value="#{msg.reporte}" id="myActionLink3"
+			action="#{ReportBean.actionGetDepositsReportIS}"  />
+		<p:commandButton ajax="false"    validateClient="false"  immediate="true" value="#{msg.cancelReport}" id="cancel"
+			action="#{ReportBean.actionExit}" process="@none" />
+
+	</h:form>
+
+
+
+	<ui:include src="/include/IncludeFooter.html"></ui:include>
+
+</body>
+</html>

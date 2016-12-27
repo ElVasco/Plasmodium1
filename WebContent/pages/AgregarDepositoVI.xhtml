@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:include src="/include/IncludeHeader.xhtml"></ui:include>
+
+<h:head></h:head>
+<body>
+	<ui:include src="/include/HiAndByeTrans.xhtml"></ui:include>
+	<ui:include src="/include/IncludeBanner.html"></ui:include>
+	<ui:include src="/include/IncludeTransMenu.xhtml"></ui:include>
+
+	<h2>Registro de Pago con Depósito</h2>
+
+	<h:form id="Deposito">
+		<p:panelGrid columns="2" border="1" rules="all" id="transferPanelS">
+			<f:facet name="header">
+						Saldo Total
+					</f:facet>
+
+			<p:outputLabel value="Crédito Total:" id="saldoBCT"
+				rendered="#{DepositBean.showUnsettledBalance}" />
+			<p:outputLabel value="Saldo Total:" id="saldoB"
+				rendered="#{!DepositBean.showUnsettledBalance}" />
+			<p:outputLabel value="#{UserBean.balance}" id="SaldoBs" />
+			<p:outputLabel value="Saldo por Liquidar:" id="saldoBPL"
+				rendered="#{DepositBean.showUnsettledBalance}" />
+			<p:outputLabel value="#{UserBean.unsettledBalance}" id="SaldoBsPL"
+				rendered="#{DepositBean.showUnsettledBalance}" />
+		</p:panelGrid>
+
+
+		<p:panelGrid columns="2" border="1" rules="all"
+			title="Datos Generales del Depósito" id="depositoPanel">
+			<f:facet name="header">
+				Datos Generales del Depósito
+			</f:facet>
+
+			<p:outputLabel value="Banco:" id="bancoOT" />
+			<p:selectOneMenu id="bankList" value="#{DepositBean.selectedBank}"
+				validator="#{ValidadorBean.validate}">
+				<f:selectItems value="#{GlobalData.selectBanks}" />
+			</p:selectOneMenu>
+
+			<p:outputLabel value="Fecha:" id="fechaOT" />
+			<p:calendar id="Fecha" value="#{DepositBean.date}"
+				pattern="dd/MM/yyyy" effect="slideDown">
+			</p:calendar>
+
+			<p:outputLabel value="Monto:" id="montoOT" />
+			<p:inputText value="#{DepositBean.amountTotal}" id="Monto" size="40"
+				required="true" maxlength="10" validator="#{ValidadorBean.validate}"
+				rendered="#{!DepositBean.showBlock}" />
+
+			<p:outputLabel value="Ráfaga Bancaria:" id="rafagaOT" />
+			<p:inputText value="#{DepositBean.controlNum}" id="Rafaga"
+				required="true" maxlength="16" size="40"
+				validator="#{ValidadorBean.validate}" />
+		</p:panelGrid>
+
+		<p:messages id="message" showDetail="true" autoUpdate="true"
+			closable="true" />
+
+		<p:commandButton ajax="false"   value="#{msg.grabarDeposito}"
+			action="#{DepositBean.actionCreateDepositIS}" update="message" />
+
+		<p:commandButton ajax="false"   value="#{msg.cancel}" immediate="true" validateClient="false" id="myActionLink5"
+			action="#{DepositBean.actionExit}" process="@none" />
+
+
+	</h:form>
+
+	<ui:include src="/include/IncludeFooter.html"></ui:include>
+
+</body>
+</html>

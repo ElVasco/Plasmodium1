@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:include src="/include/IncludeHeader.xhtml"></ui:include>
+
+<h:head></h:head>
+<body>
+	<ui:include src="/include/HiAndByeTrans.xhtml"></ui:include>
+	<ui:include src="/include/IncludeBanner.html"></ui:include>
+	<ui:include src="/include/IncludeTransMenu.xhtml"></ui:include>
+
+
+	<h2>Editor de rutas</h2>
+
+	<h:form id="RutasId">
+
+		<p:panelGrid columns="1" id="tarjetasPanel">
+			<f:facet name="header">
+						Panel de edición de rutas
+					</f:facet>
+			<p:selectOneMenu value="#{RutasBean.selectedRoute}" id="selectRoute">
+				<p:ajax listener="#{RutasBean.routeListenerMethod}"
+					update="detailPanel,buttonPanel" />
+				<f:selectItems value="#{GlobalData.selectRutas}" />
+				<f:selectItem itemValue="999" itemLabel="Agregar nueva Ruta..."
+					itemDisabled="#{!AuthorizationBean.CREATE_ROUTE}" />
+			</p:selectOneMenu>
+		</p:panelGrid>
+
+		<p:outputPanel id="detailPanel">
+
+
+			<p:panelGrid columns="2" id="detalleruta"
+				rendered="#{RutasBean.showDetail}">
+				<p:outputLabel value="Ruta:*" id="Ruta" />
+				<p:inputText value="#{RutasBean.routeName}" id="nombreruta"
+					required="true" validator="#{ValidadorBean.validate}" />
+				<p:outputLabel value="Estados:*" id="Estado" />
+				<p:selectOneMenu value="#{RutasBean.selectedState}" id="selectState"
+					validator="#{ValidadorBean.validate}" required="true">
+					<p:ajax listener="#{RutasBean.stateListenerMethod}"
+						update="selectMunicipality,selectCity" />
+					<f:selectItems value="#{RutasBean.selectState}" />
+				</p:selectOneMenu>
+				<p:outputLabel value="Municipio:*" id="Municipio" />
+				<p:selectOneMenu value="#{RutasBean.selectedMunicipality}"
+					id="selectMunicipality" validator="#{ValidadorBean.validate}"
+					required="true">
+					<p:ajax listener="#{RutasBean.municipalityListenerMethod}"
+						update="selectCity" />
+					<f:selectItems value="#{RutasBean.selectMunicipality}" />
+				</p:selectOneMenu>
+				<p:outputLabel value="Ciudades:*" id="Ciudad" />
+				<p:selectOneMenu value="#{RutasBean.selectedCity}" id="selectCity"
+					validator="#{ValidadorBean.validate}" required="true">
+					<f:selectItems value="#{RutasBean.selectCity}" />
+				</p:selectOneMenu>
+			</p:panelGrid>
+
+			<p:outputLabel value="#{msg.forcedInput}" id="Mensaje_Obligatorio" style="font-weight:bold;color:#FF0000" rendered="#{RutasBean.showDetail}" />
+
+		</p:outputPanel>
+
+		<p:messages id="error" showDetail="true" autoUpdate="true"
+			closable="true" />
+
+		<p:outputPanel id="buttonPanel">
+
+
+			<p:commandButton ajax="false" value="#{msg.grabar}" id="buttonAdd"
+				action="#{RutasBean.actionAddRoute}" onstart="statusDialog1.show();"
+				onsuccess="PF('statusDialog').hide()"
+				rendered="#{RutasBean.showCreate and AuthorizationBean.CREATE_ROUTE}"
+				update="error">
+
+			</p:commandButton>
+			<p:commandButton ajax="false" value="#{msg.change}" id="buttonChange"
+				action="#{RutasBean.actionChangeRoute}"
+				onstart="statusDialog1.show();"
+				onsuccess="PF('statusDialog').hide()"
+				rendered="#{RutasBean.showModify and AuthorizationBean.MODIFY_ROUTE}"
+				update="error">
+			</p:commandButton>
+
+			<p:commandButton ajax="false" value="#{msg.cancel}" immediate="true"
+				validateClient="false" id="cancel" action="#{RutasBean.actionExit}"
+				process="@none">
+			</p:commandButton>
+
+			<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+				closable="false" resizable="false" showHeader="false">
+				<p:graphicImage
+					name="http://www.primefaces.org/showcase/javax.faces.resource/demo/images/ajaxloadingbar.gif.xhtml" />
+			</p:dialog>
+		</p:outputPanel>
+
+	
+	</h:form>
+
+	<ui:include src="/include/IncludeFooter.html"></ui:include>
+
+</body>
+</html>

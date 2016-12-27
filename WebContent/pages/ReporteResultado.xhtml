@@ -1,0 +1,130 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+<ui:include src="/include/IncludeHeader.xhtml"></ui:include>
+
+<h:head></h:head>
+<body>
+
+	<!-- Esta parte es delicada la lista se llena en un bean "UserBean" pero se selecciona con otro "AsignarDistribuidor1Bean" -->
+	<ui:include src="/include/HiAndByeTrans.xhtml"></ui:include>
+	<ui:include src="/include/IncludeBanner.html"></ui:include>
+	<ui:include src="/include/IncludeTransMenu.xhtml"></ui:include>
+
+	<h2>Resultado de reporte</h2>
+
+	<h:form id="ReporteResultadoForm">
+		<p:commandButton value="#{msg.exitReport}" id="cancel" ajax="false"
+			action="#{ResultBean.actionExit}" process="@none" immediate="true"
+			validateClient="false" />
+		<p:panelGrid columns="2" border="1" rules="all" id="TotalPanel"
+			style="border:0;background-color:#FFF;margin-bottom:0px;border-spacing: 0 0 0 10;"
+			rendered="#{ResultBean.showBillInf}">
+			<f:facet name="header">
+						Datos de la guía de despacho
+					</f:facet>
+			<p:panelGrid columns="2" border="1" rules="all"
+				title="Datos Generales de la Guia de Despacho" id="BillPanel"
+				style="border: 1px;border-bottom-color: black;border-bottom-style: groove;background-color: #cccccc;margin: 0px;border-collapse: separate;border-spacing: 0px">
+
+				<p:outputLabel value="Distribuidor:" id="disttittle"
+					style="font-weight:bold;color:black;" />
+				<p:outputLabel value="#{ResultBean.distributerName}" id="distname" />
+				<p:outputLabel value="Ruta: " id="routetittle"
+					style="font-weight:bold;color:black;" />
+				<p:outputLabel value="#{ResultBean.routeNam}" id="routename" />
+				<p:outputLabel value="Fecha de la guia de despacho:"
+					id="dateBilltittel" style="font-weight:bold;color:black;" />
+				<p:outputLabel value="#{ResultBean.dateb}" id="dateBillname" />
+				<p:outputLabel value="Numero de control: " id="billtittle"
+					style="font-weight:bold;color:black;" />
+				<p:outputLabel value="#{ResultBean.billControlNumber}" id="Billname" />
+				<p:outputLabel value="Nombre del cliente: " id="clientName"
+					style="font-weight:bold;color:black;" />
+				<p:outputLabel value="#{ResultBean.client_name}" id="clientnameo" />
+			</p:panelGrid>
+			<p:panelGrid columns="2" border="1" rules="all" rendered="#{ResultBean.depositControlNumber!=1}"
+				title="Datos Generales de la Guia de Despacho" id="DepPanel"
+				style="border: 1px;border-bottom-color: black;border-bottom-style: groove;background-color: #cccccc;margin: 0px;border-collapse: separate;border-spacing: 0px">
+
+				<p:outputLabel value="Número de control:" id="DespControltittle"
+					style="font-weight:bold;color:black;" />
+				<p:outputLabel value="#{ResultBean.depositControlNumber}"
+					id="DepControl" />
+				<p:outputLabel value="Banco: " id="Bancotittle"
+					style="font-weight:bold;color:black;" />
+				<p:outputLabel value="#{ResultBean.bankName}" id="Bankname" />
+				<p:outputLabel value="Fecha del Deposito:" id="dateDeptittel"
+					style="font-weight:bold;color:black;" />
+				<p:outputLabel value="#{ResultBean.dated}" id="dateDepname" />
+				<p:outputLabel value="Estatus del Deposito: " id="Aptittle"
+					style="font-weight:bold;color:black;" />
+				<p:outputLabel value="#{ResultBean.ap}" id="Apname" />
+			</p:panelGrid>
+		</p:panelGrid>
+
+		<p:dataTable id="dataTable" var="row"
+			value="#{ResultBean.resultList.getFields()}" paginator="true"
+			rows="50" filteredValue="#{ResultBean.filteredFieldList}">
+			<f:facet name="header">
+				<p:outputLabel
+					value="#{ResultBean.title} #{ResultBean.rangoFechasStr}" />
+			</f:facet>
+			<c:forEach items="#{ResultBean.resultList.getLabels()}" var="col"
+				varStatus="status">
+				<c:if test="#{ResultBean.resultList.getTypes().get(status.count-1)}">
+					<p:column headerText="#{col}"
+						filterBy="#{row.getField(status.count-1)}"
+						filterMatchMode="contains">
+						<p:outputLabel value="#{row.getField(status.count-1)}" />
+					</p:column>
+				</c:if>
+				<c:if
+					test="#{!ResultBean.resultList.getTypes().get(status.count-1)}">
+					<p:column headerText="#{col}">
+						<p:outputLabel value="#{row.getField(status.count-1)}"
+							style="float:right" />
+					</p:column>
+
+				</c:if>
+			</c:forEach>
+		</p:dataTable>
+
+		<p:commandLink ajax="false">
+			<p:graphicImage value="../images/excel.jpeg" width="40" height="40" />
+			<p:dataExporter type="xls" target="dataTable"
+				fileName="#{ResultBean.title}"
+				postProcessor="#{ResultBean.postProcessXLS}" />
+		</p:commandLink>
+
+		<p:commandLink ajax="false">
+			<p:graphicImage value="../images/pdf.jpeg" width="40" height="40" />
+			<p:dataExporter type="pdf" target="dataTable"
+				fileName="#{ResultBean.title}"
+				preProcessor="#{ResultBean.preProcessPDF}" />
+		</p:commandLink>
+
+		<p:commandLink ajax="false">
+			<p:graphicImage value="../images/csv.jpeg" width="40" height="40" />
+			<p:dataExporter type="csv" target="dataTable"
+				fileName="#{ResultBean.title}" />
+		</p:commandLink>
+
+
+		<p:messages id="error" showDetail="true" autoUpdate="true"
+			closable="true" />
+		<br></br>
+
+		<p:commandButton value="#{msg.exitReport}" id="cancelBottom"
+			action="#{ResultBean.actionExit}" process="@none" ajax="false"
+			immediate="true" validateClient="false" />
+	</h:form>
+
+	<ui:include src="/include/IncludeFooter.html"></ui:include>
+
+</body>
+</html>

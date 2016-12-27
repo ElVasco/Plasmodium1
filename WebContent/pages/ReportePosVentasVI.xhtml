@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:include src="/include/IncludeHeader.xhtml"></ui:include>
+
+<h:head></h:head>
+<body>
+	<ui:include src="/include/HiAndByeTrans.xhtml"></ui:include>
+	<ui:include src="/include/IncludeBanner.html"></ui:include>
+	<ui:include src="/include/IncludeTransMenu.xhtml"></ui:include>
+
+	<h2>Reporte de ventas</h2>
+
+
+	<h:form id="reportForm">
+
+		<p:panelGrid border="0" columns="2">
+			<p:outputLabel> Reporte de puntos de venta</p:outputLabel>
+			<p:selectOneMenu id="reportType"
+				value="#{ReportBeanVI.selectedReport}" converter="MyConverter"
+				onchange="this.form.submit()"
+				valueChangeListener="#{ReportBeanVI.reportListenerMethod}"
+				immediate="true">
+				<f:selectItems value="#{ReportBeanVI.reportPosSalesList}" />
+			</p:selectOneMenu>
+		</p:panelGrid>
+
+		<p:panelGrid columns="2" border="1" rules="all" id="filtrosPanel"
+			rendered="#{ReportBeanVI.showFilters}">
+			<f:facet name="header">
+						Opciones de puntos de venta
+					</f:facet>
+
+			<p:outputLabel value="Vendedor:" id="cliente"
+				rendered="#{ReportBeanVI.showClient}" />
+			<p:selectOneMenu value="#{ReportBeanVI.selectedClient}"
+				id="selectClient" converter="MyConverter"
+				onchange="this.form.submit()" required="true"
+				validator="#{ValidadorBean.validate}" immediate="true"
+				valueChangeListener="#{ReportBeanVI.clientListenerMethod}"
+				rendered="#{ReportBeanVI.showClient}">
+				<f:selectItems value="#{ReportBeanVI.selectClients}" />
+			</p:selectOneMenu>
+			<p:outputLabel value="Usuario:" id="vendedor"
+				rendered="#{ReportBeanVI.showSeller}" />
+			<p:selectOneMenu value="#{ReportBeanVI.selectedSeller}"
+				id="selectSeller" converter="MyConverter" required="true"
+				validator="#{ValidadorBean.validate}" immediate="true"
+				rendered="#{ReportBeanVI.showSeller}"
+				valueChangeListener="#{ReportBeanVI.selectedSellerListener}">
+				<f:selectItems value="#{ReportBeanVI.selectSellers}" />
+			</p:selectOneMenu>
+			<p:outputLabel value="Fecha Desde:" id="fechaOC"
+				rendered="#{ReportBeanVI.showDateFrom}" />
+			<p:calendar id="selectDates" value="#{ReportBeanVI.dateFrom}"
+				pattern="dd/MM/yyyy" effect="slideDown"
+				validator="#{ValidadorBean.validate}"
+				rendered="#{ReportBeanVI.showDateFrom}">
+				<p:ajax event="dateSelect"
+					listener="#{ReportBeanVI.dateFromListener}" />
+			</p:calendar>
+
+			<p:outputLabel value="Fecha Hasta:" id="fechaOT"
+				rendered="#{ReportBeanVI.showDateTo}" />
+			<p:calendar id="selectDate" value="#{ReportBeanVI.dateTo}"
+				pattern="dd/MM/yyyy" effect="slideDown"
+				validator="#{ValidadorBean.validate}"
+				rendered="#{ReportBeanVI.showDateTo}">
+				<p:ajax event="dateSelect" listener="#{ReportBeanVI.dateToListener}" />
+			</p:calendar>
+			<p:outputLabel value="Estado:" id="EstadoNew"
+				rendered="#{ReportBeanVI.showState}" />
+			<p:selectOneMenu value="#{ReportBeanVI.selectedState}"
+				id="selectStateNew" onchange="this.form.submit()"
+				valueChangeListener="#{GlobalData.stateClientListenerMethod}"
+				immediate="true" validator="#{ValidadorBean.validate}"
+				rendered="#{ReportBeanVI.showState}">
+				<f:selectItems value="#{GlobalData.selectState}" />
+			</p:selectOneMenu>
+			<p:outputLabel value="Municipio:" id="MunicipioNew"
+				rendered="#{ReportBeanVI.showMunicipality}" />
+			<p:selectOneMenu value="#{ReportBeanVI.selectedMunicipality}"
+				id="selectMunicipalityNew" required="true"
+				onchange="this.form.submit()"
+				valueChangeListener="#{GlobalData.municipalityListenerMethod}"
+				immediate="true" validator="#{ValidadorBean.validate}"
+				rendered="#{ReportBeanVI.showMunicipality}">
+				<f:selectItems value="#{GlobalData.selectMunicipality}" />
+			</p:selectOneMenu>
+			<p:outputLabel value="Ciudad:" id="CiudadesNew"
+				rendered="#{ReportBeanVI.showCity}" />
+			<p:selectOneMenu value="#{ReportBeanVI.selectedCity}"
+				id="selectCityNew" immediate="true"
+				validator="#{ValidadorBean.validate}"
+				rendered="#{ReportBeanVI.showCity}"
+				valueChangeListener="#{ReportBeanVI.selectedCityListener}">
+				<f:selectItems value="#{GlobalData.selectCity}" />
+			</p:selectOneMenu>
+			<p:outputLabel value="Segmento:" id="Segmento_Nuevo"
+				rendered="#{ReportBeanVI.showIndustry}" />
+			<p:selectOneMenu value="#{ReportBeanVI.selectedIndustryNew}"
+				id="selectIndustryNew"
+				valueChangeListener="#{ReportBeanVI.selectedIndustryNewListener}"
+				immediate="true" validator="#{ValidadorBean.validate}"
+				rendered="#{ReportBeanVI.showIndustry}">
+				<f:selectItems value="#{GlobalData.selectIndustry}" />
+			</p:selectOneMenu>
+		</p:panelGrid>
+		<p>
+			<p:message showSummary="true" showDetail="false"
+				errorClass="message-e" id="reportMessage" for="reportType"
+				style="color:red;font-style: oblique;text-decoration: overline;font-family: 'New Century Shoolbook',serif;" />
+		</p>
+		<p>
+			<p:message showSummary="true" showDetail="false"
+				errorClass="message-e" id="selectDateMessage" for="selectDate"
+				style="color:red;font-style: oblique;text-decoration: overline;font-family: 'New Century Shoolbook',serif;" />
+		</p>
+		<p>
+			<p:message showSummary="true" showDetail="false"
+				errorClass="message-e" id="selectDateToMessage" for="selectDates"
+				style="color:red;font-style: oblique;text-decoration: overline;font-family: 'New Century Shoolbook',serif;" />
+		</p>
+
+		<p:outputLabel value="#{ReportBeanVI.message}" id="messageNoPromOT"
+			rendered="#{ReportBeanVI.message!=null}"
+			style="font-weight:bold;color:red;" />
+		<br></br>
+		<p:commandButton ajax="false"   value="#{msg.reporte}" id="myActionLink3"
+			action="#{ReportBeanVI.actionGetReport}"
+			rendered="#{ReportBeanVI.showFilters}"  />
+		<p:commandButton ajax="false"    validateClient="false"  immediate="true" value="#{msg.cancelReport}" id="cancel"
+			action="#{ReportBeanVI.actionExit}" process="@none" />
+
+
+	</h:form>
+
+
+
+	<ui:include src="/include/IncludeFooter.html"></ui:include>
+
+</body>
+</html>

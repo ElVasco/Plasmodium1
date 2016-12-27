@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:include src="/include/IncludeHeader.xhtml"></ui:include>
+
+<h:head></h:head>
+<body>
+	<!-- Esta parte es delicada la lista se llena en un bean "UserBean" pero se selecciona con otro "DepositBean" -->
+	<ui:include src="/include/HiAndByeTrans.xhtml"></ui:include>
+	<ui:include src="/include/IncludeBanner.html"></ui:include>
+	<ui:include src="/include/IncludeTransMenu.xhtml"></ui:include>
+
+	<h2>Recarga de Tickets Por Tarjeta de Credito</h2>
+
+	<h:form id="Recarga">
+		<p:panelGrid columns="2" border="1" rules="all"
+			title="Datos de la Recarga" id="recargaPanel" style="">
+			<f:facet name="header">
+				<p:outputLabel value="Datos Generales de la Recarga"
+					id="recargaDatos" />
+			</f:facet>
+			<p:outputLabel value="Numero de Tickets:" id="ticketOT" />
+			<p:inputText value="#{EPaymentBean.ticket}" id="Ticket"
+				disabled="#{EPaymentBean.confirm}" size="25" required="true"
+				maxlength="10" converter="MyConverter" immediate="true"
+				style="color:#000000;"
+				valueChangeListener="#{EPaymentBean.ticketListener}" />
+			<p:outputLabel value="Monto a pagar:" id="montoOT"
+				rendered="#{EPaymentBean.confirm}" />
+			<p:inputText value="#{EPaymentBean.amount}" id="Monto"
+				disabled="#{EPaymentBean.confirm}" size="25" required="true"
+				maxlength="10" converter="MyConverter" immediate="true"
+				rendered="#{EPaymentBean.confirm}" style="color:#000000;"
+				valueChangeListener="#{EPaymentBean.amountListener}" />
+			<p:outputLabel value="Numero de Contrato Cliente:" id="smartcardOT" />
+			<p:inputText value="#{EPaymentBean.clientContract}"
+				disabled="#{EPaymentBean.confirm}" id="clientContract"
+				required="true" maxlength="16" size="25" converter="MyConverter"
+				immediate="true" style="color:#000000;"
+				valueChangeListener="#{EPaymentBean.clientContractListener}" />
+			<p:outputLabel value="Número de Tarjeta:" id="tarjetaOT" />
+			<p:inputText value="#{EPaymentBean.tdc}"
+				disabled="#{EPaymentBean.confirm}" id="cardEP" required="true"
+				maxlength="16" size="25" converter="MyConverter" immediate="true"
+				style="color:#000000;"
+				valueChangeListener="#{EPaymentBean.tdcListener}" />
+			<p:outputLabel value="Código de Seguridad:" id="seguridadOT" />
+			<p:inputText value="#{EPaymentBean.securityCode}"
+				disabled="#{EPaymentBean.confirm}" id="securityCode" size="4"
+				required="true" maxlength="4" converter="MyConverter"
+				immediate="true" style="color:#000000;"
+				valueChangeListener="#{EPaymentBean.securityCodeListener}" />
+			<p:outputLabel value="Fecha de Vencimiento:" id="fechaOT" />
+			<p:inputText value="#{EPaymentBean.validThruDate}"
+				disabled="#{EPaymentBean.confirm}" id="validThru" size="4"
+				required="true" maxlength="4" converter="MyConverter"
+				immediate="true" style="color:#000000;"
+				valueChangeListener="#{EPaymentBean.validThruDateListener}" />
+			<p:outputLabel value="Nombre Tarjetahabiente:" id="nombreOT" />
+			<p:inputText value="#{EPaymentBean.cardholderName}"
+				disabled="#{EPaymentBean.confirm}" id="cardHolderName" size="40"
+				required="true" maxlength="20" converter="MyConverter"
+				immediate="true" style="color:#000000;"
+				valueChangeListener="#{EPaymentBean.cardHolderNameListener}" />
+			<p:outputLabel value="Número de Identificación Tarjetahabiente:"
+				id="idOT" />
+			<p:inputText value="#{EPaymentBean.cardholderId}"
+				disabled="#{EPaymentBean.confirm}" id="cardHolderId" size="40"
+				required="true" maxlength="20" converter="MyConverter"
+				immediate="true" style="color:#000000;"
+				valueChangeListener="#{EPaymentBean.cardHolderIdListener}" />
+		</p:panelGrid>
+
+		<p>
+			<p:message showSummary="true" showDetail="false"
+				errorClass="message-e" id="amountMessage" for="Monto"
+				style="color:red;font-style: oblique;text-decoration: overline;font-family: 'New Century Shoolbook',serif;" />
+		</p>
+		<p>
+			<p:message showSummary="true" showDetail="false"
+				errorClass="message-e" id="controlMessage" for="clientContract"
+				style="color:red;font-style: oblique;text-decoration: overline;font-family: 'New Century Shoolbook',serif;" />
+		</p>
+
+
+		<p>
+			<p:outputLabel value="#{EPaymentBean.message}" id="messageNoPromOT"
+				rendered="#{EPaymentBean.message!=null}"
+				style="font-weight:bold;color:red;" />
+		</p>
+		<p:panelGrid columns="1" border="1" rules="all"
+			title="Recibo de Compra Electronica" id="reciboPanel" style=""
+			rendered="#{EPaymentBean.success}">
+			<f:facet name="header">
+				<p:outputLabel value="Detalle del Recibo" id="reciboDatos" />
+			</f:facet>
+			<p>
+				<p:outputLabel value="#{EPaymentBean.receipt}" id="reciboOT"
+					rendered="#{EPaymentBean.success}" />
+			</p>
+		</p:panelGrid>
+
+		<p:commandButton ajax="false"   value="#{msg.recarga}"
+			action="#{EPaymentBean.actionTicketTDC}" immediate="true"
+			onclick="this.style.display='none'"
+			rendered="#{!EPaymentBean.confirm}" />
+		<p:commandButton ajax="false"   value="#{msg.confirmar}"
+			action="#{EPaymentBean.actionConfirmTicketTDC}" immediate="true"
+			onclick="this.style.display='none'"
+			rendered="#{EPaymentBean.confirm}" />
+		<p:commandButton ajax="false"   value="#{msg.cancel}" immediate="true" validateClient="false" id="myActionLink5"
+			action="#{EPaymentBean.actionExit}" immediate="true" />
+	</h:form>
+
+	<ui:include src="/include/IncludeFooter.html"></ui:include>
+
+</body>
+</html>

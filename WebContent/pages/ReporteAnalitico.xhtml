@@ -1,0 +1,480 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+<ui:include src="/include/IncludeHeader.xhtml"></ui:include>
+
+<h:head></h:head>
+<body onload="location.hash = '#reportForm:dataTable'">
+	<ui:include src="/include/HiAndByeTrans.xhtml"></ui:include>
+	<ui:include src="/include/IncludeBanner.html"></ui:include>
+	<ui:include src="/include/IncludeTransMenu.xhtml"></ui:include>
+
+	<h2>Reportes analíticos de gestión</h2>
+
+
+	<h:form id="reportForm">
+		<p:panelGrid border="0" columns="2">
+			<p:outputLabel> Tipo de reporte</p:outputLabel>
+			<p:selectOneMenu id="reportType"
+				value="#{AnaliticReportBean.selectedReport}">
+				<p:ajax listener="#{AnaliticReportBean.reportListener}"
+					update="filtrosPanel,panelButton,DataPanel" />
+				<f:selectItems value="#{AnaliticReportBean.reportList}" />
+			</p:selectOneMenu>
+		</p:panelGrid>
+
+		<p:messages id="message" showDetail="true" autoUpdate="true"
+			closable="true" />
+		<p:outputPanel id="DataPanel">
+			<p:panelGrid columns="2" border="1" rules="all" id="Panel1"
+				rendered="#{AnaliticReportBean.showFilters}">
+				<f:facet name="header">
+							Indicadores a consultar
+				</f:facet>
+
+				<p:outputLabel value="Cantidad de transacciones:" id="CantRecharge"
+					rendered="#{AnaliticReportBean.showIndicatorRecharge}" />
+				<p:selectBooleanCheckbox
+					value="#{AnaliticReportBean.indicatorRecharge}"
+					rendered="#{AnaliticReportBean.showIndicatorRecharge}">
+					<p:ajax listener="#{AnaliticReportBean.indicatorRechargeListener}"
+						update="Panel1" />
+				</p:selectBooleanCheckbox>
+
+				<p:outputLabel value="Monto de las transacciones:"
+					id="CantAmountRecharge"
+					rendered="#{AnaliticReportBean.showIndicatorAmountRecharge}" />
+				<p:selectBooleanCheckbox
+					value="#{AnaliticReportBean.indicatorAmountRecharge}"
+					rendered="#{AnaliticReportBean.showIndicatorAmountRecharge}">
+					<p:ajax
+						listener="#{AnaliticReportBean.indicatorAmountRechargeListener}"
+						update="Panel1" />
+				</p:selectBooleanCheckbox>
+			</p:panelGrid>
+
+			<p:panelGrid columns="2" border="1" rules="all" id="Panel2"
+				rendered="#{AnaliticReportBean.showFilters}">
+				<f:facet name="header">
+							Rango de fechas
+				</f:facet>
+
+				<p:outputLabel value="Fecha desde:" id="fechaOC"
+					rendered="#{AnaliticReportBean.showDate}" />
+				<p:calendar id="selectDates" value="#{AnaliticReportBean.date}"
+					pattern="dd/MM/yyyy" effect="slideDown"
+					rendered="#{AnaliticReportBean.showDate}">
+					<p:ajax listener="#{AnaliticReportBean.dateListener}"
+						update="Panel2" />
+				</p:calendar>
+
+				<p:outputLabel value="Fecha hasta:" id="fechaOT"
+					rendered="#{AnaliticReportBean.showDateTo}" />
+				<p:calendar id="selectDate" value="#{AnaliticReportBean.dateTo}"
+					pattern="dd/MM/yyyy" effect="slideDown"
+					rendered="#{AnaliticReportBean.showDateTo}">
+					<p:ajax listener="#{AnaliticReportBean.dateToListener}"
+						update="Panel2" />
+				</p:calendar>
+			</p:panelGrid>
+		</p:outputPanel>
+		<p:outputPanel id="filtrosPanel">
+
+			<p:panelGrid columns="4" border="1" rules="all" id="Panel3"
+				rendered="#{AnaliticReportBean.showFilters}">
+				<f:facet name="header">
+							Opciones de desglose y filtrado
+						</f:facet>
+
+				<p:outputLabel value="Características" />
+				<p:outputLabel value="Desglosar" />
+				<p:outputLabel value="Orden" />
+				<p:outputLabel value="Filtros" />
+
+
+				<p:outputLabel value="Compañía:" id="companyList"
+					rendered="#{AnaliticReportBean.showCompany}" />
+				<p:outputLabel value="" id="extra"
+					rendered="#{AnaliticReportBean.showCompany}" />
+				<p:outputLabel value="" id="extra2"
+					rendered="#{AnaliticReportBean.showCompany}" />
+				<p:selectOneMenu value="#{AnaliticReportBean.selectedCompany}"
+					validator="#{ValidadorBean.validate}" id="selectAnalyticCompany"
+					rendered="#{AnaliticReportBean.showCompany}">
+					<p:ajax listener="#{AnaliticReportBean.selectedCompanyListener}"
+						update="filtrosPanel" />
+					<f:selectItems value="#{AnaliticReportBean.selectCompany}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Periodicidad:" id="Fecha"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showDate}" />
+				<p:selectBooleanCheckbox
+					value="#{AnaliticReportBean.selectedVisualDate}"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showDate}">
+					<p:ajax listener="#{AnaliticReportBean.ordDateListener}"
+						update="filtrosPanel" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel value="#{AnaliticReportBean.ordDate}" id="ordFecha"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showDate}" />
+				<p:selectOneMenu value="#{AnaliticReportBean.selectedDate}"
+					validator="#{ValidadorBean.validate}" id="FormDate"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showDate}">
+					<p:ajax listener="#{AnaliticReportBean.selectedValueListener}"
+						update="filtrosPanel" />
+					<f:selectItems value="#{AnaliticReportBean.selectDate}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Método de recarga/pago:" id="method"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showMethodRecharge}" />
+				<p:selectBooleanCheckbox
+					value="#{AnaliticReportBean.selectedVisualMethod}"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showMethodRecharge}">
+					<p:ajax listener="#{AnaliticReportBean.ordMethodListener}"
+						update="filtrosPanel" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel value="#{AnaliticReportBean.ordMethod}"
+					id="ordMethod"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showMethodRecharge}" />
+				<p:selectOneMenu
+					value="#{AnaliticReportBean.selectedMethodRecharge}"
+					id="methodList"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showMethodRecharge}">
+					<f:selectItems value="#{AnaliticReportBean.selectMethodRecharge}" />
+					<p:ajax listener="#{AnaliticReportBean.redPaymentListener}"
+						update="FormRedList" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Condición comercial:" id="FormRed"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showRedPayment}" />
+				<p:selectBooleanCheckbox
+					value="#{AnaliticReportBean.selectedVisualRedPayment}"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showRedPayment}">
+					<p:ajax listener="#{AnaliticReportBean.ordRedPaymentListener}"
+						update="filtrosPanel" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel value="#{AnaliticReportBean.ordRedPayment}"
+					id="ordRed"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showRedPayment}" />
+				<p:selectOneMenu value="#{AnaliticReportBean.selectedRedPayment}"
+					id="FormRedList"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showRedPayment}">
+					<p:ajax listener="#{AnaliticReportBean.selectedValueListener}"
+						update="filtrosPanel" />
+					<f:selectItem itemValue="999"
+						itemLabel="Todos las condiciones comerciales" />
+					<f:selectItems value="#{AnaliticReportBean.selectRedPayment}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Instrumento de recaudación:" id="FormUser"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showUserPayment}" />
+				<p:selectBooleanCheckbox
+					value="#{AnaliticReportBean.selectedVisualUserPayment}"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showUserPayment}">
+					<p:ajax listener="#{AnaliticReportBean.ordUserPaymentListener}"
+						update="filtrosPanel" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel value="#{AnaliticReportBean.ordUserPayment}"
+					id="ordUser"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showUserPayment}" />
+				<p:selectOneMenu value="#{AnaliticReportBean.selectedUserPayment}"
+					id="FormUserList"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showUserPayment}">
+					<p:ajax listener="#{AnaliticReportBean.selectedValueListener}"
+						update="filtrosPanel" />
+					<f:selectItem itemValue="999"
+						itemLabel="Todos los instrumentos de recaudación" />
+					<f:selectItems value="#{AnaliticReportBean.selectUserPayment}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Nivel 1 de la red:" id="FormDistributer"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showDistributers}" />
+				<p:selectBooleanCheckbox
+					value="#{AnaliticReportBean.selectedVisualDistributer}"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showDistributers}">
+					<p:ajax listener="#{AnaliticReportBean.ordDistributerListener}"
+						update="filtrosPanel" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel value="#{AnaliticReportBean.ordDistributer}"
+					id="ordDist"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showDistributers}" />
+				<p:selectOneMenu value="#{AnaliticReportBean.selectedDistributer1}"
+					id="FormDistributerList"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showDistributers}">
+					<f:selectItems value="#{AnaliticReportBean.selectDistributer1}" />
+					<p:ajax listener="#{AnaliticReportBean.distributer2Listener}"
+						update="FormDistributerList2" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Nivel 2 de la red:" id="FormDistributer2"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showDistributers}" />
+				<p:selectBooleanCheckbox
+					value="#{AnaliticReportBean.selectedVisualDistributer2}"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showDistributers}">
+					<p:ajax listener="#{AnaliticReportBean.ordDistributerListener2}"
+						update="filtrosPanel" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel value="#{AnaliticReportBean.ordDistributer2}"
+					id="ordDist2"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showDistributers}" />
+				<p:selectOneMenu value="#{AnaliticReportBean.selectedDistributer2}"
+					id="FormDistributerList2"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showDistributers}">
+					<f:selectItems value="#{AnaliticReportBean.selectDistributer2}" />
+					<p:ajax listener="#{AnaliticReportBean.distributer3Listener}"
+						update="FormDistributerList3" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Nivel 3 de la red:" id="FormDistributer3"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showDistributers}" />
+				<p:selectBooleanCheckbox
+					value="#{AnaliticReportBean.selectedVisualDistributer3}"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showDistributers}">
+					<p:ajax listener="#{AnaliticReportBean.ordDistributerListener3}"
+						update="filtrosPanel" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel value="#{AnaliticReportBean.ordDistributer3}"
+					id="ordDist3"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showDistributers}" />
+				<p:selectOneMenu value="#{AnaliticReportBean.selectedDistributer3}"
+					id="FormDistributerList3"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showDistributers}">
+					<p:ajax listener="#{AnaliticReportBean.selectedValueListener}"
+						update="filtrosPanel" />
+					<f:selectItems value="#{AnaliticReportBean.selectDistributer3}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Industria o segmento:" id="FormIndustry"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showIndustry}" />
+				<p:selectBooleanCheckbox
+					value="#{AnaliticReportBean.selectedVisualIndustry}"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showIndustry}">
+					<p:ajax listener="#{AnaliticReportBean.ordIndustryListener}"
+						update="filtrosPanel" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel value="#{AnaliticReportBean.ordIndustry}"
+					id="ordIndustry"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showIndustry}" />
+				<p:selectOneMenu value="#{AnaliticReportBean.selectedIndustry}"
+					id="FormIndustryList"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showIndustry}">
+					<p:ajax listener="#{AnaliticReportBean.selectedValueListener}"
+						update="filtrosPanel" />
+					<f:selectItem itemValue="999" itemLabel="Todas las industrias" />
+					<f:selectItems value="#{AnaliticReportBean.selectIndustry}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Estado:" id="EstadoNew"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showState}" />
+				<p:selectBooleanCheckbox
+					value="#{AnaliticReportBean.selectedVisualState}"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showState}">
+					<p:ajax listener="#{AnaliticReportBean.ordStateListener}"
+						update="filtrosPanel" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel value="#{AnaliticReportBean.ordState}"
+					id="ordEstadoNew"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showState}" />
+				<p:selectOneMenu value="#{AnaliticReportBean.selectedState}"
+					id="selectStateNew" validator="#{ValidadorBean.validate}"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showState}">
+					<p:ajax listener="#{AnaliticReportBean.selectedStateListener}"
+						update="selectMunicipalityNew,selectCityNew" />
+					<f:selectItem itemValue="999" itemLabel="Todos los estados" />
+					<f:selectItems value="#{AnaliticReportBean.selectState}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Municipio:" id="MunicipioNew"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showMunicipality}" />
+				<p:selectBooleanCheckbox
+					value="#{AnaliticReportBean.selectedVisualMunicipality}"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showMunicipality}">
+					<p:ajax listener="#{AnaliticReportBean.ordMunicipalityListener}"
+						update="filtrosPanel" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel value="#{AnaliticReportBean.ordMunicipality}"
+					id="ordMunicipioNew"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showMunicipality}" />
+				<p:selectOneMenu value="#{AnaliticReportBean.selectedMunicipality}"
+					id="selectMunicipalityNew" required="true"
+					validator="#{ValidadorBean.validate}"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showMunicipality}">
+					<p:ajax
+						listener="#{AnaliticReportBean.selectedMunicipalityListener}"
+						update="selectCityNew" />
+					<f:selectItem itemValue="999" itemLabel="Todos los municipios" />
+					<f:selectItems value="#{AnaliticReportBean.selectMunicipality}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Ciudad:" id="CiudadesNew"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showCity}" />
+				<p:selectBooleanCheckbox
+					value="#{AnaliticReportBean.selectedVisualCity}"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showCity}">
+					<p:ajax listener="#{AnaliticReportBean.ordCityListener}"
+						update="filtrosPanel" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel value="#{AnaliticReportBean.ordCity}"
+					id="ordCiudadesNew"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showCity}" />
+				<p:selectOneMenu value="#{AnaliticReportBean.selectedCity}"
+					id="selectCityNew" validator="#{ValidadorBean.validate}"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showCity}">
+					<p:ajax listener="#{AnaliticReportBean.selectedValueListener}"
+						update="filtrosPanel" />
+					<f:selectItem itemValue="999" itemLabel="Todas las ciudades" />
+					<f:selectItems value="#{AnaliticReportBean.selectCity}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Denominación:" id="denom"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showDenom}" />
+				<p:selectBooleanCheckbox
+					value="#{AnaliticReportBean.selectedVisualDenom}"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showDenom}">
+					<p:ajax listener="#{AnaliticReportBean.ordDenomListener}"
+						update="filtrosPanel" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel value="#{AnaliticReportBean.ordDenom}" id="ordDenom"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showDenom}" />
+				<p:selectOneMenu value="#{AnaliticReportBean.selectedDenom}"
+					id="selectDenom" validator="#{ValidadorBean.validate}"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showDenom}">
+					<p:ajax listener="#{AnaliticReportBean.selectedValueListener}"
+						update="filtrosPanel" />
+					<f:selectItems value="#{AnaliticReportBean.selectDenom}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Facial:" id="Facial"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showFacial}" />
+				<p:selectBooleanCheckbox
+					value="#{AnaliticReportBean.selectedVisualFacial}"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showFacial}">
+					<p:ajax listener="#{AnaliticReportBean.ordFacialListener}"
+						update="filtrosPanel" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel value="#{AnaliticReportBean.ordFacial}"
+					id="ordFacial"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showFacial}" />
+				<p:selectOneMenu value="#{AnaliticReportBean.selectedFacial}"
+					id="selectFacial" validator="#{ValidadorBean.validate}"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showFacial}">
+					<p:ajax listener="#{AnaliticReportBean.selectedValueListener}"
+						update="filtrosPanel" />
+					<f:selectItems value="#{AnaliticReportBean.selectFacial}" />
+				</p:selectOneMenu>
+
+
+				<p:outputLabel value="Condicion:" id="Condition"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showCondition}" />
+				<p:selectBooleanCheckbox
+					value="#{AnaliticReportBean.selectedVisualCondition}"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showCondition}">
+					<p:ajax listener="#{AnaliticReportBean.ordConditionListener}"
+						update="filtrosPanel" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel value="#{AnaliticReportBean.ordCondition}"
+					id="ordCondition"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showCondition}" />
+				<p:selectOneMenu value="#{AnaliticReportBean.selectedCondition}"
+					id="selectCondition" validator="#{ValidadorBean.validate}"
+					rendered="#{AnaliticReportBean.showSelectedCompany and AnaliticReportBean.showCondition}">
+					<p:ajax listener="#{AnaliticReportBean.selectedValueListener}"
+						update="filtrosPanel" />
+					<f:selectItems value="#{AnaliticReportBean.selectCondition}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Totalizar por desglose" id="rollup"
+					rendered="#{AnaliticReportBean.showSelectedCompany}" />
+				<p:selectBooleanCheckbox id="rollup1"
+					value="#{AnaliticReportBean.selectedVisualRollUp}"
+					rendered="#{AnaliticReportBean.showSelectedCompany}">
+					<p:ajax listener="#{AnaliticReportBean.selectedValueListener}"
+						update="rollup1" />
+				</p:selectBooleanCheckbox>
+
+
+			</p:panelGrid>
+		</p:outputPanel>
+
+		<p:messages id="message3" showDetail="true" autoUpdate="true"
+			closable="true" />
+
+		<p:outputPanel id="panelButton">
+			<p:commandButton ajax="false" value="#{msg.reporte}"
+				id="myActionLink" action="#{AnaliticReportBean.actionGetReport}"
+				rendered="#{AnaliticReportBean.showFilters and !AnaliticReportBean.showResultTable}"
+				udpate="message,message3,dataTable" />
+
+			<p:commandButton ajax="false" value="#{msg.reportedRedo}"
+				id="myActionLink2" action="#{AnaliticReportBean.actionGetReport}"
+				rendered="#{AnaliticReportBean.showFilters and AnaliticReportBean.showResultTable}"
+				udpate="message,message3,panelButton" />
+
+			<p:commandButton ajax="false" validateClient="false" immediate="true"
+				value="#{msg.cancelReport}" id="cancel"
+				action="#{AnaliticReportBean.actionExit}" process="@none" />
+		</p:outputPanel>
+
+
+		<p:dataTable id="dataTable" var="row"
+			value="#{ResultBean.resultList.getFields()}" paginator="true"
+			rows="25" filteredValue="#{ResultBean.filteredFieldList}"
+			rendered="#{AnaliticReportBean.showResultTable}" sortMode="multiple">
+			<f:facet name="header">
+				<p:outputLabel
+					value="#{ResultBean.title} #{ResultBean.rangoFechasStr}" />
+			</f:facet>
+
+			<c:forEach items="#{ResultBean.resultList.getLabels()}" var="col"
+				varStatus="status">
+				<c:if test="#{ResultBean.resultList.getTypes().get(status.count-1)}">
+					<p:column headerText="#{col}"
+						filterBy="#{row.getField(status.count-1)}"
+						filterMatchMode="contains">
+						<p:outputLabel value="#{row.getField(status.count-1)}" />
+					</p:column>
+				</c:if>
+				<c:if
+					test="#{!ResultBean.resultList.getTypes().get(status.count-1)}">
+					<c:if test="#{!AnaliticReportBean.selectedVisualRollUp}">
+						<p:column headerText="#{col}" parse="number"
+							sortBy="#{row.getField(status.count-1)}"
+							sortFunction="#{AnaliticReportBean.sortByNumber}">
+							<p:outputLabel value="#{row.getField(status.count-1)}"
+								style="float:right" />
+						</p:column>
+					</c:if>
+					<c:if test="#{AnaliticReportBean.selectedVisualRollUp}">
+						<p:column headerText="#{col}" parse="number">
+							<p:outputLabel value="#{row.getField(status.count-1)}"
+								style="float:right" />
+						</p:column>
+					</c:if>
+				</c:if>
+			</c:forEach>
+		</p:dataTable>
+
+		<p:dataTable id="pruebaData" rendered="false">
+		</p:dataTable>
+
+		<p:commandLink ajax="false"
+			rendered="#{AnaliticReportBean.showResultTable}">
+			<p:graphicImage value="../images/excel.jpeg" width="40" height="40" />
+			<p:dataExporter type="xls" target="dataTable"
+				postProcessor="#{AnaliticReportBean.postProcessXLS}"
+				fileName="ReporteAnalitico" />
+		</p:commandLink>
+
+		<!-- 
+		<p:barChart rendered="#{RechargeReportBean.showResultTable}" id="basic" value="#{RechargeReportBean.categoryModel}" legendPosition="ne"  
+            title="Basic Bar Chart" min="0" max="#{RechargeReportBean.maxSizeReportGraph}"  style="height:300px"/> 
+ 		-->
+	</h:form>
+
+	<ui:include src="/include/IncludeFooter.html"></ui:include>
+
+</body>
+</html>

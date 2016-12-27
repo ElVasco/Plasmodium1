@@ -1,0 +1,147 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:include src="/include/IncludeHeader.xhtml"></ui:include>
+
+<h:head></h:head>
+<body>
+	<ui:include src="/include/HiAndByeTrans.xhtml"></ui:include>
+	<ui:include src="/include/IncludeBanner.html"></ui:include>
+	<ui:include src="/include/IncludeTransMenu.xhtml"></ui:include>
+
+	<h2>Reporte de estatus</h2>
+
+
+	<h:form id="reportForm">
+		<p:panelGrid border="0" columns="2">
+			<p:outputLabel> Reporte de estatus</p:outputLabel>
+			<p:selectOneMenu id="reportStatus"
+				value="#{StatusReportBean.selectedReport}">
+				<p:ajax listener="#{StatusReportBean.reportListener}"
+					update="filtrosPanel,panelButton" />
+				<f:selectItems value="#{StatusReportBean.reportList}" />
+			</p:selectOneMenu>
+		</p:panelGrid>
+
+		<p:outputPanel id="filtrosPanel">
+			<p:panelGrid columns="2" border="1" rules="all" id="panel1"
+				rendered="#{StatusReportBean.showFilters}">
+				<f:facet name="header">
+							Opciones de Estatus
+						</f:facet>
+
+				<p:outputLabel value="Busqueda por:" id="serialOT"
+					rendered="#{StatusReportBean.showSeco}" />
+				<p:selectOneMenu id="serialConsecutive"
+					value="#{StatusReportBean.selectedConsec}"
+					rendered="#{StatusReportBean.showSeco}">
+					<p:ajax listener="#{StatusReportBean.reportSerialMethod}"
+						update="filtrosPanel" />
+					<f:selectItems value="#{StatusReportBean.selectIdType}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Zona:" id="distOT"
+					rendered="#{StatusReportBean.showDistributer}" />
+				<p:selectOneMenu value="#{StatusReportBean.selectedDistributer}"
+					id="distribuidorList"
+					rendered="#{StatusReportBean.showDistributer}">
+					<p:ajax listener="#{StatusReportBean.distributerListenerMethod}"
+						update="rutaList" />
+					<f:selectItems value="#{StatusReportBean.selectDistributer}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Ruta:" id="rutaOT"
+					rendered="#{StatusReportBean.showRoute}" />
+				<p:selectOneMenu value="#{StatusReportBean.selectedRoute}"
+					id="rutaList" rendered="#{StatusReportBean.showRoute}">
+					<p:ajax listener="#{StatusReportBean.routeListenerMethod}" />
+					<f:selectItems value="#{StatusReportBean.selectRoute}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Consecutivo Desde:" id="consecutivoFrom"
+					rendered="#{StatusReportBean.showConsecutive}" />
+				<p:inputText id="serialListTo"
+					value="#{StatusReportBean.selectedConsecutiveFrom}"
+					validator="#{ValidadorBean.validate}"
+					rendered="#{StatusReportBean.showConsecutive}" required="true">
+				</p:inputText>
+
+				<p:outputLabel value="Consecutivo Hasta:" id="consecutivoTo"
+					rendered="#{StatusReportBean.showConsecutiveTo}" />
+				<p:inputText id="consecutivoListTo"
+					value="#{StatusReportBean.selectedConsecutiveTo}"
+					validator="#{ValidadorBean.validate}"
+					rendered="#{StatusReportBean.showConsecutiveTo}" required="true">
+				</p:inputText>
+
+				<p:outputLabel value="Serial:" id="serialTo"
+					rendered="#{StatusReportBean.showSerial}" />
+				<p:inputText id="serialNumber"
+					value="#{StatusReportBean.selectedSerial}"
+					validator="#{ValidadorBean.validate}"
+					rendered="#{StatusReportBean.showSerial}" required="true">
+				</p:inputText>
+
+				<p:outputLabel value="PIN:" id="pinL"
+					rendered="#{StatusReportBean.showPin}" />
+				<p:inputText id="pinNumber" value="#{StatusReportBean.selectedPin}"
+					validator="#{ValidadorBean.validate}"
+					rendered="#{StatusReportBean.showPin}" required="true">
+				</p:inputText>
+
+				<p:outputLabel value="Estatus:" id="status"
+					rendered="#{StatusReportBean.showStatus}" />
+				<p:selectOneMenu value="#{StatusReportBean.selectedStatus}"
+					id="statusList" rendered="#{StatusReportBean.showStatus}"
+					validator="#{ValidadorBean.validate}" required="true">
+					<f:selectItems value="#{StatusReportBean.selectStatus}" />
+				</p:selectOneMenu>
+
+				<p:outputLabel value="Confirmación:" id="ConfirOT"
+					rendered="#{StatusReportBean.showConfirm}" />
+				<p:selectOneRadio value="#{StatusReportBean.selectedConfirm}"
+					id="confirmList" rendered="#{StatusReportBean.showConfirm}"
+					required="true">
+					<f:selectItems value="#{StatusReportBean.selectConfirm}" />
+				</p:selectOneRadio>
+
+				<p:outputLabel value="Fecha:" id="fechaOT"
+					rendered="#{StatusReportBean.showDate}" />
+				<p:calendar id="selectDate" value="#{StatusReportBean.date}"
+					pattern="dd/MM/yyyy" effect="slideDown"
+					rendered="#{StatusReportBean.showDate}">
+				</p:calendar>
+
+				<p:outputLabel value="Incluir Archivo:" id="showArchive"
+					rendered="#{StatusReportBean.showArch}" />
+				<p:selectBooleanCheckbox value="#{StatusReportBean.includeArchive}"
+					id="archBox" rendered="#{StatusReportBean.showArch}" />
+
+			</p:panelGrid>
+		</p:outputPanel>
+
+		<p:messages id="message" showDetail="true" autoUpdate="true"
+			closable="true" />
+
+		<p:outputPanel id="panelButton">
+			<p:commandButton ajax="false" value="#{msg.reporte}"
+				id="myActionLink3" action="#{StatusReportBean.actionGetReport}"
+				update="message" rendered="#{StatusReportBean.showFilters}" />
+
+
+			<p:commandButton ajax="false" validateClient="false" immediate="true"
+				value="#{msg.cancelReport}" id="cancel"
+				action="#{StatusReportBean.actionExit}" process="@none" />
+
+		</p:outputPanel>
+
+
+	</h:form>
+
+	<ui:include src="/include/IncludeFooter.html"></ui:include>
+
+</body>
+</html>

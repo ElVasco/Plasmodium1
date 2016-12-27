@@ -1,0 +1,180 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+<ui:include src="/include/IncludeHeader.xhtml"></ui:include>
+
+<h:head>
+	<script
+		src="http://maps.google.com/maps/api/js?key=AIzaSyDXM9lmEguvVPQD50Jx6Lxl2cVeevCV50Y"
+		type="text/javascript"></script>
+</h:head>
+<body>
+	<!-- Esta parte es delicada la lista se llena en un bean "UserBean" -->
+	<ui:include src="/include/HiAndByeTrans.xhtml"></ui:include>
+	<ui:include src="/include/IncludeBanner.html"></ui:include>
+	<ui:include src="/include/IncludeTransMenu.xhtml"></ui:include>
+
+
+	<p:panel id="panel" header="Panel de edición de usuarios"
+		styleClass="blockUser">
+		<f:facet name="header">
+							Datos generales de la Institucion
+						</f:facet>
+		<h:form id="InstitutionId" styleClass="distributerSelector">
+			<p:inputText type="hidden" id="test" name="hidden1"
+				value="#{InstitutionBean.center}">
+				<p:ajax event="valueChange"/>
+			</p:inputText>
+			<!-- PANEL DE FILTRO DE INSTITUTO   -->
+			<h:panelGrid id="panelInstitute" columns="3" cellpadding="5">
+				<!-- Seleccion de tipo de institucion -->
+				<p:outputLabel value="Tipo de institución:" id="institutionTypeOPL"
+					for="institutionTypeFor" />
+				<p:selectOneMenu value="#{InstitutionBean.selectedInstitutionType}"
+					id="institutionTypeFor">
+					<p:ajax listener="#{InstitutionBean.institutionTypeListenerMethod}"
+						update="panel1,panelInstitute,buttonPanel,panel12,mapitaNew,dialogo" />
+					<f:selectItem itemLabel="Seleccione un tipo de institución"
+						itemValue="" noSelectionOption="true" />
+					<f:selectItems value="#{InstitutionBean.selectInstitutionType}" />
+				</p:selectOneMenu>
+				<p:message for="institutionTypeFor" display="tooltip" />
+
+				<!-- Seleccion de institucion -->
+				<p:outputLabel value="Institución:" id="institutionOPL"
+					for="institutionFor"
+					rendered="#{InstitutionBean.showInstitutionList}" />
+				<p:selectOneMenu value="#{InstitutionBean.selectedInstitution}"
+					id="institutionFor" disabled="#{InstitutionBean.showDetailNew}"
+					rendered="#{InstitutionBean.showInstitutionList}">
+					<p:ajax listener="#{InstitutionBean.institutionListenerMethod}"
+						update="panel1,panelInstitute,buttonPanel,panel12,mapita,dialogo" />
+					<f:selectItem itemLabel="Seleccione una institución" itemValue=""
+						noSelectionOption="true" />
+					<f:selectItems value="#{InstitutionBean.selectInstitution}" />
+					<f:selectItem itemLabel="Agregar una institución" itemValue="999"
+						noSelectionOption="false" />
+				</p:selectOneMenu>
+				<p:message for="institutionFor" display="tooltip"
+					rendered="#{InstitutionBean.showInstitutionList}" />
+
+			</h:panelGrid>
+
+			<h:panelGrid id="panel12" columns="1" cellpadding="5">
+
+				<p:outputLabel rendered="#{InstitutionBean.showDetail}">
+					<th>Detalles del Instituto</th>
+				</p:outputLabel>
+			</h:panelGrid>
+
+			<!-- PANEL DE INFORMACION DE INSTITUCION  -->
+			<h:panelGrid id="panel1" columns="3" cellpadding="5">
+
+				<p:outputLabel value="Nombre de institucion:" for="name"
+					rendered="#{InstitutionBean.showDetail}" />
+				<p:inputText id="name" value="#{InstitutionBean.institution.name}"
+					required="#{InstitutionBean.editDetail}"
+					readonly="#{!(InstitutionBean.editDetail)}"
+					rendered="#{InstitutionBean.showDetail}"
+					validatorMessage="Solo letras papá">
+					<p:ajax event="keyup" update="namemsg" />
+					<f:validateRegex pattern="[a-zA-Z]+" />
+				</p:inputText>
+				<p:message id="namemsg" for="name" display="text,tooltip" />
+
+				<p:outputLabel value="Tipo de institucion:" for="type"
+					rendered="#{InstitutionBean.showDetail}" />
+				<p:inputText id="type"
+					value="#{InstitutionBean.institution.institutionType.name}"
+					required="#{InstitutionBean.editDetail}"
+					readonly="#{!(InstitutionBean.editDetail)}"
+					rendered="#{InstitutionBean.showDetail}"
+					validatorMessage="Solo letras papá">
+					<p:ajax event="keyup" update="typemsg" />
+					<f:validateRegex pattern="[a-zA-Z]+" />
+				</p:inputText>
+				<p:message id="typemsg" for="type" display="text,tooltip" />
+
+				<p:outputLabel value="Latitud:" for="gpslat"
+					rendered="#{InstitutionBean.showDetail}" />
+				<p:inputText id="gpslat"
+					value="#{InstitutionBean.institution.location.latitude}"
+					required="#{InstitutionBean.editDetail}"
+					readonly="#{!(InstitutionBean.editDetail)}"
+					rendered="#{InstitutionBean.showDetail}"
+					validatorMessage="Solo coordenadas papá">
+					<p:ajax event="keyup" update="gpslatmsg" />
+					<f:validateRegex pattern="(^-?[0-9]\d*(\.\d+)?$)" />
+				</p:inputText>
+				<p:message id="gpslatmsg" for="gpslat" display="text,tooltip" />
+
+				<p:outputLabel value="Longitud:" for="gpslon"
+					rendered="#{InstitutionBean.showDetail}" />
+				<p:inputText id="gpslon"
+					value="#{InstitutionBean.institution.location.longitude}"
+					required="#{InstitutionBean.editDetail}"
+					readonly="#{!(InstitutionBean.editDetail)}"
+					rendered="#{InstitutionBean.showDetail}"
+					validatorMessage="Solo coordenadas papá">
+					<p:ajax event="keyup" update="gpslonmsg" />
+					<f:validateRegex pattern="^-?[0-9]\d*(\.\d+)?$" />
+				</p:inputText>
+				<p:message id="gpslonmsg" for="gpslon" display="text,tooltip" />
+
+				<p:spacer width="100" height="10" />
+				<p:spacer width="100" height="10" />
+				<p:commandButton value="Modal" type="button"
+					onclick="PF('dlg2').show();" rendered="#{InstitutionBean.showMap}" />
+
+			</h:panelGrid>
+
+			<!-- PANEL DE BOTONES  -->
+			<h:panelGrid id="buttonPanel" columns="3" cellpadding="5">
+
+				<p:commandButton ajax="false" value="#{msg.change}"
+					id="buttonChange" action="#{InstitutionBean.actionChangeUser}"
+					validateClient="true"
+					rendered="#{!InstitutionBean.showDetailNew and InstitutionBean.showDetail}"
+					update="error,userEditPanel" />
+				<p:commandButton ajax="false"
+					value="#{InstitutionBean.userEnabled ? msg.deactivate:msg.reactivate}"
+					id="buttonDelete" action="#{InstitutionBean.actionDeleteUser}"
+					validateClient="true"
+					rendered="#{!InstitutionBean.showDetailNew and InstitutionBean.showDetail and !InstitutionBean.editDetail}"
+					process="@none" />
+				<p:commandButton ajax="false" value="#{msg.actionAddUser}"
+					id="buttonAdd" action="#{InstitutionBean.actionAddUser}"
+					validateClient="true"
+					rendered="#{InstitutionBean.showDetailNew and InstitutionBean.showDetail}"
+					update="error" />
+				<p:commandButton ajax="false" value="#{msg.cancel}" immediate="true"
+					id="cancel" process="@none" action="#{InstitutionBean.actionExit}" />
+			</h:panelGrid>
+			<p:dialog header="Mapa" widgetVar="dlg2" modal="true"
+				resizable="false" id="dialogo" height="400" width="80%"
+				closeOnEscape="true">
+				<p:gmap center="#{InstitutionBean.center}" zoom="13" type="HYBRID"
+					id="mapita" style="width:100%;height:400px"
+					model="#{InstitutionBean.simpleModel}"
+					rendered="#{!(InstitutionBean.showDetailNew)}" />
+				<p:gmap center="#{InstitutionBean.center}" zoom="13" type="HYBRID"
+					id="mapitaNew" style="width:100%;height:400px"
+					rendered="#{InstitutionBean.showDetailNew}" />
+			</p:dialog>
+		</h:form>
+	</p:panel>
+	<ui:include src="/include/IncludeFooter.html"></ui:include>
+	<script>
+		function ip_callback(o) {
+			var latlong = "";
+			latlong = latlong.concat(o.latitude, ",", o.longitude)
+			document.getElementById("InstitutionId:test").value = latlong;
+		}
+	</script>
+	<script src="http://freegeoip.net/json/?callback=ip_callback"></script>
+</body>
+</html>
