@@ -11,11 +11,11 @@
            		maxActive="50" 
            		maxIdle="30" 
            		maxWait="10000"
-              	username="root"
+              	username="tony"
               	logAbandoned="true"
               	removeAbandoned="true"
               	removeAbandonedTimeout="10"
-				password="Tx0m1n.00"
+				password="tony123"
 				driverClassName="com.mysql.jdbc.Driver"
               	url="jdbc:mysql://127.0.0.1:3306/plasmodium?autoReconnect=true"/>
 
