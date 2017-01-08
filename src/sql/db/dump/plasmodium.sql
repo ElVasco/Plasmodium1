@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50710
 File Encoding         : 65001
 
-Date: 2017-01-08 22:46:34
+Date: 2017-01-08 22:51:32
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -14721,6 +14721,7 @@ CREATE TABLE `parameters` (
 -- ----------------------------
 -- Records of parameters
 -- ----------------------------
+INSERT INTO `parameters` VALUES ('param.footer.year', '2016');
 INSERT INTO `parameters` VALUES ('param.key.google', 'key=AIzaSyDXM9lmEguvVPQD50Jx6Lxl2cVeevCV50Y');
 INSERT INTO `parameters` VALUES ('param.url.google.latlng', 'https://maps.googleapis.com/maps/api/geocode/json?latlng=');
 
