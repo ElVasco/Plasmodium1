@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 
 
 
+
 //Abstract class DAO Factory
 /**
  * @author wcsadmin
@@ -22,7 +23,9 @@ public abstract class DAOFactory {
 	//There will be a method for each DAO that can be
 	//created. The concrete factories will have to
 	// implement these methods.
-	public abstract InstitutionDAO getCardDAO();
+	public abstract InstitutionDAO getInstitutionDAO();
+	public abstract LocatioDAO getLocatioDAO();
+	public abstract GlobalDAO getGlobalDAO();
 	public abstract UserDAO getUserDAO();
 
 	public abstract AuthorizationDAO getAuthorizationDAO();

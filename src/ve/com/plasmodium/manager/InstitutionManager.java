@@ -16,7 +16,7 @@ public class InstitutionManager {
     final InstitutionDAO institutionDAO;
 
     public InstitutionManager(short aFactoryNumber) {
-    	this.institutionDAO = DAOFactory.getDAOFactory(aFactoryNumber).getCardDAO();
+    	this.institutionDAO = DAOFactory.getDAOFactory(aFactoryNumber).getInstitutionDAO();
     }
 
 	public void institutionDetail(InstitutionDTO institutionDTO, String institution) {

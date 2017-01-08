@@ -61,10 +61,13 @@ public class MySQLDAOFactory extends DAOFactory {
 		}
 	}
 
-	public InstitutionDAO getCardDAO() {
+	public InstitutionDAO getInstitutionDAO() {
 		return new MySQLInstitutionDAO();
 	}
 
+	public GlobalDAO getGlobalDAO() {
+		return new MySQLGlobalDAO();
+	}
 
 	public UserDAO getUserDAO() {
 		return new MySQLUserDAO();
@@ -73,6 +76,10 @@ public class MySQLDAOFactory extends DAOFactory {
 
 	public AuthorizationDAO getAuthorizationDAO() {
 		return new MySQLAuthorizationDAO();
+	}
+
+	public LocatioDAO getLocatioDAO() {
+		return new MySQLLocatioDAO();
 	}
 
 }

@@ -11,6 +11,7 @@ import javax.faces.bean.SessionScoped;
 
 import org.apache.log4j.Logger;
 
+import ve.com.plasmodium.manager.GlobalManager;
 import ve.com.plasmodium.manager.InstitutionManager;
 import ve.com.plasmodium.model.dao.SQLConstant;
 import ve.com.plasmodium.model.vo.InstitutionDTO;
@@ -26,11 +27,20 @@ public class GlobalDataBean {
 	private List<InstitutionTypeDTO> institutionTypeList;
 	private List<InstitutionDTO> institutionList;
 	private Map<String,List<InstitutionDTO>> mapInstitution_Type;
+	private Map<String,String> param;
 
 
 	public GlobalDataBean(){
 		resetInstitutionTypeList();
 		resetInstitutionList();
+		param = new HashMap<String,String>();
+		searchParameter(param);
+	}
+
+	private void searchParameter(Map<String, String> param2) {
+		GlobalManager gm = new GlobalManager(SQLConstant.MYSQL);
+		gm.searchParameter(param);
+		
 	}
 
 	public List<InstitutionTypeDTO> resetInstitutionTypeList() {
@@ -106,6 +116,14 @@ public class GlobalDataBean {
 
 	public void setMapInstitution_Type(Map<String,List<InstitutionDTO>> mapInstitution_Type) {
 		this.mapInstitution_Type = mapInstitution_Type;
+	}
+
+	public Map<String,String> getParam() {
+		return param;
+	}
+
+	public void setParam(Map<String,String> param) {
+		this.param = param;
 	}
 
 }

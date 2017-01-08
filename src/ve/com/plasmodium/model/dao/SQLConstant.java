@@ -444,6 +444,7 @@ public final class SQLConstant {
 	public static String searchStatus13or14 = "SELECT * FROM status WHERE company=? AND denom=? AND cluster=? AND lot=? AND sublot=? AND serial=? AND status IN (13,14)";
 	public static String addRechargeFact = "INSERT INTO fact_recharge (company,method,network,packing,industry,location,time,total_money,total_charge) VALUES(?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE total_money=total_money+?, total_charge=total_charge+1";
 	public static String getChownPermissions = "SELECT CONCAT(directory_user,':',directory_group) FROM company WHERE company=?";
+
 	
 
 	//**********************************************************************CREACI�N DE DEPOSITO*****************************************************************************
@@ -948,6 +949,10 @@ public final class SQLConstant {
 	public final static String UsuarioDetail = 
 			"SELECT u.id_user ,ui.institution ,u.num_ident ,u.first_name,u.fist_last_name,u.email,u.position,u.id_level,u.login,u.active FROM user AS u STRAIGHT_JOIN user_institution AS ui ON ui.user = u.id_user WHERE u.id_user=?";
 
+		//************************************ GLOBAL ******************************//
+	
+	public final static String getParameters = "SELECT id, parameter FROM parameters";
+	
 		//************************************ INSTITUCION ******************************//
 	
 	public static final String getInstitutionList = "SELECT i.id_institution, i.`name`, it.id_institution_type ,it.`name` AS name1, l.id_location, l.latitude,l.longitude,l.administrative_area_level_1, l.administrative_area_level_2, l.locality, l.route, l.place_ID, l.demarcation FROM institution i JOIN institution_type it ON i.id_institution_type=it.id_institution_type JOIN location_gps l ON i.id_location=l.id_location WHERE i.id_institution_type=?;";
