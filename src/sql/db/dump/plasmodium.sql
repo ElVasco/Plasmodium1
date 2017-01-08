@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50710
 File Encoding         : 65001
 
-Date: 2016-12-26 16:31:45
+Date: 2017-01-08 22:46:34
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -14707,6 +14707,22 @@ INSERT INTO `location_gps` VALUES ('751', 'Venezuela', 'Sucre', 'Arismendi', 'Sa
 INSERT INTO `location_gps` VALUES ('752', 'Venezuela', 'Sucre', 'Arismendi', 'null', 'null', 'Unnamed Road', 'null', '10.75166667', '-62.69777778', 'ChIJj50dQo0ANIwR3LvYPbCodPo', null);
 INSERT INTO `location_gps` VALUES ('753', 'Venezuela', 'Sucre', 'Arismendi', 'San Juan de Unare', 'null', 'Unnamed Road', 'null', '10.7525', '-62.74305556', 'ChIJVU3im_MBNIwR8kE7Ue-Ik7A', null);
 INSERT INTO `location_gps` VALUES ('754', 'Venezuela', 'Distrito Capital', 'Libertador', 'Caracas', null, null, null, '10.495175', '-66.893608', 'ChIJUelZwddYKowR1bJCM-DN8vs', null);
+
+-- ----------------------------
+-- Table structure for `parameters`
+-- ----------------------------
+DROP TABLE IF EXISTS `parameters`;
+CREATE TABLE `parameters` (
+  `id` varchar(255) NOT NULL,
+  `parameter` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of parameters
+-- ----------------------------
+INSERT INTO `parameters` VALUES ('param.key.google', 'key=AIzaSyDXM9lmEguvVPQD50Jx6Lxl2cVeevCV50Y');
+INSERT INTO `parameters` VALUES ('param.url.google.latlng', 'https://maps.googleapis.com/maps/api/geocode/json?latlng=');
 
 -- ----------------------------
 -- Table structure for `patient_data`
