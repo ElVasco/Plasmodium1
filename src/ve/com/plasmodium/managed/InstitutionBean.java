@@ -27,7 +27,7 @@ import ve.com.plasmodium.model.vo.InstitutionTypeDTO;
 @SessionScoped
 public class InstitutionBean {
 
-	public static final Logger logger = Logger.getLogger(UserEditBean.class);
+	public static final Logger logger = Logger.getLogger(InstitutionBean.class);
 
 	private List<SelectItem> selectInstitutionType;
 	private String selectedInstitutionType;

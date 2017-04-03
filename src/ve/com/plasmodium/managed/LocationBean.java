@@ -22,7 +22,7 @@ import ve.com.plasmodium.model.vo.LocationDTO;
 @SessionScoped
 public class LocationBean {
 
-	public static final Logger logger = Logger.getLogger(UserEditBean.class);
+	public static final Logger logger = Logger.getLogger(LocationBean.class);
 
 	private MapModel emptyModel;
 	private Marker marker;

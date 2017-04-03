@@ -18,29 +18,29 @@
 	<p:panel id="panel" header="Panel de edición de tipo de Institucion"
 		styleClass="blockUser">
 		<f:facet name="header">
-							Tipo de Institucion
+							Tipo de Plasmodium
 						</f:facet>
-		<h:form id="form_InsititutionType" styleClass="distributerSelector">
+		<h:form id="form_PlasmodiumType" styleClass="distributerSelector">
 
-			<!-- PANEL DE NOMBRE DE TIPO DE INSTITUCION  -->
-			<h:panelGrid id="panel_InsititutionType" columns="3" cellpadding="5">
+			<!-- PANEL DE NOMBRE DE TIPO DE PLASMODIUM  -->
+			<h:panelGrid id="panel_PlasmodiumType" columns="3" cellpadding="5">
 				<!-- Nombre del tipo de institucion -->
-				<p:outputLabel value="Tipo de institución:" id="institutionTypeOPL"
-					for="institutionTypeFor" rendered="#{!InstitutionTypeBean.showDetailNew}"/>
-				<p:selectOneMenu value="#{InstitutionTypeBean.selectedInstitutionType}"
-					id="institutionTypeFor" rendered="#{!InstitutionTypeBean.showDetailNew}">
-					<p:ajax listener="#{InstitutionTypeBean.institutionTypeListenerMethod}"
-						update="panel_InsititutionType" />
+				<p:outputLabel value="Tipo de institución:" id="plasmodiumTypeOPL"
+					for="plasmodiumTypeFor" rendered="#{!PlasmodiumTypeBean.showDetailNew}"/>
+				<p:selectOneMenu value="#{PlasmodiumTypeBean.selectedplasmodiumType}"
+					id="plasmodiumTypeFor" rendered="#{!PlasmodiumTypeBean.showDetailNew}">
+					<p:ajax listener="#{PlasmodiumTypeBean.plasmodiumTypeListenerMethod}"
+						update="panel_PlasmodiumType" />
 					<f:selectItem itemLabel="Seleccione un tipo de institución"
 						itemValue="" noSelectionOption="true" />
-					<f:selectItems value="#{InstitutionTypeBean.selectInstitutionType}" />
+					<f:selectItems value="#{PlasmodiumTypeBean.selectplasmodiumType}" />
 				</p:selectOneMenu>
-				<p:message for="institutionTypeFor" display="tooltip" />
+				<p:message for="plasmodiumTypeFor" display="tooltip" />
 					
-				<p:outputLabel value="Nombre de institucion:" for="name" rendered="#{InstitutionTypeBean.showDetailNew or InstitutionTypeBean.showDetail}"/>
-				<p:inputText id="name" value="#{InstitutionTypeBean.instiType.name}"
+				<p:outputLabel value="Nombre de institucion:" for="name" rendered="#{PlasmodiumTypeBean.showDetailNew or PlasmodiumTypeBean.showDetail}"/>
+				<p:inputText id="name" value="#{PlasmodiumTypeBean.instiType.name}"
 					validatorMessage="Solo letras papá" 
-					rendered="#{InstitutionTypeBean.showDetailNew or InstitutionTypeBean.showDetail}">
+					rendered="#{PlasmodiumTypeBean.showDetailNew or PlasmodiumTypeBean.showDetail}">
 					<p:ajax event="keyup" update="namemsg" />
 					<f:validateRegex pattern="[a-zA-Z]+" />
 				</p:inputText>
@@ -52,17 +52,17 @@
 			<h:panelGrid id="buttonPanel" columns="3" cellpadding="5">
 
 				<p:commandButton ajax="false" value="#{msg.change}"
-					id="buttonChange" action="#{InstitutionTypeBean.actionChangeUser}"
+					id="buttonChange" action="#{PlasmodiumTypeBean.actionChangeUser}"
 					validateClient="true"
-					rendered="#{!InstitutionTypeBean.showDetailNew}"
+					rendered="#{!PlasmodiumTypeBean.showDetailNew}"
 					update="error,userEditPanel" />
 				<p:commandButton ajax="false" value="#{msg.actionAddUser}"
-					id="buttonAdd" action="#{InstitutionTypeBean.actionAddUser}"
+					id="buttonAdd" action="#{PlasmodiumTypeBean.actionAddUser}"
 					validateClient="true"
-					rendered="#{InstitutionTypeBean.showDetailNew}"
+					rendered="#{PlasmodiumTypeBean.showDetailNew}"
 					update="error" />
 				<p:commandButton ajax="false" value="#{msg.cancel}" immediate="true"
-					id="cancel" process="@none" action="#{InstitutionTypeBean.actionExit}" />
+					id="cancel" process="@none" action="#{PlasmodiumTypeBean.actionExit}" />
 			</h:panelGrid>
 		</h:form>
 	</p:panel>

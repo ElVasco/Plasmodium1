@@ -81,6 +81,25 @@
 			<to-view-id>/pages/MenuInicio.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
+		<navigation-rule>
+		<from-view-id>/pages/InstitutionType.xhtml</from-view-id>
+		<navigation-case>
+			<from-outcome>successful</from-outcome>
+			<to-view-id>/pages/MenuInicio.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>successful_assign</from-outcome>
+			<to-view-id>/pages/MenuInicio.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>fail</from-outcome>
+			<to-view-id>/pages/Institution.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>successful_exit</from-outcome>
+			<to-view-id>/pages/MenuInicio.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
 	<!-- ASIGNACION DE TARJETAS A RUTAS -->
 	<navigation-rule>
 		<from-view-id>/pages/AsignarRuta.xhtml</from-view-id>

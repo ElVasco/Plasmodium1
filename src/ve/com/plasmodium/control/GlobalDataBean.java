@@ -16,6 +16,7 @@ import ve.com.plasmodium.manager.InstitutionManager;
 import ve.com.plasmodium.model.dao.SQLConstant;
 import ve.com.plasmodium.model.vo.InstitutionDTO;
 import ve.com.plasmodium.model.vo.InstitutionTypeDTO;
+import ve.com.plasmodium.model.vo.LethalityDTO;
 import ve.com.plasmodium.model.vo.LocationDTO;
 
 
@@ -28,6 +29,7 @@ public class GlobalDataBean {
 	private List<InstitutionDTO> institutionList;
 	private Map<String,List<InstitutionDTO>> mapInstitution_Type;
 	private Map<String,String> param;
+	private List<LethalityDTO> lethalityList;
 
 
 	public GlobalDataBean(){
@@ -35,6 +37,12 @@ public class GlobalDataBean {
 		resetInstitutionList();
 		param = new HashMap<String,String>();
 		searchParameter(param);
+		searchLethality();
+	}
+
+	private void searchLethality() {
+		GlobalManager gm = new GlobalManager(SQLConstant.MYSQL);
+		gm.searchLethality(lethalityList);
 	}
 
 	private void searchParameter(Map<String, String> param2) {
@@ -124,6 +132,14 @@ public class GlobalDataBean {
 
 	public void setParam(Map<String,String> param) {
 		this.param = param;
+	}
+
+	public List<LethalityDTO> getLethalityList() {
+		return lethalityList;
+	}
+
+	public void setLethalityList(List<LethalityDTO> lethalityList) {
+		this.lethalityList = lethalityList;
 	}
 
 }
