@@ -17,5 +17,5 @@
               	removeAbandonedTimeout="10"
 				password="Tx0m1n.00"
 				driverClassName="com.mysql.jdbc.Driver"
-              	url="jdbc:mysql://127.0.0.1:3306/plasmodium?autoReconnect=true"/>
+              	url="jdbc:mysql://uyoniomysql.ddns.net:8087/plasmodium?autoReconnect=true"/>
 </Context>
