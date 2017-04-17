@@ -688,7 +688,4 @@ public class MySQLUserDAO implements UserDAO {
 		MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
 		return result;
 	}
-
-
 }
-

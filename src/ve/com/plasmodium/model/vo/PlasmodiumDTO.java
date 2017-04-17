@@ -3,19 +3,30 @@ package ve.com.plasmodium.model.vo;
 import java.io.Serializable;
 
 public class PlasmodiumDTO implements Serializable {
-    
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 8091132031798295338L;
+	
+	private String id;
 	private String name;
 	private String description;
 	private LethalityDTO letalLevel;
+	private String letalidad;
+	public PlasmodiumTypeDTO plasmodiumType;
 	
 	public PlasmodiumDTO (){
 		
 	}
+
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	
 	
 	public LethalityDTO getLetalLevel() {
 		return letalLevel;
@@ -23,6 +34,14 @@ public class PlasmodiumDTO implements Serializable {
 	public void setLetalLevel(LethalityDTO letalLevel) {
 		this.letalLevel = letalLevel;
 	}
+	
+	public String getLetalidad() {
+		return letalidad;
+	}
+	public void setLetalidad(String string) {
+		this.letalidad = string;
+	}
+	
 	public String getDescription() {
 		return description;
 	}
@@ -80,5 +99,12 @@ public class PlasmodiumDTO implements Serializable {
 		}
 		return true;
 	}
+	
+	public PlasmodiumTypeDTO getPlasmodiumType() {
+		return plasmodiumType;
+	}
 
+	public void setPlasmodiumType(PlasmodiumTypeDTO plasmodiumType) {
+		this.plasmodiumType = plasmodiumType;
+	}
 }

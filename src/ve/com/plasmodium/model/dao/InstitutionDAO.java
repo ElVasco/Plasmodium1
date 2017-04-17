@@ -15,6 +15,13 @@ public interface InstitutionDAO {
 	public void institutionList(List<InstitutionDTO> institution, String selectedInstitutionType);
 
 	public void getIntitutionTypeList(List<InstitutionTypeDTO> institutionTypeList); 
-    
+	
+	public int addInstitutionType(InstitutionTypeDTO institutionType);
+	
+	public int changeInstitutionType(InstitutionTypeDTO institutionType);
+	
+	public int addInstitution(InstitutionDTO institution);
+	
+	public int changeInstitution(InstitutionDTO institution);
     
 }

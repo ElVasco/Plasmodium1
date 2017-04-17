@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import ve.com.plasmodium.model.dao.InstitutionDAO;
 import ve.com.plasmodium.model.vo.InstitutionDTO;
 import ve.com.plasmodium.model.vo.InstitutionTypeDTO;
+import ve.com.plasmodium.model.vo.PlasmodiumDTO;
 import ve.com.plasmodium.model.dao.DAOFactory;
 
 public class InstitutionManager {
@@ -26,15 +27,6 @@ public class InstitutionManager {
 			 logger.error("Exception institutionManager - institutionDetail ", e);
 		}
 	}
-//    public UserCompanyVo datosUsuario(String login) throws DAOException, CustomException {
-//	UserCompanyVo userCompanyVo = null;
-//	try {
-//	    userCompanyVo = userDAO.datosUsuario(login);
-//	} catch (Exception e) {
-//	    logger.error("Ocurrio un Excepcion: ", e);
-//	}
-//	return userCompanyVo;
-//    }
 
 	public void institutionList(List<InstitutionDTO> institution, String selectedInstitutionType) {
 		try {
@@ -52,4 +44,39 @@ public class InstitutionManager {
 		}
 	}
 
+    public int addInstitutionType(InstitutionTypeDTO instiTypeDTO) {
+    	try{
+    		return institutionDAO.addInstitutionType(instiTypeDTO);
+    	}catch (Exception e){
+    		logger.error("Exception institutionTypeManager - adding institutionType ", e);
+    		return -1;
+    	}
+    }
+
+    public int changeInstitutionType(InstitutionTypeDTO instiTypeDTO) {
+    	try{
+    		return institutionDAO.changeInstitutionType(instiTypeDTO);
+    	}catch (Exception e){
+    		logger.error("Exception institutionTypeManager - cambiando institutionType ", e);
+    		return -1;
+    	}
+    }
+
+    public int addInstitution(InstitutionDTO instiDTO) {
+    	try{
+    		return institutionDAO.addInstitution(instiDTO);
+    	}catch (Exception e){
+    		logger.error("Exception institutionTypeManager - adding institutionType ", e);
+    		return -1;
+    	}
+    }
+
+    public int changeInstitution(InstitutionDTO instiDTO) {
+    	try{
+    		return institutionDAO.changeInstitution(instiDTO);
+    	}catch (Exception e){
+    		logger.error("Exception institutionTypeManager - cambiando institutionType ", e);
+    		return -1;
+    	}
+    }
 }

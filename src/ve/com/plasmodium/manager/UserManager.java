@@ -122,8 +122,6 @@ public class UserManager {
 		return result;
 	}
 
-
-
 	public int addUser(String nameUser,String lastNameUser,String idUser,String phoneUser1, String mailUser, String selectedLevelUser, String jobtitleUser, String active, String loginUser, String passUser, String selectedInstitution) {
 		int result = 0;
 		try{
@@ -134,8 +132,6 @@ public class UserManager {
 		return result;
 	}
 
-
-
 	public boolean validatePassword(String login, String pwd) {
 		boolean result = false;
 		try{
@@ -145,8 +141,6 @@ public class UserManager {
 		}
 		return result;
 	}
-
-
 
 	public boolean updatePass(String login, String pwdNew) {
 		boolean result = false;
@@ -177,8 +171,6 @@ public class UserManager {
 		}
 	}
 
-
-
 	public float bucarDeduction(short company) {
 		float deduction = 1;
 		try {
@@ -188,8 +180,6 @@ public class UserManager {
 		}
 		return deduction;
 	}
-
-
 
 	public List<SelectItem> getPendingStates(Short company) {
 		List<SelectItem> stateList = null;
@@ -251,8 +241,6 @@ public class UserManager {
 		}
 		return serviceCompany;
 	}
-
-
 
 	public boolean validUserExist(String login) {
 		boolean result = false;

@@ -15,6 +15,7 @@
 				rendered="#{AuthorizationBean.ADMIN_MENU}" />
 			<p:menuitem value="Crear Usuario" url="UserEdit.jsf"
 				rendered="#{AuthorizationBean.CREATE_USER}" /> -->
+
 			<p:submenu label="USUARIOS" icon="fa fa-users">
 				<p:menuitem value="Agregar" url="User.jsf?modify=0" icon="fa fa-plus" />
 				<p:menuitem value="Modificar" url="User.jsf?modify=1" icon="fa fa-edit" />
@@ -25,20 +26,23 @@
 				<p:menuitem value="Modificar" url="PlasmodiumEdit.jsf?modify=1" icon="fa fa-edit" />
 				<!-- <p:menuitem value="Eliminar" url="UserEdit.jsf" icon="fa fa-minus" /> -->
 			</p:submenu>
-			<p:submenu label="CAPAÑAS" icon="fa fa-bullhorn">
-				<p:menuitem value="Agregar" url="UserEdit.jsf" icon="fa fa-plus" />
-				<p:menuitem value="Modificar" url="UserEdit.jsf" icon="fa fa-edit" />
+			<p:submenu label="CAMPAÑAS" icon="fa fa-bullhorn">
+				<p:menuitem value="Agregar" url="CampaignEdit.jsf?modify=0" icon="fa fa-plus" />
+				<p:menuitem value="Modificar" url="CampaignEdit.jsf?modify=1" icon="fa fa-edit" />
 				<!-- <p:menuitem value="Eliminar" url="UserEdit.jsf" icon="fa fa-minus" /> -->
 			</p:submenu>
 			<p:submenu label="CRIADERO" icon="fa fa-tint">
-				<p:menuitem value="Agregar" url="UserEdit.jsf" icon="fa fa-plus" />
-				<p:menuitem value="Modificar" url="UserEdit.jsf" icon="fa fa-edit" />
+				<p:menuitem value="Agregar" url="HatcheryEdit.jsf?modify=0" icon="fa fa-plus" />
+				<p:menuitem value="Modificar" url="HatcheryEdit.jsf?modify=1" icon="fa fa-edit" />
 				<!-- <p:menuitem value="Eliminar" url="UserEdit.jsf" icon="fa fa-minus" /> -->
 			</p:submenu>
 			<p:submenu label="FENOMENOS" icon="fa fa-bolt">
-				<p:menuitem value="Agregar" url="UserEdit.jsf" icon="fa fa-plus" />
-				<p:menuitem value="Modificar" url="UserEdit.jsf" icon="fa fa-edit" />
-				<!-- <p:menuitem value="Eliminar" url="UserEdit.jsf" icon="fa fa-minus" /> -->
+				<p:menuitem value="Agregar" url="PhenomenonEdit.jsf?modify=0" icon="fa fa-plus" />
+				<p:menuitem value="Modificar" url="PhenomenonEdit.jsf?modify=1" icon="fa fa-edit" />
+			</p:submenu>
+			<p:submenu label="TIPOS FENOMENOS" icon="fa fa-bolt">
+				<p:menuitem value="Agregar" url="PhenomenonTypeEdit.jsf?modify=0" icon="fa fa-plus" />
+				<p:menuitem value="Modificar" url="PhenomenonTypeEdit.jsf?modify=1" icon="fa fa-edit" />
 			</p:submenu>
 			<p:submenu label="TIPO DE INSTITUCIONES" icon="fa fa-simplybuilt">
 				<p:menuitem value="Agregar" url="InstitutionType.jsf?modify=0" icon="fa fa-plus" />
@@ -56,8 +60,8 @@
 				<!-- <p:menuitem value="Eliminar" url="UserEdit.jsf" icon="fa fa-minus" /> -->
 			</p:submenu>
 			<p:submenu label="DEMARCACION" icon="fa fa-crop">
-				<p:menuitem value="Agregar" url="UserEdit.jsf" icon="fa fa-plus" />
-				<p:menuitem value="Modificar" url="UserEdit.jsf" icon="fa fa-edit" />
+				<p:menuitem value="Agregar" url="DemarcationsEdit.jsf?modify=0" icon="fa fa-plus" />
+				<p:menuitem value="Modificar" url="DemarcationsEdit.jsf?modify=1" icon="fa fa-edit" />
 				<!-- <p:menuitem value="Eliminar" url="UserEdit.jsf" icon="fa fa-minus" /> -->
 			</p:submenu>
 		</p:submenu>

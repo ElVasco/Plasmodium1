@@ -14,8 +14,7 @@
 	<ui:include src="/include/IncludeBanner.html"></ui:include>
 	<ui:include src="/include/IncludeTransMenu.xhtml"></ui:include>
 
-
-	<p:panel id="panel" header="Panel de edición de tipo de Institucion"
+	<p:panel id="panel" header="Panel de edición de tipo de Plasmodium"
 		styleClass="blockUser">
 		<f:facet name="header">
 							Tipo de Plasmodium
@@ -24,43 +23,71 @@
 
 			<!-- PANEL DE NOMBRE DE TIPO DE PLASMODIUM  -->
 			<h:panelGrid id="panel_PlasmodiumType" columns="3" cellpadding="5">
-				<!-- Nombre del tipo de institucion -->
-				<p:outputLabel value="Tipo de institución:" id="plasmodiumTypeOPL"
-					for="plasmodiumTypeFor" rendered="#{!PlasmodiumTypeBean.showDetailNew}"/>
-				<p:selectOneMenu value="#{PlasmodiumTypeBean.selectedplasmodiumType}"
-					id="plasmodiumTypeFor" rendered="#{!PlasmodiumTypeBean.showDetailNew}">
-					<p:ajax listener="#{PlasmodiumTypeBean.plasmodiumTypeListenerMethod}"
-						update="panel_PlasmodiumType" />
-					<f:selectItem itemLabel="Seleccione un tipo de institución"
-						itemValue="" noSelectionOption="true" />
-					<f:selectItems value="#{PlasmodiumTypeBean.selectplasmodiumType}" />
-				</p:selectOneMenu>
-				<p:message for="plasmodiumTypeFor" display="tooltip" />
-					
-				<p:outputLabel value="Nombre de institucion:" for="name" rendered="#{PlasmodiumTypeBean.showDetailNew or PlasmodiumTypeBean.showDetail}"/>
-				<p:inputText id="name" value="#{PlasmodiumTypeBean.instiType.name}"
-					validatorMessage="Solo letras papá" 
-					rendered="#{PlasmodiumTypeBean.showDetailNew or PlasmodiumTypeBean.showDetail}">
-					<p:ajax event="keyup" update="namemsg" />
-					<f:validateRegex pattern="[a-zA-Z]+" />
-				</p:inputText>
-				<p:message id="namemsg" for="name" display="text,tooltip" />
-			</h:panelGrid>
 
+				<p:outputLabel value="Plasmodium tipo:"
+					for="plasmodiumTypeFor" rendered="#{!PlasmodiumTypeBean.showDetailNew}"/>
+				<p:selectOneMenu value="#{PlasmodiumTypeBean.selectedPlasmodiumType}"
+					id="plasmodiumTypeFor" rendered="#{!PlasmodiumTypeBean.showDetailNew}">
+					<p:ajax listener="#{PlasmodiumTypeBean.plasmodiumTypeListenerMethod}" 
+					update="panel_PlasmodiumType" />
+					<f:selectItem itemLabel="Seleccione Plasmodium"
+						itemValue="" noSelectionOption="true" />
+					<f:selectItems value="#{PlasmodiumTypeBean.selectPlasmodiumType}" />
+				</p:selectOneMenu>
+				<p:message for="plasmodiumTypeFor" display="text,tooltip" />
+
+				<!-- Nombre del tipo de Plasmodium -->
+				<p:outputLabel for="name" value="Nombre Plasmodium:"
+							   rendered="#{PlasmodiumTypeBean.showDetailNew or !PlasmodiumTypeBean.showDetail}"/>
+				<p:inputText id="name" value="#{PlasmodiumTypeBean.namePlasmodiumType}" type="text"
+							 required="true" rendered="#{(PlasmodiumTypeBean.showDetailNew or !PlasmodiumTypeBean.showDetail)}"
+							 disabled="#{!PlasmodiumTypeBean.showDetail}"
+				 			 validatorMessage="Debe tener solo letras.">
+					<p:ajax event="keyup" update="nameID" />
+					<f:validateRegex pattern="[a-zA-Z]+"/>
+				</p:inputText>
+				<p:message id="nameID" for="name" display="text,tooltip"/>
+
+				<!-- Descripción del tipo de Plasmodium -->
+				<p:outputLabel for="description" value="Descripción:"
+							   rendered="#{PlasmodiumTypeBean.showDetailNew == true or PlasmodiumTypeBean.showDetail == false}"/>
+				<p:inputText id="description" value="#{PlasmodiumTypeBean.description}" type="text" required="true"
+				rendered="#{PlasmodiumTypeBean.showDetailNew == true or PlasmodiumTypeBean.showDetail == false}"
+							 validatorMessage="Debe tener solo letras">
+				</p:inputText>
+
+				<p:message for="description" display="text,tooltip"/>
+
+				<p:outputLabel value="Letalidad:" required="true" validatorMessage="Debe seleccionar Letalidad"
+					for="letalidad" rendered="#{PlasmodiumTypeBean.showDetailNew or !PlasmodiumTypeBean.showDetail}"/>
+				<p:selectOneMenu value="#{PlasmodiumTypeBean.selectedLetalidad}"
+					id="letalidad" rendered="#{PlasmodiumTypeBean.showDetailNew or !PlasmodiumTypeBean.showDetail}">
+					<p:ajax listener="#{PlasmodiumTypeBean.plasmodiumLetalidadListenerMethod}" />
+					<f:selectItem itemLabel="Seleccione Letalidad"
+						itemValue="" noSelectionOption="true" />
+					<f:selectItems value="#{PlasmodiumTypeBean.selectLetalidad}" />
+				</p:selectOneMenu>
+				<p:message for="letalidad" display="text,tooltip" />
+
+			</h:panelGrid>
 
 			<!-- PANEL DE BOTONES  -->
 			<h:panelGrid id="buttonPanel" columns="3" cellpadding="5">
 
-				<p:commandButton ajax="false" value="#{msg.change}"
-					id="buttonChange" action="#{PlasmodiumTypeBean.actionChangeUser}"
-					validateClient="true"
-					rendered="#{!PlasmodiumTypeBean.showDetailNew}"
-					update="error,userEditPanel" />
-				<p:commandButton ajax="false" value="#{msg.actionAddUser}"
-					id="buttonAdd" action="#{PlasmodiumTypeBean.actionAddUser}"
-					validateClient="true"
+			<!-- Añadir el permiso en la BASE DE DATOS para cambiar validateClient a true-->
+
+				<p:commandButton ajax="false" value="#{msg.actionAddPlasmodium}"
+					id="buttonAdd" action="#{PlasmodiumTypeBean.actionAddPlasmodium}"
+					validateClient="false"
 					rendered="#{PlasmodiumTypeBean.showDetailNew}"
 					update="error" />
+
+				<p:commandButton ajax="false" value="#{msg.actionUpdatePlasmodium}"
+					id="buttonUpdate" action="#{PlasmodiumTypeBean.actionUpdatePlasmodium}"
+					validateClient="false"
+					rendered="#{!PlasmodiumTypeBean.showDetailNew}"
+					update="error" />
+
 				<p:commandButton ajax="false" value="#{msg.cancel}" immediate="true"
 					id="cancel" process="@none" action="#{PlasmodiumTypeBean.actionExit}" />
 			</h:panelGrid>

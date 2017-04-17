@@ -80,7 +80,7 @@
 					required="#{InstitutionBean.editDetail}"
 					readonly="#{!(InstitutionBean.editDetail)}"
 					rendered="#{InstitutionBean.showDetail}"
-					validatorMessage="Solo letras papá">
+					validatorMessage="Solo letras">
 					<p:ajax event="keyup" update="namemsg" />
 					<f:validateRegex pattern="[a-zA-Z]+" />
 				</p:inputText>
@@ -93,7 +93,7 @@
 					required="#{InstitutionBean.editDetail}"
 					readonly="#{!(InstitutionBean.editDetail)}"
 					rendered="#{InstitutionBean.showDetail}"
-					validatorMessage="Solo letras papá">
+					validatorMessage="Solo letras">
 					<p:ajax event="keyup" update="typemsg" />
 					<f:validateRegex pattern="[a-zA-Z]+" />
 				</p:inputText>
@@ -106,7 +106,7 @@
 					required="#{InstitutionBean.editDetail}"
 					readonly="#{!(InstitutionBean.editDetail)}"
 					rendered="#{InstitutionBean.showDetail}"
-					validatorMessage="Solo coordenadas papá">
+					validatorMessage="Solo coordenadas">
 					<p:ajax event="keyup" update="gpslatmsg" />
 					<f:validateRegex pattern="(^-?[0-9]\d*(\.\d+)?$)" />
 				</p:inputText>
@@ -119,7 +119,7 @@
 					required="#{InstitutionBean.editDetail}"
 					readonly="#{!(InstitutionBean.editDetail)}"
 					rendered="#{InstitutionBean.showDetail}"
-					validatorMessage="Solo coordenadas papá">
+					validatorMessage="Solo coordenadas.">
 					<p:ajax event="keyup" update="gpslonmsg" />
 					<f:validateRegex pattern="^-?[0-9]\d*(\.\d+)?$" />
 				</p:inputText>
@@ -136,18 +136,12 @@
 			<h:panelGrid id="buttonPanel" columns="3" cellpadding="5">
 
 				<p:commandButton ajax="false" value="#{msg.change}"
-					id="buttonChange" action="#{InstitutionBean.actionChangeUser}"
+					id="buttonChange" action="#{InstitutionBean.actionChangeInstitution}"
 					validateClient="true"
 					rendered="#{!InstitutionBean.showDetailNew and InstitutionBean.showDetail}"
 					update="error,userEditPanel" />
-				<p:commandButton ajax="false"
-					value="#{InstitutionBean.userEnabled ? msg.deactivate:msg.reactivate}"
-					id="buttonDelete" action="#{InstitutionBean.actionDeleteUser}"
-					validateClient="true"
-					rendered="#{!InstitutionBean.showDetailNew and InstitutionBean.showDetail and !InstitutionBean.editDetail}"
-					process="@none" />
-				<p:commandButton ajax="false" value="#{msg.actionAddUser}"
-					id="buttonAdd" action="#{InstitutionBean.actionAddUser}"
+				<p:commandButton ajax="false" value="#{msg.actionAddInstitution}"
+					id="buttonAdd" action="#{InstitutionBean.actionAddInstitution}"
 					validateClient="true"
 					rendered="#{InstitutionBean.showDetailNew and InstitutionBean.showDetail}"
 					update="error" />

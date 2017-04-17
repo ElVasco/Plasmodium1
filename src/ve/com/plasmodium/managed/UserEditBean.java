@@ -401,7 +401,7 @@ public class UserEditBean {
 		String navigation = "fail";
 		if (!(this.editDetail)) {
 			this.editDetail = true; 
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,"Modo Edición Habilitado","Modifique los campos necesarios y vuelva a presionar \"Modificar\" para guardar los cambios."));
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,"Modo Ediciï¿½n Habilitado","Modifique los campos necesarios y vuelva a presionar \"Modificar\" para guardar los cambios."));
 		} else {
 			UserManager userManager = new UserManager(SQLConstant.MYSQL);
 			UserBean sessionUserBean = (UserBean) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("UserBean");
@@ -418,7 +418,7 @@ public class UserEditBean {
 
 			if(userManager.changeUser(company, user, doc, login, name, mail, cargo, level, pass)){
 				navigation = "successful_change";
-				sessionUserBean.getMessages().add(0,"Operación satisfactoria - El usuario: "+nameUser+" "+lastNameUser+" ha sido actualizado en el sistema.");	    	
+				sessionUserBean.getMessages().add(0,"Operaciï¿½n satisfactoria - El usuario: "+nameUser+" "+lastNameUser+" ha sido actualizado en el sistema.");	    	
 				sessionUserBean.setMessageExit("");
 				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("UserEditBean");
 			}
@@ -441,7 +441,7 @@ public class UserEditBean {
 		/*if(!levelListUser.equals("999")) {
 			if(userManager.approveUser(company, user, level, serviceCompany, max_unsettled_balance, max_selling_amount, max_days_card_unsettled)){
 				navigation = "successful_change";
-				sessionUserBean.getMessages().add(0,"Operación satisfactoria - El usuario: "+nameUser+" "+lastNameUser+" ha sido aprobado.");	    	
+				sessionUserBean.getMessages().add(0,"Operaciï¿½n satisfactoria - El usuario: "+nameUser+" "+lastNameUser+" ha sido aprobado.");	    	
 				mailNotify(nameUser,lastNameUser,mailUser,maxUnsettledBalance,true);
 			}
 		} else {
@@ -467,7 +467,7 @@ public class UserEditBean {
 		String subject = "Registro de Vendedor Externo";
 		String body = "Estimado "+nameUser+" "+lastNameUser+",\n"+
 				"Su usuario en el sistema de Vendedores Externos ha sido "+
-				(accept?"aprobado. "+(maxUnsettledBalance.isEmpty()?"":"Su límite de crédito es de BsF. "+maxUnsettledBalance):"rechazado.");
+				(accept?"aprobado. "+(maxUnsettledBalance.isEmpty()?"":"Su lï¿½mite de crï¿½dito es de BsF. "+maxUnsettledBalance):"rechazado.");
 		String[] mailList = {mail};
 		MailNotifier mn = new MailNotifier(mailList, subject, body);
 		mn.send();
@@ -485,7 +485,7 @@ public class UserEditBean {
 		company = sessionUserBean.getCompany();
 		if(userManager.deleteUser(selectedUser,(userEnabled ? false:true))){
 			navigation="successful_delete";
-			sessionUserBean.getMessages().add(0,"Operación satisfactoria - El usuario: "+nameUser+" ha sido "+(userEnabled ? "borrado del sistema.":"reactivado en el sistema."));	    	
+			sessionUserBean.getMessages().add(0,"Operaciï¿½n satisfactoria - El usuario: "+nameUser+" ha sido "+(userEnabled ? "borrado del sistema.":"reactivado en el sistema."));	    	
 			sessionUserBean.setMessageExit("");
 			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("UserEditBean");
 		}
@@ -493,7 +493,7 @@ public class UserEditBean {
 	}
 
 	/**
-	 * Agrega un usuario nuevo al sistema 
+	 * Agrega un usuario nuevo al sistema
 	 * @return String Navigation que nos indica a que pantalla dirigirnos
 	 * @throws CustomException
 	 */
@@ -519,7 +519,7 @@ public class UserEditBean {
 				break;
 			case 1:
 				navigation = "successful_add";
-				sessionUserBean.getMessages().add(0,"Operación satisfactoria - El usuario: "+nameUser+" ha sido agregado en el sistema.");	    	
+				sessionUserBean.getMessages().add(0,"Operaciï¿½n satisfactoria - El usuario: "+nameUser+" ha sido agregado en el sistema.");	    	
 				sessionUserBean.setMessageExit("");
 				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("UserEditBean");
 				break;
@@ -540,7 +540,6 @@ public class UserEditBean {
 			selectInstitution.clear();
 		}
 	}
-
 
 	/**
 	 * Resetela (limpia) la lista de usuario para volverla a llenar segun la institucion seleccionado
@@ -678,7 +677,7 @@ public class UserEditBean {
 	 */
 	public String actionExit(){
 		String navigation = "successful_exit";
-		FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO, "Información","Operación cancelada."));
+		FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO, "Informaciï¿½n","Operaciï¿½n cancelada."));
 		FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("UserEditBean");
 		return navigation;
 	}

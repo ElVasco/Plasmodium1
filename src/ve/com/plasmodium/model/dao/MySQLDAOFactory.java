@@ -1,6 +1,5 @@
 package ve.com.plasmodium.model.dao;
 
-
 //  MySQL concrete DAO Factory implementation
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -14,11 +13,10 @@ import org.apache.log4j.Logger;
 
 import ve.com.plasmodium.exception.DAOException;
 
-
-
 public class MySQLDAOFactory extends DAOFactory {
 
 	public static final Logger logger = Logger.getLogger(MySQLDAOFactory.class);
+
 	private static MySQLDAOFactory INSTANCE = null;
 
 	public static MySQLDAOFactory getInstance(){
@@ -30,7 +28,7 @@ public class MySQLDAOFactory extends DAOFactory {
 
 	//   method to create MySQL connections
 	public static Connection createConnection() {
-		// Use DRIVER and DBURL to create a connection
+		// Use DRIVER and DB_URL to create a connection
 		// Recommend connection pool implementation/usage
 		Connection conn = null;
 		try {
@@ -51,7 +49,7 @@ public class MySQLDAOFactory extends DAOFactory {
 
 		return conn;
 	}
-	
+
 	public static void closeConection(Connection conn, String classFunction){
 		try {
 			conn.close();
@@ -82,4 +80,28 @@ public class MySQLDAOFactory extends DAOFactory {
 		return new MySQLLocatioDAO();
 	}
 
+	@Override
+	public PlasmodiumDAO getPlasmodiumDAO() {
+		return new MYSQLPlasmodiumDAO();
+	}
+
+	@Override
+	public PhenomenonDAO getPhenomenonDAO() {
+		return new MySQLPhenomenonDAO();
+	}
+
+	@Override
+	public HatcheryDAO getHatcheryDAO() {
+		return new MySQLHatcheryDAO();
+	}
+
+	@Override
+	public CampaignDAO getCampaignDAO() {
+		return new MySQLCampaignDAO();
+	}
+
+	@Override
+	public DemarcationDAO getDemarcationDAO() {
+		return new MySQLDemarcationDAO();
+	}
 }

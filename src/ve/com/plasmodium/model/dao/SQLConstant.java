@@ -421,7 +421,7 @@ public final class SQLConstant {
 	
 	public static String getBankName = "SELECT name FROM bank WHERE company=? AND bank=?";
 	
-	//******* QUERIES PARA RELLENAR EL CUBO DE REPORTE DE ANALISIS DE LIQUIDACIÓN ******//	
+	//******* QUERIES PARA RELLENAR EL CUBO DE REPORTE DE ANALISIS DE LIQUIDACIï¿½N ******//	
 	public static String getIndustryAndLocation = "SELECT cl.industry, cl.state, cl.municipality, cl.city, cl.distributer FROM card AS c STRAIGHT_JOIN bill AS b ON c.company=b.company AND c.bill=b.bill STRAIGHT_JOIN client AS cl ON b.company=cl.company AND b.client=cl.client WHERE c.company=? AND c.denom=? AND c.cluster=? AND c.lot=? AND c.sublot=? AND c.serial=?";
 	public static String getIndustryAndLocation2 = "SELECT pos.industry, pos.state, pos.municipality, pos.city, c.user_company, c.amount FROM e_card AS c STRAIGHT_JOIN e_pos AS pos ON c.user_company=pos.company AND c.user=pos.user AND c.e_pos=pos.e_pos WHERE c.company=? AND c.denom=? AND c.cluster=? AND c.lot=? AND c.sublot=? AND c.serial=?";
 	public static String getIndustryAndLocation3 = "SELECT cl.industry, cl.state, cl.municipality, cl.city, cl.distributer, ec.amount FROM e_card AS ec STRAIGHT_JOIN user AS u ON ec.user_company=u.company AND ec.user=u.user STRAIGHT_JOIN client AS cl ON u.company=cl.company AND u.client=cl.client WHERE ec.company=? AND ec.denom=? AND ec.cluster=? AND ec.lot=? AND ec.sublot=? AND ec.serial=?";
@@ -871,7 +871,7 @@ public final class SQLConstant {
 	public static final String authorizedDepApproversMailList = "SELECT u.email FROM user AS u, sec_level_profile AS slp, sec_profile_rol AS spr, sec_rol AS sr WHERE u.level = slp.level AND slp.profile = spr.profile AND spr.rol = sr.rol AND sr.rol_name = 'IS_APPROVE_DEPOSIT' AND u.level NOT IN (98,99) AND u.company = ?;";
 	public static final String depositNotificationData = "SELECT d.control_number, u.email, d.bank FROM deposit AS d, user AS u WHERE d.deposit_usr = u.user AND d.deposit = ?;";
 	
-	//********************************************************************cubo de información de recargas*************************************************************
+	//********************************************************************cubo de informaciï¿½n de recargas*************************************************************
 	
 	public static final String getChannel = "SELECT channel,description_channel FROM dim_method WHERE company=? GROUP BY channel;";
 	
@@ -957,11 +957,107 @@ public final class SQLConstant {
 	
 		//************************************ INSTITUCION ******************************//
 	
-	public static final String getInstitutionList = "SELECT i.id_institution, i.`name`, it.id_institution_type ,it.`name` AS name1, l.id_location, l.latitude,l.longitude,l.administrative_area_level_1, l.administrative_area_level_2, l.locality, l.route, l.place_ID, l.demarcation FROM institution i JOIN institution_type it ON i.id_institution_type=it.id_institution_type JOIN location_gps l ON i.id_location=l.id_location WHERE i.id_institution_type=?;";
+	public static final String getInstitutionList = 
+			"SELECT i.id_institution, i.`name`, it.id_institution_type ,it.`name` AS name1, l.id_location, l.latitude,l.longitude,l.administrative_area_level_1, l.administrative_area_level_2, l.locality, l.route, l.place_ID, l.demarcation FROM institution i JOIN institution_type it ON i.id_institution_type=it.id_institution_type JOIN location_gps l ON i.id_location=l.id_location WHERE i.id_institution_type=?;";
 	
-	public static final String getInstitutionDetail = "SELECT i.id_institution, i.`name`, it.`name`, l.latitude,l.longitude,l.state, l.city, l.municipality, l.demarcation FROM institution i JOIN institution_type it ON i.id_institution_type=it.id_institution_type JOIN location_gps l ON i.id_location=l.id_location WHERE i.id_institution=?;";
+	public static final String getInstitutionDetail = 
+			"SELECT i.id_institution, i.`name`, it.`name`, l.latitude,l.longitude,l.state, l.city, l.municipality, l.demarcation FROM institution i JOIN institution_type it ON i.id_institution_type=it.id_institution_type JOIN location_gps l ON i.id_location=l.id_location WHERE i.id_institution=?;";
 	
-			//************************************ INSTITUCION TYPE ******************************//	
-	public static final String getInstitutionTypeList = "SELECT id_institution_type, name FROM institution_type";
-}	
+	public static final String addInstitution = "INSERT INTO institution (name,id_location,id_institution_type) VALUE (?,?,?);";
 
+	public static final String changeInstitution = "UPDATE institution SET name = ? ,"
+			+ "id_location = ? ,"
+			+ "id_institution_type = ? "
+			+ "WHERE id_institution = ?;";
+
+	//************************************ INSTITUCION TYPE ******************************//	
+	public static final String getInstitutionTypeList = "SELECT id_institution_type, name FROM institution_type;";
+
+	public static final String addInstitutionType = "INSERT INTO institution_type (name) VALUE (?);";
+
+	public static final String changeInstitutionType = "UPDATE institution_type SET name = ? "
+														+ "WHERE id_institution_type = ? ;";
+
+	//************************************ PLASMODIUM TYPE ******************************//	
+	public static final String getPlasmodiumTypeList = "SELECT id, name FROM plasmodium_type";
+
+	public final static String addPlasmodium = 
+			"INSERT INTO plasmodium_type (name,description,letalidad) VALUE (?,?,?);";
+
+	public final static String updatePlasmodium = 
+			"UPDATE plasmodium_type "
+			+ "SET description = ?,"
+			+ "letalidad = ? "
+			+ "WHERE name = ?;";
+
+	public static final String getLetalidadList = "SELECT id, letalidad FROM lethality_level";
+	
+	public static final String getPlasmodiumDetail = "SELECT id, name, description, letalidad FROM plasmodium_type WHERE id = ?";
+
+	//************************************ PHENOMENON TYPE ******************************//
+	public static final String getPhenomenonTypeList = "SELECT id, name FROM tipo_fenomeno";
+
+	public static final String getPhenomenonTypeDetail = "SELECT id, name FROM tipo_fenomeno WHERE name = ?";
+	
+	public final static String addPhenomenonType = 
+			"INSERT INTO tipo_fenomeno (name) VALUE (?);";
+
+	public final static String updatePhenomenonType = 
+			"UPDATE tipo_fenomeno "
+			+ "SET name = ? "
+			+ "WHERE id = ?;";	
+
+	//************************************ PHENOMENON ******************************//
+	public static final String getPhenomenonList = "SELECT id, name, descripcion, tipo_fenomeno FROM fenomenos;";
+
+	public static final String getPhenomenonDetail = "SELECT id, name, descripcion, tipo_fenomeno FROM fenomenos WHERE id = ?";
+
+	public final static String addPhenomenon =
+			"INSERT INTO fenomenos (name,descripcion,tipo_fenomeno) VALUE (?,?,?);";
+
+	public final static String updatePhenomenon = 
+			"UPDATE fenomenos "
+			+ "SET descripcion = ?, "
+			+ "tipo_fenomeno = ? "
+			+ "WHERE name = ?;";
+
+	//************************************ CAMPAÃ‘AS ******************************//
+	public static final String getCampanasList = "SELECT id, name, descripcion FROM campanas;";
+
+	public static final String getCampanasDetail = "SELECT id, name, descripcion FROM campanas WHERE id = ?";
+
+	public final static String addCampanas =
+			"INSERT INTO campanas (name,descripcion) VALUE (?,?);";
+
+	public final static String updateCampanas = 
+			"UPDATE campanas "
+			+ "SET descripcion = ?, "
+			+ "WHERE name = ?;";
+
+	//************************************ DEMARCACIONES ******************************//
+	public static final String getDemarcacionesList = "SELECT id, demarcacion, description FROM demarcaciones;";
+
+	public static final String getDemarcacionesDetail = "SELECT id, demarcacion, description FROM demarcaciones WHERE id = ?";
+
+	public final static String addDemarcaciones =
+			"INSERT INTO demarcaciones (demarcacion,description) VALUE (?,?);";
+
+	public final static String updateDemarcaciones = 
+			"UPDATE demarcaciones "
+			+ "SET description = ?, "
+			+ "WHERE demarcacion = ?;";
+
+	//************************************ CRIADEROS ******************************//
+	public static final String getCriaderosList = "SELECT id, name FROM criaderos;";
+
+	public static final String getCriaderosDetail = "SELECT id, name FROM criaderos WHERE id = ?";
+
+	public final static String addCriaderos =
+			"INSERT INTO criaderos (name) VALUE (?);";
+
+	public final static String updateCriaderos = 
+			"UPDATE criaderos "
+			+ "SET name = ?, "
+			+ "WHERE name = ?;";
+
+}

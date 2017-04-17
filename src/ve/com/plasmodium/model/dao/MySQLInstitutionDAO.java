@@ -15,13 +15,13 @@ public class MySQLInstitutionDAO implements InstitutionDAO {
 	Connection conn;
 	PreparedStatement preparedStatement;
 	ResultSet resultSet;
-	
+
 	public void initSQLData(){
 		conn = MySQLDAOFactory.createConnection();
 		preparedStatement = null;
 		resultSet = null;
 	}
-	
+
 	public void institutionDetail(InstitutionDTO institutionDTO, String institution) {
 		initSQLData();
 		try{
@@ -94,4 +94,85 @@ public class MySQLInstitutionDAO implements InstitutionDAO {
 		MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
 	}
 
+	@Override
+	public int addInstitutionType(InstitutionTypeDTO institutionType) {
+		initSQLData();
+		try{
+			preparedStatement = conn.prepareStatement(SQLConstant.addInstitutionType);
+			preparedStatement.setString(1, institutionType.getName());
+			int result  = preparedStatement.executeUpdate();
+			logger.debug("Statement a ejecutarse " + preparedStatement.toString());
+			logger.debug("Resultado -> " + result);
+			if(result > 0)
+				return result = 0;
+		}catch (Exception e){
+			logger.error("Exception " +this.getClass().getSimpleName() + " - " + Utils.getMethodName(), e);
+			MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
+		}
+		MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
+		return -1;
+	}
+
+	@Override
+	public int changeInstitutionType(InstitutionTypeDTO institutionType) {
+		initSQLData();
+		try{
+			preparedStatement = conn.prepareStatement(SQLConstant.changeInstitutionType);
+			preparedStatement.setString(1, institutionType.getName());
+			preparedStatement.setInt(2, institutionType.getIdIstitutionType());
+			int result  = preparedStatement.executeUpdate();
+			logger.debug("Statement a ejecutarse " + preparedStatement.toString());
+			logger.debug("Resultado -> " + result);
+			if(result > 0)
+				return result = 0;
+		}catch (Exception e){
+			logger.error("Exception " +this.getClass().getSimpleName() + " - " + Utils.getMethodName(), e);
+			MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
+		}
+		MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
+		return -1;
+	}
+
+	@Override
+	public int addInstitution(InstitutionDTO institution) {
+		initSQLData();
+		try{
+			preparedStatement = conn.prepareStatement(SQLConstant.addInstitution);
+			preparedStatement.setString(1, institution.getName());
+			preparedStatement.setInt(2, institution.getLocation().getIdLocation());
+			preparedStatement.setInt(3, institution.getInstitutionType().getIdIstitutionType());
+			int result  = preparedStatement.executeUpdate();
+			logger.debug("Statement a ejecutarse " + preparedStatement.toString());
+			logger.debug("Resultado -> " + result);
+			if(result > 0)
+				return result = 0;
+		}catch (Exception e){
+			logger.error("Exception " +this.getClass().getSimpleName() + " - " + Utils.getMethodName(), e);
+			MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
+		}
+		MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
+		return -1;
+	}
+
+	@Override
+	public int changeInstitution(InstitutionDTO institution) {
+		initSQLData();
+		try{
+			preparedStatement = conn.prepareStatement(SQLConstant.changeInstitution);
+			preparedStatement.setString(1, institution.getName());
+			preparedStatement.setInt(2, institution.getLocation().getIdLocation());
+			preparedStatement.setInt(3, institution.getInstitutionType().getIdIstitutionType());
+			preparedStatement.setInt(4, institution.getIdIstitution());
+			int result  = preparedStatement.executeUpdate();
+			logger.debug("Statement a ejecutarse " + preparedStatement.toString());
+			logger.debug("Resultado -> " + result);
+			if(result > 0)
+				return result = 0;
+		}catch (Exception e){
+			logger.error("Exception " +this.getClass().getSimpleName() + " - " + Utils.getMethodName(), e);
+			MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
+		}
+		MySQLDAOFactory.closeConection(conn, this.getClass().getSimpleName() + " - " + Utils.getMethodName());
+		return -1;
+	}
 }

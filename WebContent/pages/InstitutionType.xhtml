@@ -36,10 +36,10 @@
 					<f:selectItems value="#{InstitutionTypeBean.selectInstitutionType}" />
 				</p:selectOneMenu>
 				<p:message for="institutionTypeFor" display="tooltip" />
-					
+
 				<p:outputLabel value="Nombre de institucion:" for="name" rendered="#{InstitutionTypeBean.showDetailNew or InstitutionTypeBean.showDetail}"/>
 				<p:inputText id="name" value="#{InstitutionTypeBean.instiType.name}"
-					validatorMessage="Solo letras papá" 
+					validatorMessage="Solo se permiten letras."
 					rendered="#{InstitutionTypeBean.showDetailNew or InstitutionTypeBean.showDetail}">
 					<p:ajax event="keyup" update="namemsg" />
 					<f:validateRegex pattern="[a-zA-Z]+" />
@@ -52,12 +52,12 @@
 			<h:panelGrid id="buttonPanel" columns="3" cellpadding="5">
 
 				<p:commandButton ajax="false" value="#{msg.change}"
-					id="buttonChange" action="#{InstitutionTypeBean.actionChangeUser}"
+					id="buttonChange" action="#{InstitutionTypeBean.actionChangeInstitutionType}"
 					validateClient="true"
 					rendered="#{!InstitutionTypeBean.showDetailNew}"
 					update="error,userEditPanel" />
-				<p:commandButton ajax="false" value="#{msg.actionAddUser}"
-					id="buttonAdd" action="#{InstitutionTypeBean.actionAddUser}"
+				<p:commandButton ajax="false" value="#{msg.actionAddInstitutionType}"
+					id="buttonAdd" action="#{InstitutionTypeBean.actionAddInstitutionType}"
 					validateClient="true"
 					rendered="#{InstitutionTypeBean.showDetailNew}"
 					update="error" />

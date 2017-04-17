@@ -35,6 +35,7 @@ public class InstitutionBean {
 	private String selectedInstitution;
 	private String center;
 	private InstitutionDTO institution;
+	private String msgFaces;
 
 	private MapModel simpleModel;
 	private Marker marker;
@@ -49,6 +50,7 @@ public class InstitutionBean {
 		setShowMap(false);
 		resetInstitutionType();
 		resetInstitution();
+		resetInsti();
 		Map<String, String> parameterMap = (Map<String, String>) FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
 		String param = parameterMap.get("modify");
 		logger.debug(param + "----------");
@@ -62,9 +64,10 @@ public class InstitutionBean {
 		else
 			selectInstitutionType.clear();
 		GlobalDataBean gd = (GlobalDataBean) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("GlobalData");
-		if(gd.getInstitutionTypeList().size() == 0){
-			gd.findInstitutionType();
+		if(gd.getInstitutionTypeList() != null){
+			gd.getInstitutionTypeList().clear();
 		}
+		gd.findInstitutionType();
 		for(InstitutionTypeDTO inty : gd.getInstitutionTypeList()){
 			SelectItem e = new SelectItem( inty.getIdIstitutionType() + "", inty.getName());
 			selectInstitutionType.add(e);
@@ -79,7 +82,12 @@ public class InstitutionBean {
 			selectInstitution.clear();
 	}
 
-	public void institutionListenerMethod( ){
+	private void resetInsti(){
+		if(institution == null)
+			institution = new InstitutionDTO();
+	}
+
+	public void institutionListenerMethod(){
 		logger.debug("Entre al metodo de busca de detalle de institucion  ");
 		try{
 			setShowDetail(false);
@@ -134,8 +142,6 @@ public class InstitutionBean {
 			}
 		}
 	}
-
-	
 	
 	public void setGPS() {
 		simpleModel = new DefaultMapModel();
@@ -160,11 +166,60 @@ public class InstitutionBean {
 
 	public String actionExit(){
 		String navigation = "successful_exit";
-		FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO, "Informaci髇","Operaci髇 cancelada."));
+		FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO, "Informaci锟絥","Operaci锟絥 cancelada."));
 		FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("InstitutionBean");
 		return navigation;
 	}
 
+	public String actionAddInstitution(){
+		String navigation = "successful_exit";
+		InstitutionDTO instiType = new InstitutionDTO();
+		instiType.setIdIstitution(this.getInstitution().getIdIstitution());
+		instiType.setName(this.getInstitution().getName());
+		instiType.setLocation(this.getInstitution().getLocation());
+		instiType.setInstitutionType(this.getInstitution().getInstitutionType());
+		logger.debug("InstitutionTypeDTO to create" + instiType.toString());
+		GlobalDataBean gd = (GlobalDataBean) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("GlobalData");
+		int result = gd.addInstitution(instiType);
+		switch(result){
+		case 0:
+			navigation = "successful";
+			msgFaces = "Tipo de institucion agregada con exito";
+			break;
+		case -1:
+			navigation = "fail";
+			msgFaces = "Error al intentar agregar tipo de Instituci贸n";
+			break;
+		}
+		FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO, "Informaci贸n",msgFaces));
+		FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("InstitutionTypeBean");
+		return navigation;
+	}
+
+	public String actionChangeInstitution(){
+		String navigation = "successful_exit";
+		InstitutionDTO instiType = new InstitutionDTO();
+		instiType.setIdIstitution(this.getInstitution().getIdIstitution());
+		instiType.setName(this.getInstitution().getName());
+		instiType.setLocation(this.getInstitution().getLocation());
+		instiType.setInstitutionType(this.getInstitution().getInstitutionType());
+		logger.debug("InstitutionTypeDTO to modify" + instiType.toString());
+		GlobalDataBean gd = (GlobalDataBean) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("GlobalData");
+		int result = gd.changeInstitution(instiType);
+		switch(result){
+		case 0:
+			navigation = "successful";
+			msgFaces = "Tipo de institucion cambiada con exito";
+			break;
+		case -1:
+			navigation = "fail";
+			msgFaces = "Error al intentar actualizar tipo de Instituci贸n";
+			break;
+		}
+		FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO, "Informaci贸n",msgFaces));
+		FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("InstitutionTypeBean");
+		return navigation;
+	}
 
 	public List<SelectItem> getSelectInstitutionType() {
 		return selectInstitutionType;

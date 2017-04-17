@@ -3,9 +3,6 @@ package ve.com.plasmodium.model.dao;
 
 import org.apache.log4j.Logger;
 
-
-
-
 //Abstract class DAO Factory
 /**
  * @author wcsadmin
@@ -27,6 +24,12 @@ public abstract class DAOFactory {
 	public abstract LocatioDAO getLocatioDAO();
 	public abstract GlobalDAO getGlobalDAO();
 	public abstract UserDAO getUserDAO();
+
+	public abstract PlasmodiumDAO getPlasmodiumDAO();
+	public abstract PhenomenonDAO getPhenomenonDAO();
+	public abstract HatcheryDAO getHatcheryDAO();
+	public abstract CampaignDAO getCampaignDAO();
+	public abstract DemarcationDAO getDemarcationDAO();
 
 	public abstract AuthorizationDAO getAuthorizationDAO();
 	//IS
