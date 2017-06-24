@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50710
 File Encoding         : 65001
 
-Date: 2017-01-08 22:51:32
+Date: 2017-04-22 17:50:30
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -13931,6 +13931,22 @@ CREATE TABLE `institution_type` (
 INSERT INTO `institution_type` VALUES ('1', 'Universidad');
 
 -- ----------------------------
+-- Table structure for `lethality_level`
+-- ----------------------------
+DROP TABLE IF EXISTS `lethality_level`;
+CREATE TABLE `lethality_level` (
+  `id` int(11) NOT NULL,
+  `letalidad` varchar(10) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of lethality_level
+-- ----------------------------
+INSERT INTO `lethality_level` VALUES ('1', 'Benigna');
+INSERT INTO `lethality_level` VALUES ('2', 'Maligna');
+
+-- ----------------------------
 -- Table structure for `location_gps`
 -- ----------------------------
 DROP TABLE IF EXISTS `location_gps`;
@@ -19112,14 +19128,17 @@ CREATE TABLE `plasmodium_type` (
   `id` int(11) NOT NULL,
   `name` varchar(45) DEFAULT NULL,
   `description` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `letalidad` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_lethality_level` (`letalidad`),
+  CONSTRAINT `fk_lethality_level` FOREIGN KEY (`letalidad`) REFERENCES `lethality_level` (`id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of plasmodium_type
 -- ----------------------------
-INSERT INTO `plasmodium_type` VALUES ('1', 'P. vivax', 'Plasmodium vivax');
-INSERT INTO `plasmodium_type` VALUES ('2', 'P. falciparum', 'Plasmodium falciparum');
+INSERT INTO `plasmodium_type` VALUES ('1', 'P. vivax', 'Plasmodium vivax', null);
+INSERT INTO `plasmodium_type` VALUES ('2', 'P. falciparum', 'Plasmodium falciparum', null);
 
 -- ----------------------------
 -- Table structure for `sec_level`
