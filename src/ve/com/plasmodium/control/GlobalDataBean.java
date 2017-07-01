@@ -35,6 +35,8 @@ public class GlobalDataBean {
 	public GlobalDataBean(){
 		resetInstitutionTypeList();
 		resetInstitutionList();
+		resetLethatityList();
+		
 		param = new HashMap<String,String>();
 		searchParameter(param);
 		searchLethality();
@@ -68,7 +70,16 @@ public class GlobalDataBean {
 		}
 		return institutionList;
 	}
-
+	
+	public List<LethalityDTO> resetLethatityList() {
+		if(lethalityList==null){
+			lethalityList = new ArrayList<LethalityDTO>();
+		}else{
+			lethalityList.clear();
+		}
+		return lethalityList;
+	}
+	
 	public InstitutionDTO institutionInit() {
 		InstitutionDTO institution = new InstitutionDTO();
 		institution.setInstitutionType(institutionTypeInit());
