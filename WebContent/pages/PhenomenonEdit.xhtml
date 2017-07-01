@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+<ui:include src="/include/IncludeHeader.xhtml"></ui:include>
+
+<h:head></h:head>
+<body>
+	<!-- Esta parte es delicada la lista se llena en un bean "UserBean" -->
+	<ui:include src="/include/HiAndByeTrans.xhtml"></ui:include>
+	<ui:include src="/include/IncludeBanner.html"></ui:include>
+	<ui:include src="/include/IncludeTransMenu.xhtml"></ui:include>
+
+	<p:panel id="panel" header="Panel de edición de tipo de Fenomenos"
+		styleClass="blockUser">
+		<f:facet name="header">
+							Fenomenos
+						</f:facet>
+		<h:form id="form_Phenomenon" styleClass="distributerSelector">
+
+			<!-- PANEL DE NOMBRE PHENOMENON  -->
+			<h:panelGrid id="panel_Phenomenon" columns="3" cellpadding="5">
+
+				<p:outputLabel value="Fenomeno:"
+					for="phenomenonFor" rendered="#{!PhenomenonBean.showDetailNew}"/>
+				<p:selectOneMenu value="#{PhenomenonBean.selectedPhenomenon}"
+					id="phenomenonFor" rendered="#{!PhenomenonBean.showDetailNew}">
+					<p:ajax listener="#{PhenomenonBean.phenomenonListenerMethod}"
+					update="panel_Phenomenon" />
+					<f:selectItem itemLabel="Seleccione Fenomeno"
+						itemValue="" noSelectionOption="true" />
+					<f:selectItems value="#{PhenomenonBean.selectPhenomenon}" />
+				</p:selectOneMenu>
+				<p:message for="phenomenonFor" display="text,tooltip" />
+
+				<!-- Nombre del Fenomeno -->
+				<p:outputLabel for="name" value="Nombre del Fenomeno:"
+							   rendered="#{PhenomenonBean.showDetailNew or !PhenomenonBean.showDetail}"/>
+				<p:inputText id="name" value="#{PhenomenonBean.namePhenomenon}" type="text"
+							 required="true" rendered="#{(PhenomenonBean.showDetailNew or !PhenomenonBean.showDetail)}"
+							 disabled="#{!PhenomenonBean.showDetail}"
+				 			 validatorMessage="Debe tener solo letras.">
+					<p:ajax event="keyup" update="nameID" />
+					<f:validateRegex pattern="[a-zA-Z]+"/>
+				</p:inputText>
+				<p:message id="nameID" for="name" display="text,tooltip"/>
+
+				<!-- Descripción del tipo de Fenomeno-->
+				<p:outputLabel for="description" value="Descripción:"
+							   rendered="#{PhenomenonBean.showDetailNew == true or PhenomenonBean.showDetail == false}"/>
+				<p:inputText id="description" value="#{PhenomenonBean.description}" type="text" required="true"
+				rendered="#{PhenomenonBean.showDetailNew == true or PhenomenonBean.showDetail == false}"
+							 validatorMessage="Debe tener solo letras">
+				</p:inputText>
+				<p:message for="description" display="text,tooltip"/>
+
+				<p:outputLabel value="Tipo de Fenomeno" required="true" validatorMessage="Debe seleccionar Tipo de Fenomeno"
+					for="PhenomenonType" rendered="#{PhenomenonBean.showDetailNew or !PhenomenonBean.showDetail}"/>
+				<p:selectOneMenu value="#{PhenomenonBean.selectedPhenomenonType}"
+					id="PhenomenonType" rendered="#{PhenomenonBean.showDetailNew or !PhenomenonBean.showDetail}">
+					<!--  <p:ajax listener="#{PhenomenonBean.phenomenonListenerMethod}" />-->
+					<f:selectItem itemLabel="Seleccione Tipo de Fenomeno"
+						itemValue="" noSelectionOption="true" />
+					<f:selectItems value="#{PhenomenonBean.selectPhenomenonType}" />
+				</p:selectOneMenu>
+				<p:message for="PhenomenonType" display="text,tooltip" />
+
+			</h:panelGrid>
+
+			<!-- PANEL DE BOTONES  -->
+			<h:panelGrid id="buttonPanel" columns="3" cellpadding="5">
+
+			<!-- Añadir el permiso en la BASE DE DATOS para cambiar validateClient a true-->
+				<p:commandButton ajax="false" value="#{msg.actionAddPhenomenon}"
+					id="buttonAdd" action="#{PhenomenonBean.actionAddPhenomenon}"
+					validateClient="false"
+					rendered="#{PhenomenonBean.showDetailNew}"
+					update="error" />
+
+				<p:commandButton ajax="false" value="#{msg.actionUpdatePhenomenon}"
+					id="buttonUpdate" action="#{PhenomenonBean.actionUpdatePhenomenon}"
+					validateClient="false"
+					rendered="#{!PhenomenonBean.showDetailNew}"
+					update="error" />
+
+				<p:commandButton ajax="false" value="#{msg.cancel}" immediate="true"
+					id="cancel" process="@none" action="#{PhenomenonBean.actionExit}" />
+			</h:panelGrid>
+		</h:form>
+	</p:panel>
+	<ui:include src="/include/IncludeFooter.html"></ui:include>
+
+</body>
+</html>

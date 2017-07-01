@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+<ui:include src="/include/IncludeHeader.xhtml"></ui:include>
+
+<h:head></h:head>
+<body>
+	<!-- Esta parte es delicada la lista se llena en un bean "UserBean" -->
+	<ui:include src="/include/HiAndByeTrans.xhtml"></ui:include>
+	<ui:include src="/include/IncludeBanner.html"></ui:include>
+	<ui:include src="/include/IncludeTransMenu.xhtml"></ui:include>
+
+	<p:panel id="panel" header="Panel de edición de Campañas"
+		styleClass="blockUser">
+		<f:facet name="header">
+							Campañas
+						</f:facet>
+		<h:form id="form_Campaign" styleClass="distributerSelector">
+
+			<!-- PANEL DE CAMPAÑAS  -->
+			<h:panelGrid id="panel_Campaign" columns="3" cellpadding="5">
+
+				<p:outputLabel value="Campaña:"
+					for="campaignFor" rendered="#{!CampaignBean.showDetailNew}"/>
+				<p:selectOneMenu value="#{CampignBean.selectedCampaign}"
+					id="campaignFor" rendered="#{!CampaignBean.showDetailNew}">
+					<p:ajax listener="#{CampaignBean.campaignListenerMethod}" 
+					update="panel_Campaign" />
+					<f:selectItem itemLabel="Seleccione Campaña"
+						itemValue="" noSelectionOption="true" />
+					<f:selectItems value="#{CampaignBean.selectCampaign}" />
+				</p:selectOneMenu>
+				<p:message for="campaignFor" display="text,tooltip" />
+
+				<!-- Nombre del tipo de Campaña -->
+				<p:outputLabel for="name" value="Nombre Campaña:"
+							   rendered="#{CampaignBean.showDetailNew or !CampaignBean.showDetail}"/>
+				<p:inputText id="name" value="#{CampaignBean.nameCampaign}" type="text"
+							 required="true" rendered="#{(CampaignBean.showDetailNew or !CampaignBean.showDetail)}"
+							 disabled="#{!CampaignBean.showDetail}"
+				 			 validatorMessage="Debe tener solo letras.">
+					<p:ajax event="keyup" update="nameID" />
+					<f:validateRegex pattern="[a-zA-Z]+"/>
+				</p:inputText>
+				<p:message id="nameID" for="name" display="text,tooltip"/>
+
+				<!-- Descripción de la Campaña -->
+				<p:outputLabel for="description" value="Descripción:"
+							   rendered="#{CampaignBean.showDetailNew == true or CampaignBean.showDetail == false}"/>
+				<p:inputText id="description" value="#{CampaignBean.description}" type="text" required="true"
+				rendered="#{CampaignBean.showDetailNew == true or CampaignBean.showDetail == false}"
+							 validatorMessage="Debe tener solo letras">
+				</p:inputText>
+
+				<p:message for="description" display="text,tooltip"/>
+
+			</h:panelGrid>
+
+			<!-- PANEL DE BOTONES  -->
+			<h:panelGrid id="buttonPanel" columns="3" cellpadding="5">
+
+			<!-- Añadir el permiso en la BASE DE DATOS para cambiar validateClient a true-->
+
+				<p:commandButton ajax="false" value="#{msg.actionAddCampaign}"
+					id="buttonAdd" action="#{CampaignBean.actionAddCampaign}"
+					validateClient="false"
+					rendered="#{CampaignBean.showDetailNew}"
+					update="error" />
+
+				<p:commandButton ajax="false" value="#{msg.actionUpdateCampaign}"
+					id="buttonUpdate" action="#{CampaignBean.actionUpdateCampaign}"
+					validateClient="false"
+					rendered="#{!CampaignBean.showDetailNew}"
+					update="error" />
+
+				<p:commandButton ajax="false" value="#{msg.cancel}" immediate="true"
+					id="cancel" process="@none" action="#{CampaignBean.actionExit}" />
+			</h:panelGrid>
+		</h:form>
+	</p:panel>
+	<ui:include src="/include/IncludeFooter.html"></ui:include>
+
+</body>
+</html>

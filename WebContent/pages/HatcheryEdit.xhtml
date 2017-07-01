@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+<ui:include src="/include/IncludeHeader.xhtml"></ui:include>
+
+<h:head></h:head>
+<body>
+	<!-- Esta parte es delicada la lista se llena en un bean "UserBean" -->
+	<ui:include src="/include/HiAndByeTrans.xhtml"></ui:include>
+	<ui:include src="/include/IncludeBanner.html"></ui:include>
+	<ui:include src="/include/IncludeTransMenu.xhtml"></ui:include>
+
+	<p:panel id="panel" header="Panel de edición de Criaderos"
+		styleClass="blockUser">
+		<f:facet name="header">
+							Criaderos
+						</f:facet>
+		<h:form id="form_Hatchery" styleClass="distributerSelector">
+
+			<!-- PANEL DE NOMBRE DE CRIADEROS  -->
+			<h:panelGrid id="panel_Hatchery" columns="3" cellpadding="5">
+
+				<p:outputLabel value="Criadero:"
+					for="hatcheryFor" rendered="#{!HatcheryBean.showDetailNew}"/>
+				<p:selectOneMenu value="#{HatcheryBean.selectedHatchery}"
+					id="hatcheryFor" rendered="#{!HatcheryBean.showDetailNew}">
+					<p:ajax listener="#{HatcheryBean.hatcheryListenerMethod}" 
+					update="panel_Hatchery" />
+					<f:selectItem itemLabel="Seleccione Criadero"
+						itemValue="" noSelectionOption="true" />
+					<f:selectItems value="#{HatcheryBean.selectHatchery}" />
+				</p:selectOneMenu>
+				<p:message for="hatcheryFor" display="text,tooltip" />
+
+				<!-- Nombre de Criadero -->
+				<p:outputLabel for="name" value="Nombre Criadero:"
+							   rendered="#{HatcheryBean.showDetailNew or !HatcheryBean.showDetail}"/>
+				<p:inputText id="name" value="#{HatcheryBean.nameHatchery}" type="text"
+							 required="true" rendered="#{(HatcheryBean.showDetailNew or !HatcheryBean.showDetail)}"
+							 disabled="#{!HatcheryBean.showDetail}"
+				 			 validatorMessage="Debe tener solo letras.">
+					<p:ajax event="keyup" update="nameID" />
+					<f:validateRegex pattern="[a-zA-Z]+"/>
+				</p:inputText>
+				<p:message id="nameID" for="name" display="text,tooltip"/>
+
+				<!-- Descripción de Criadero -->
+				<p:outputLabel for="description" value="Descripción:"
+							   rendered="#{HatcheryBean.showDetailNew == true or HatcheryBean.showDetail == false}"/>
+				<p:inputText id="description" value="#{HatcheryBean.description}" type="text" required="true"
+				rendered="#{HatcheryBean.showDetailNew == true or HatcheryBean.showDetail == false}"
+							 validatorMessage="Debe tener solo letras">
+				</p:inputText>
+
+				<p:message for="description" display="text,tooltip"/>
+
+			</h:panelGrid>
+
+			<!-- PANEL DE BOTONES  -->
+			<h:panelGrid id="buttonPanel" columns="3" cellpadding="5">
+
+			<!-- Añadir el permiso en la BASE DE DATOS para cambiar validateClient a true-->
+
+				<p:commandButton ajax="false" value="#{msg.actionAddHatchery}"
+					id="buttonAdd" action="#{HatcheryBean.actionAddHatchery}"
+					validateClient="false"
+					rendered="#{HatcheryBean.showDetailNew}"
+					update="error" />
+
+				<p:commandButton ajax="false" value="#{msg.actionUpdateHatchery}"
+					id="buttonUpdate" action="#{HatcheryBean.actionUpdateHatchery}"
+					validateClient="false"
+					rendered="#{!HatcheryBean.showDetailNew}"
+					update="error" />
+
+				<p:commandButton ajax="false" value="#{msg.cancel}" immediate="true"
+					id="cancel" process="@none" action="#{HatcheryBean.actionExit}" />
+			</h:panelGrid>
+		</h:form>
+	</p:panel>
+	<ui:include src="/include/IncludeFooter.html"></ui:include>
+
+</body>
+</html>
