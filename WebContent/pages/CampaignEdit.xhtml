@@ -26,7 +26,7 @@
 
 				<p:outputLabel value="Campaña:"
 					for="campaignFor" rendered="#{!CampaignBean.showDetailNew}"/>
-				<p:selectOneMenu value="#{CampignBean.selectedCampaign}"
+				<p:selectOneMenu value="#{CampaignBean.selectedCampaign}"
 					id="campaignFor" rendered="#{!CampaignBean.showDetailNew}">
 					<p:ajax listener="#{CampaignBean.campaignListenerMethod}" 
 					update="panel_Campaign" />
@@ -38,26 +38,41 @@
 
 				<!-- Nombre del tipo de Campaña -->
 				<p:outputLabel for="name" value="Nombre Campaña:"
-							   rendered="#{CampaignBean.showDetailNew or !CampaignBean.showDetail}"/>
+							   rendered="#{(CampaignBean.showDetailNew or !CampaignBean.showDetail) and !CampaignBean.showAddValue}"/>
 				<p:inputText id="name" value="#{CampaignBean.nameCampaign}" type="text"
-							 required="true" rendered="#{(CampaignBean.showDetailNew or !CampaignBean.showDetail)}"
+							 required="true" rendered="#{(CampaignBean.showDetailNew or !CampaignBean.showDetail) and !CampaignBean.showAddValue}"
 							 disabled="#{!CampaignBean.showDetail}"
 				 			 validatorMessage="Debe tener solo letras.">
 					<p:ajax event="keyup" update="nameID" />
 					<f:validateRegex pattern="[a-zA-Z]+"/>
 				</p:inputText>
-				<p:message id="nameID" for="name" display="text,tooltip"/>
+				<p:message id="nameID" for="name" display="text,tooltip" rendered="#{(CampaignBean.showDetailNew or !CampaignBean.showDetail) and !CampaignBean.showAddValue}"/>
 
 				<!-- Descripción de la Campaña -->
 				<p:outputLabel for="description" value="Descripción:"
-							   rendered="#{CampaignBean.showDetailNew == true or CampaignBean.showDetail == false}"/>
+							   rendered="#{(CampaignBean.showDetailNew or !CampaignBean.showDetail) and !CampaignBean.showAddValue}"/>
 				<p:inputText id="description" value="#{CampaignBean.description}" type="text" required="true"
-				rendered="#{CampaignBean.showDetailNew == true or CampaignBean.showDetail == false}"
+				rendered="#{(CampaignBean.showDetailNew or !CampaignBean.showDetail) and !CampaignBean.showAddValue}"
 							 validatorMessage="Debe tener solo letras">
 				</p:inputText>
 
-				<p:message for="description" display="text,tooltip"/>
-
+				<p:message for="description" display="text,tooltip" rendered="#{(CampaignBean.showDetailNew or !CampaignBean.showDetail) and !CampaignBean.showAddValue}"/>
+				
+				<!-- Fecha inicio de la Campaña -->
+				<p:outputLabel for="dateStart" value="Fecha inicio:" rendered="#{CampaignBean.showAddValue}"/>
+				<p:calendar id="dateStart" rendered="#{CampaignBean.showAddValue}"/>
+				<p:message for="dateStart" display="text,tooltip" rendered="#{CampaignBean.showAddValue}"/>
+				
+				<!-- Fecha fin de la Campaña -->
+				<p:outputLabel for="dateEnd" value="Fecha fin:" rendered="#{CampaignBean.showAddValue}"/>
+				<p:calendar id="dateEnd" rendered="#{CampaignBean.showAddValue}"/>
+				<p:message for="dateEnd" display="text,tooltip" rendered="#{CampaignBean.showAddValue}"/>
+				<!-- <p:gmap id="location" rendered="#{CampaignBean.showAddValue}" center="" zoom="" type=""/> -->
+				
+				<p:autoComplete id="prueba" value="#{CampaignBean.txt1}" completeMethod="#{GlobalData.completeText}" >
+					<p:ajax event="itemSelect" listener="#{CampaignBean.SelectedListener}" process="@form"/> 
+					<p:ajax event="change" listener="#{CampaignBean.SelectedListener}" process="@form"/> 
+				</p:autoComplete>
 			</h:panelGrid>
 
 			<!-- PANEL DE BOTONES  -->

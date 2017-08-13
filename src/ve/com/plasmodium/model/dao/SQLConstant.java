@@ -955,6 +955,7 @@ public final class SQLConstant {
 	
 	public final static String getLethality = "SELECT id, letalidad FROM lethality_level";
 	
+	
 		//************************************ INSTITUCION ******************************//
 	
 	public static final String getInstitutionList = 
@@ -1059,5 +1060,9 @@ public final class SQLConstant {
 			"UPDATE criaderos "
 			+ "SET name = ?, "
 			+ "WHERE name = ?;";
-
+	
+	//************************************ LOCALIDAD ******************************//
+	public static final String getLocationDetail = "SELECT id_location, country, administrative_area_level_1, administrative_area_level_2, locality, route, latitude, longitude, demarcation FROM location_gps WHERE place_ID = ?";
+	
+	public static final String insertLocation = "INSERT INTO location_gps (country, administrative_area_level_1, administrative_area_level_2, locality, route, latitude, longitude, place_ID) VALUES (?,?,?,?,?,?,?,?)";
 }

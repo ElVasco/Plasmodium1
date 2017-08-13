@@ -15,6 +15,7 @@ import ve.com.plasmodium.manager.DemarcationManager;
 import ve.com.plasmodium.manager.GlobalManager;
 import ve.com.plasmodium.manager.HatcheryManager;
 import ve.com.plasmodium.manager.InstitutionManager;
+import ve.com.plasmodium.manager.LocationManager;
 import ve.com.plasmodium.manager.PhenomenonManager;
 import ve.com.plasmodium.manager.PlasmodiumManager;
 import ve.com.plasmodium.model.dao.SQLConstant;
@@ -29,6 +30,7 @@ import ve.com.plasmodium.model.vo.PhenomenonDTO;
 import ve.com.plasmodium.model.vo.PhenomenonTypeDTO;
 import ve.com.plasmodium.model.vo.PlasmodiumDTO;
 import ve.com.plasmodium.model.vo.PlasmodiumTypeDTO;
+import ve.com.plasmodium.util.Utils;
 
 @ManagedBean(name="GlobalData")
 @SessionScoped
@@ -52,6 +54,7 @@ public class GlobalDataBean {
 	private Map<String,List<PhenomenonDTO>> mapPhenomenon;
 	private List<PhenomenonDTO> phenomenonList;
 	private PhenomenonDTO phenomenonDetail;
+	private Map<String,LocationDTO> locationList;
 
 	private Map<String,List<HatcheryDTO>> mapHatchery_Type;
 	private List<HatcheryDTO> hatcheryList;
@@ -82,6 +85,21 @@ public class GlobalDataBean {
 		gm.searchParameter(param);		
 	}
 
+	public List<String> completeText(String query) {
+		if(locationList == null || locationList.isEmpty())
+			locationList = new HashMap<String,LocationDTO>();
+		List<String> results = new ArrayList<String>();
+		try {
+			results.addAll(Utils.geocoding("Venezuela, "+query, locationList));
+			if(results.size() == 0){
+				results.add("No hay coincidencia");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return results;
+	}
+	
 	public void findInstitution(String selectedInstitutionType) {
 		mapInstitution_Type = new HashMap<String, List<InstitutionDTO>>();
 		InstitutionManager institutionManager = new InstitutionManager(SQLConstant.MYSQL);
@@ -550,6 +568,13 @@ public class GlobalDataBean {
 		institution.setLocation(locationInit());
 		return institution;
 	}
+	
+
+	public void getLocationDetail(String placeId, String txt1) {
+		LocationManager locationManager = new LocationManager(SQLConstant.MYSQL);
+		locationManager.getLocationDetail(placeId, txt1);
+		
+	}
 
 	public InstitutionTypeDTO institutionTypeInit() {
 		InstitutionTypeDTO institutionType = new InstitutionTypeDTO();
@@ -671,6 +696,14 @@ public class GlobalDataBean {
 
 	public void setMapCampaign_Type(Map<String, List<CampaignDTO>> mapCampaign_Type) {
 		this.mapCampaign_Type = mapCampaign_Type;
+	}
+
+	public Map<String,LocationDTO> getLocationList() {
+		return locationList;
+	}
+
+	public void setLocationList(Map<String,LocationDTO> locationList) {
+		this.locationList = locationList;
 	}
 
 }

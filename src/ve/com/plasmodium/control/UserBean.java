@@ -248,6 +248,7 @@ public class UserBean {
 		String navigation = "successful_exit";
 		UserBean sessionUserBean = (UserBean) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("UserBean");
 		sessionUserBean.setMessageExit("Operación finalizada - el usuario NO ha sido actualizado en el Sistema.");
+		FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO, "Información","Operación cancelada."));
 		//FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("UserBean");
 		resetFaceUser();
 		return navigation;

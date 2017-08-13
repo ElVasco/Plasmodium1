@@ -33,6 +33,11 @@
 		<param-name>contextConfigLocation</param-name>
 		<param-value>/WEB-INF/securityContext.xml</param-value>
 	</context-param>
+	<!-- Time in seconds that facelets should be checked for changes since last request. A value of -1 disables refresh checking. -->
+	<context-param>
+	    <param-name>javax.faces.FACELETS_REFRESH_PERIOD</param-name>
+	    <param-value>0</param-value>
+	</context-param>
 
 
 	<filter>

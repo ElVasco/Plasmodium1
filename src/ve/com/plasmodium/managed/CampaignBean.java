@@ -1,6 +1,7 @@
 package ve.com.plasmodium.managed;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,30 +16,49 @@ import org.apache.log4j.Logger;
 import ve.com.plasmodium.control.GlobalDataBean;
 import ve.com.plasmodium.exception.CustomException;
 import ve.com.plasmodium.model.vo.CampaignDTO;
+import ve.com.plasmodium.model.vo.LocationDTO;
 
 @ManagedBean(name="CampaignBean")
 @SessionScoped
 public class CampaignBean {
 
 	public static final Logger logger = Logger.getLogger(CampaignBean.class);
-	
+
 	private boolean showDetailNew;
 	private boolean showDetail;
+	private boolean showAddValue;
 	private List<SelectItem> selectCampaign;
 	private String selectedCampaign;
 	private String nameCampaign;
 	private String description;
 	private String id;
+	private String txt1;
+
 
 	public CampaignBean() {
 		Map<String, String> parameterMap = (Map<String, String>) FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
 		String param = parameterMap.get("modify");
-		if (param.equals("1"))
+		if (!param.equals("0"))
 			resetSelectCampaign();
 		logger.debug("parametro" + param + "----------");
 		if(param!=null){
 			setShowDetailNew(param.equals("0"));
 			setShowDetail(param.equals("0"));
+			setShowAddValue(param.equals("2"));
+		}
+
+	}
+
+
+	
+	public void SelectedListener(){
+		GlobalDataBean gd = (GlobalDataBean) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("GlobalData");
+		LocationDTO p = gd.getLocationList().get(txt1);
+		if(p != null){
+			if(p.getLatitude() == null || p.getLongitude() == null)
+				gd.getLocationDetail(p.getPlaceId(), txt1);
+			if(p!=null)
+				logger.debug("place " + p.getPlaceId() + "----------");
 		}
 	}
 
@@ -51,7 +71,7 @@ public class CampaignBean {
 		logger.debug("BuscarCampaign");
 		buscarCampaign();
 	}
-	
+
 	public void buscarCampaign(){
 		GlobalDataBean gd = (GlobalDataBean) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("GlobalData");
 		if(gd.getCampaignList().size() == 0){
@@ -65,14 +85,16 @@ public class CampaignBean {
 
 	public void campaignListenerMethod(){
 		setNameCampaign("");
-			GlobalDataBean gd = (GlobalDataBean) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("GlobalData");
-			setShowDetail(false);
-			logger.debug("selectedCampaign -> " + selectedCampaign);
-			if(gd.getMapCampaign_Type() == null || gd.getMapCampaign_Type().get(selectedCampaign).size() == 0){
-				gd.findDetailCampaign(selectedCampaign);
-			}
-			setNameCampaign(gd.getCampaignDetail().getName());
-			setDescription(gd.getCampaignDetail().getDescription());
+		GlobalDataBean gd = (GlobalDataBean) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("GlobalData");
+		setShowDetail(false);
+		logger.debug("selectedCampaign -> " + selectedCampaign);
+		if(gd.getCampaignList().get(Integer.parseInt(selectedCampaign)) == null){
+			gd.findDetailCampaign(selectedCampaign);
+		}else{
+			gd.setCampaignDetail(gd.getCampaignList().get(Integer.parseInt(selectedCampaign)));
+		}
+		setNameCampaign(gd.getCampaignDetail().getName());
+		setDescription(gd.getCampaignDetail().getDescription());
 	}
 
 	public String actionAddCampaign() throws CustomException{
@@ -86,18 +108,21 @@ public class CampaignBean {
 		GlobalDataBean gd = (GlobalDataBean) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("GlobalData");
 		result = gd.addCampaign(campaignDTO);
 		switch(result){
-			case 0:
+		case 0:
 			navigation = "successful";
-			FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO, "CampaÃ±a agregada con exito", ""));
+			FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO, "Campaña agregada con exito", ""));
 			break;
-			case -1:
+		case -1:
 			navigation = "fail";
-			FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO, "No se pudo agregar campaÃ±a", ""));
+			FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO, "No se pudo agregar campaña", ""));
 			break;
-			default:
-				navigation = "fail";
-				FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO, "No se pudo agregar campaÃ±a", ""));
-				break;
+		default:
+			navigation = "fail";
+			FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO, "No se pudo agregar campaña", ""));
+			break;
+		}
+		if(navigation.equalsIgnoreCase("successful")){
+			gd.getCampaignList().add(campaignDTO);
 		}
 		FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("CampaignBean");
 		return navigation;
@@ -114,22 +139,22 @@ public class CampaignBean {
 		GlobalDataBean gd = (GlobalDataBean) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("GlobalData");
 		result = gd.updateCampaign(campaignDTO);
 		switch(result){
-			case 0:
+		case 0:
 			navigation = "successful_update";
-			FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO, "CampaÃ±a actualizada con exito.", ""));
+			FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO, "Campaña actualizada con exito.", ""));
 			break;
-			case -1:
+		case -1:
 			navigation = "fail";
-			FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO, "No se pudo actualizar campaÃ±a.", ""));
+			FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO, "No se pudo actualizar campaña.", ""));
 			break;
 		}
-		
+
 		return navigation;
 	}
 
 	public String actionExit(){
 		String navigation = "successful_exit";
-		FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO, "InformaciÃ³n","OperaciÃ³n cancelada."));
+		FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO, "Información","Operación cancelada."));
 		FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("CampaignBean");
 		return navigation;
 	}
@@ -189,4 +214,21 @@ public class CampaignBean {
 	public void setId(String id) {
 		this.id = id;
 	}
+
+	public boolean isShowAddValue() {
+		return showAddValue;
+	}
+
+	public void setShowAddValue(boolean showAddValue) {
+		this.showAddValue = showAddValue;
+	}
+
+	public String getTxt1() {
+		return txt1;
+	}
+
+	public void setTxt1(String txt1) {
+		this.txt1 = txt1;
+	}
+
 }

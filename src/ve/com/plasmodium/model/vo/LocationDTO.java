@@ -19,7 +19,17 @@ public class LocationDTO implements Serializable {
 	
 	public LocationDTO () {}
 	
-
+	public LocationDTO (LocationDTO l) {
+		super();
+		this.idLocation = l.getIdLocation();
+		this.latitude = l.getLatitude();
+		this.longitude = l.getLongitude();
+		this.country = l.getCountry();
+		this.administrative_area_level_1 = l.getAdministrative_area_level_1();
+		this.administrative_area_level_2 = l.getAdministrative_area_level_2();
+		this.locality = l.getLocality();getClass();
+		this.placeId = l.getPlaceId();
+	}
 
 	public int getIdLocation() {
 		return idLocation;

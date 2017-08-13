@@ -40,11 +40,11 @@
 				<p:menuitem value="Agregar" url="PhenomenonEdit.jsf?modify=0" icon="fa fa-plus" />
 				<p:menuitem value="Modificar" url="PhenomenonEdit.jsf?modify=1" icon="fa fa-edit" />
 			</p:submenu>
-			<p:submenu label="TIPOS FENOMENOS" icon="fa fa-bolt">
+			<p:submenu label="TIPOS FENOM" ic.on="fa fa-bolt">
 				<p:menuitem value="Agregar" url="PhenomenonTypeEdit.jsf?modify=0" icon="fa fa-plus" />
 				<p:menuitem value="Modificar" url="PhenomenonTypeEdit.jsf?modify=1" icon="fa fa-edit" />
 			</p:submenu>
-			<p:submenu label="TIPO DE INSTITUCIONES" icon="fa fa-simplybuilt">
+			<p:submenu label="TIPO DE INST." icon="fa fa-simplybuilt">
 				<p:menuitem value="Agregar" url="InstitutionType.jsf?modify=0" icon="fa fa-plus" />
 				<p:menuitem value="Modificar" url="InstitutionType.jsf?modify=1" icon="fa fa-edit" />
 				<!-- <p:menuitem value="Eliminar" url="UserEdit.jsf" icon="fa fa-minus" /> -->
@@ -67,50 +67,13 @@
 		</p:submenu>
 
 		<p:submenu label="VALORES" icon="fa fa-file-text-o">
-			<p:menuitem value="Pago con depósito" url="AgregarDepositoVI.jsf"
-				rendered="#{AuthorizationBean.IS_REGISTER_PAYMENT}" />
-			<p:menuitem value="Recarga de tickets" url="RecargaSaldoSANITAS.jsf"
-				rendered="#{AuthorizationBean.RECHARGE_TICKETS}" />
-			<p:menuitem value="Pago con TDC" url="RecargaSaldoSANITASTDC.jsf"
-				rendered="#{AuthorizationBean.CREDIT_CARD_PAYMENT}" />
+			<p:menuitem value="CAMPAÑAS" icon="fa fa-crop" url="CampaignEdit.jsf?modify=2"/>
+			<p:menuitem value="CRIADERO" icon="fa fa-crop" url="HatcheryEdit.jsf?modify=2"/>
+			<p:menuitem value="FENOMENOS" icon="fa fa-crop" url="PhenomenonEdit.jsf?modify=2"/>
+			<p:menuitem value="CASOS" icon="fa fa-crop" url="DemarcationsEdit.jsf?modify=2"/>
 		</p:submenu>
 
-		<p:submenu label="CASOS" icon="fa fa-exclamation-triangle"
-			rendered="#{AuthorizationBean.CLOSEOUT_MENU}">
-			<p:submenu label="Pre-cierre"
-				rendered="#{AuthorizationBean.PRECLOSING_REPORT_ZONE || AuthorizationBean.PRECLOSING_REPORT || AuthorizationBean.PRECLOSING_REPORT_ZONE_GRE || AuthorizationBean.PRECLOSING_REPORT_GRE}">
-				<p:menuitem value="Resumen cierre de zona" url="PreCierreZona.jsf"
-					rendered="#{AuthorizationBean.PRECLOSING_REPORT_ZONE}" />
-				<p:menuitem value="Reporte cierre de cadenas comerciales"
-					url="ReportePreCierreCadena.jsf"
-					rendered="#{AuthorizationBean.PRECLOSING_REPORT_ZONE_GRE}" />
-				<p:menuitem value="Reporte cierre de vendedores externos"
-					url="PreCierreZonaVI.jsf"
-					rendered="#{AuthorizationBean.PRECLOSING_REPORT_ZONE_GRE}" />
-				<p:menuitem value="Resumen de cierre" url="PreCierre.jsf"
-					rendered="#{AuthorizationBean.PRECLOSING_REPORT}" />
-				<p:menuitem value="Resumen de cierre de cadena comercial"
-					url="PreCierreCadena.jsf"
-					rendered="#{AuthorizationBean.PRECLOSING_REPORT_GRE}" />
-				<p:menuitem value="Resumen de cierre vendedores externos"
-					url="PreCierreVI.jsf"
-					rendered="#{AuthorizationBean.PRECLOSING_REPORT_GRE}" />
-			</p:submenu>
 
-			<p:submenu label="Cierre"
-				rendered="#{AuthorizationBean.CLOSEOUT  || AuthorizationBean.CLOSING_REPORTS_GRE || AuthorizationBean.REVERSE_REPORT}">
-				<p:menuitem value="Ejecutar cierre" url="Cierre.jsf"
-					rendered="#{AuthorizationBean.CLOSEOUT}" />
-				<p:menuitem value="Ejecutar cierre cadenas comerciales"
-					url="CierreCadena.jsf"
-					rendered="#{AuthorizationBean.CLOSING_REPORTS_GRE}" />
-				<p:menuitem value="Ejecutar cierre vendedores externos"
-					url="CierreVI.jsf"
-					rendered="#{AuthorizationBean.CLOSING_REPORTS_GRE}" />
-				<p:menuitem value="Reverso de cierre" url="ReversoCierre.jsf"
-					rendered="#{AuthorizationBean.REVERSE_REPORT}" />
-			</p:submenu>
-		</p:submenu>
 
 		<p:submenu label="REPORTES" icon="fa fa-cubes">
 

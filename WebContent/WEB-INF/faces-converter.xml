@@ -15,6 +15,11 @@
     <converter-class>ve.com.plasmodium.converter.MyConverter</converter-class>
 </converter>
 
+<converter>
+    <converter-id>PlaceConverter</converter-id>
+    <converter-class>ve.com.plasmodium.converter.PlaceConverter</converter-class>
+</converter>
+
 </faces-config>
 
 

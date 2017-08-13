@@ -19,5 +19,9 @@
 		<h:outputText value="" />
 	</f:facet>
 </p:ajaxStatus>
-
+<p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+ 
+<p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false" height="0px" width="0px">
+    <p:graphicImage name="/images/loading.gif" />
+</p:dialog>
 </html>

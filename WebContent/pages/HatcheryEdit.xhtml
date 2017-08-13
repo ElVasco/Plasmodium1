@@ -50,9 +50,9 @@
 
 				<!-- Descripción de Criadero -->
 				<p:outputLabel for="description" value="Descripción:"
-							   rendered="#{HatcheryBean.showDetailNew == true or HatcheryBean.showDetail == false}"/>
+							   rendered="#{HatcheryBean.showDetailNew or !HatcheryBean.showDetail}"/>
 				<p:inputText id="description" value="#{HatcheryBean.description}" type="text" required="true"
-				rendered="#{HatcheryBean.showDetailNew == true or HatcheryBean.showDetail == false}"
+				rendered="#{HatcheryBean.showDetailNew or !HatcheryBean.showDetail}"
 							 validatorMessage="Debe tener solo letras">
 				</p:inputText>
 
